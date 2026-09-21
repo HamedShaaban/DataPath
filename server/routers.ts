@@ -213,6 +213,8 @@ export const appRouter = router({
           });
         try {
           const response = await invokeLLM({
+            userId: ctx.user.id,
+            model: process.env.AI_MODEL,
             messages: [
               {
                 role: "system",
@@ -263,7 +265,8 @@ export const appRouter = router({
           if (result.topicIds.some(id => !valid.has(id)))
             throw new Error("Unknown curriculum reference");
           return result;
-        } catch {
+        } catch (error) {
+          if (error instanceof TRPCError) throw error;
           throw new TRPCError({
             code: "BAD_GATEWAY",
             message: "Coach is temporarily unavailable. Try again later.",

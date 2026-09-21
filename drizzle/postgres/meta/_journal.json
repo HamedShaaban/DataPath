@@ -22,6 +22,13 @@
       "when": 1790023596643,
       "tag": "0002_aromatic_black_widow",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1790023984872,
+      "tag": "0003_naive_black_tom",
+      "breakpoints": true
     }
   ]
 }

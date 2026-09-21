@@ -18,13 +18,14 @@ const response = (value: unknown) =>
 beforeEach(() => {
   vi.clearAllMocks();
   vi.stubEnv("BUILT_IN_FORGE_API_KEY", "audit-mock-key");
+  vi.stubEnv("AI_MODEL", "pinned-test-model-v1");
   vi.mocked(invokeLLM).mockResolvedValue(
     response({ message: "Guidance", topicIds: [] })
   );
 });
 afterEach(() => vi.unstubAllEnvs());
 describe("AI documentation contract audit (mock provider)", () => {
-  it("sends bounded curated context without a model or tools", async () => {
+  it("sends bounded curated context with a pinned model and no tools", async () => {
     const state = newState();
     await caller().datapath.coach({
       state,
@@ -33,7 +34,8 @@ describe("AI documentation contract audit (mock provider)", () => {
       consent: true,
     });
     const call = vi.mocked(invokeLLM).mock.calls[0][0];
-    expect(call.model).toBeUndefined();
+    expect(call.model).toBe("pinned-test-model-v1");
+    expect(call.userId).toBeGreaterThan(0);
     expect(call.tools).toBeUndefined();
     expect(call.max_tokens).toBe(1800);
     expect(call.messages).toHaveLength(2);

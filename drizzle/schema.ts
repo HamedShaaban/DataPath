@@ -1,5 +1,6 @@
 import {
   integer,
+  bigint,
   index,
   pgEnum,
   pgTable,
@@ -141,3 +142,21 @@ export const sessions = pgTable(
     index("sessions_expiry_idx").on(table.expiresAt),
   ]
 );
+
+// Cost is integer micro-USD; the monthly total includes unsettled reservations.
+export const aiBudgets = pgTable("aiBudgets", {
+  month: varchar("month", { length: 7 }).primaryKey(),
+  spentMicros: bigint("spentMicros", { mode: "number" }).notNull().default(0),
+});
+export const aiRequests = pgTable("aiRequests", {
+  id: varchar("id", { length: 36 }).primaryKey(),
+  userId: integer("userId").notNull().references(() => users.id, { onDelete: "cascade" }),
+  month: varchar("month", { length: 7 }).notNull(),
+  model: varchar("model", { length: 200 }).notNull(),
+  reservedMicros: bigint("reservedMicros", { mode: "number" }).notNull(),
+  chargedMicros: bigint("chargedMicros", { mode: "number" }),
+  status: varchar("status", { length: 20 }).notNull().default("reserved"),
+  promptTokens: integer("promptTokens"),
+  completionTokens: integer("completionTokens"),
+  createdAt: timestamp("createdAt", { withTimezone: true }).notNull().defaultNow(),
+}, table => [index("ai_requests_user_time_idx").on(table.userId, table.createdAt)]);

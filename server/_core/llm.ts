@@ -1,4 +1,6 @@
 import { ENV } from "./env";
+import { aiConfig } from "../ai-config";
+import { reserveAI, settleAI } from "../ai-budget";
 
 export type Role = "system" | "user" | "assistant" | "tool" | "function";
 
@@ -56,6 +58,7 @@ export type ToolChoice =
   | ToolChoiceExplicit;
 
 export type InvokeParams = {
+  userId: number;
   messages: Message[];
   tools?: Tool[];
   toolChoice?: ToolChoice;
@@ -219,7 +222,7 @@ const resolveApiUrl = () =>
 
 const assertApiKey = () => {
   if (!ENV.forgeApiKey) {
-    throw new Error("OPENAI_API_KEY is not configured");
+    throw new Error("BUILT_IN_FORGE_API_KEY is not configured");
   }
 };
 
@@ -268,76 +271,34 @@ const normalizeResponseFormat = ({
   };
 };
 
-const RETRY_MAX_RETRIES = 4;
-const RETRY_BASE_DELAY_MS = 500;
-const RETRY_MAX_DELAY_MS = 30_000;
-
-type FetchInit = NonNullable<Parameters<typeof fetch>[1]>;
-
-const sleep = (ms: number) =>
-  new Promise<void>(resolve => setTimeout(resolve, ms));
-
-const parseRetryAfter = (value: string | null): number | undefined => {
-  if (!value) return undefined;
-  const seconds = Number(value);
-  if (Number.isFinite(seconds)) return Math.max(0, seconds * 1000);
-  const at = Date.parse(value);
-  return Number.isNaN(at) ? undefined : Math.max(0, at - Date.now());
-};
-
-// Equal-jitter exponential backoff. The cap/2 floor guarantees a minimum
-// delay so a misbehaving caller loop slows down instead of hammering the
-// upstream while it keeps returning errors.
-const computeBackoffDelay = (
-  attempt: number,
-  retryAfterMs?: number
-): number => {
-  const cap = Math.min(RETRY_BASE_DELAY_MS * 2 ** attempt, RETRY_MAX_DELAY_MS);
-  const jittered = cap / 2 + Math.random() * (cap / 2);
-  return Math.min(Math.max(jittered, retryAfterMs ?? 0), RETRY_MAX_DELAY_MS);
-};
-
-// Retries non-2xx responses and network errors with exponential backoff, then
-// returns the final Response so callers keep their existing error handling.
-const fetchWithBackoff = async (
-  url: string,
-  init: FetchInit
-): Promise<Response> => {
-  let lastError: unknown;
-
-  for (let attempt = 0; attempt <= RETRY_MAX_RETRIES; attempt++) {
+class ProviderError extends Error {
+  constructor(public status: number) { super(`AI provider returned HTTP ${status}`); }
+}
+export async function fetchAIJson(url: string, init: RequestInit, onAttempt: () => void = () => {}) {
+  const timeout = aiConfig().AI_TIMEOUT_MS;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
+    let delay = 500;
     try {
-      const response = await fetch(url, {...init, signal: AbortSignal.timeout(25000)});
-      if (response.ok || (response.status < 500 && response.status !== 429) || attempt === RETRY_MAX_RETRIES) {
-        return response;
-      }
-
-      const retryAfterMs = parseRetryAfter(
-        response.headers.get("retry-after")
-      );
-      try {
+      onAttempt();
+      const response = await fetch(url, { ...init, signal: controller.signal });
+      if (!response.ok) {
+        const seconds = Number(response.headers.get("retry-after"));
+        if (Number.isFinite(seconds)) delay = Math.min(2000, Math.max(500, seconds * 1000));
         await response.body?.cancel();
-      } catch {
-        // Body already settled; nothing to clean up.
+        throw new ProviderError(response.status);
       }
-      console.warn(
-        `LLM request retry ${attempt + 1}/${RETRY_MAX_RETRIES} after status ${response.status}`
-      );
-      await sleep(computeBackoffDelay(attempt, retryAfterMs));
+      // Keep the timeout active until the response body has been consumed.
+      return await response.json();
     } catch (error) {
-      lastError = error;
-      if (attempt === RETRY_MAX_RETRIES) throw error;
-      console.warn(
-        `LLM request retry ${attempt + 1}/${RETRY_MAX_RETRIES} after network error`
-      );
-      await sleep(computeBackoffDelay(attempt));
-    }
+      const retryable = controller.signal.aborted || error instanceof TypeError || (error instanceof ProviderError && (error.status === 429 || error.status >= 500));
+      if (!retryable || attempt === 1) throw error;
+    } finally { clearTimeout(timer); }
+    await new Promise(resolve => setTimeout(resolve, delay));
   }
-
-  throw lastError instanceof Error
-    ? lastError
-    : new Error("LLM request failed after exhausting retries");
-};
+  throw new Error("AI request failed");
+}
 
 export async function invokeLLM(params: InvokeParams): Promise<InvokeResult> {
   assertApiKey();
@@ -362,9 +323,9 @@ export async function invokeLLM(params: InvokeParams): Promise<InvokeResult> {
     messages: messages.map(normalizeMessage),
   };
 
-  if (model) {
-    payload.model = model;
-  }
+  const config = aiConfig();
+  if (model && model !== config.AI_MODEL) throw new Error("AI model must match the configured model");
+  payload.model = config.AI_MODEL;
 
   if (tools && tools.length > 0) {
     payload.tools = tools;
@@ -401,23 +362,24 @@ export async function invokeLLM(params: InvokeParams): Promise<InvokeResult> {
     payload.response_format = normalizedResponseFormat;
   }
 
-  const response = await fetchWithBackoff(resolveApiUrl(), {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      authorization: `Bearer ${ENV.forgeApiKey}`,
-    },
-    body: JSON.stringify(payload),
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(
-      `LLM invoke failed: ${response.status} ${response.statusText} – ${errorText}`
-    );
+  if (!Number.isInteger(params.userId) || params.userId <= 0) throw new Error("AI requests require an account");
+  if (!Number.isInteger(resolvedMaxTokens) || resolvedMaxTokens! < 1 || resolvedMaxTokens! > 1800) throw new Error("AI output must be bounded to 1800 tokens");
+  if (messages.some(message => ensureArray(message.content).some(part => typeof part !== "string" && part.type !== "text"))) throw new Error("AI accounting currently supports text requests only");
+  const body = JSON.stringify(payload);
+  const reservation = await reserveAI(params.userId, Buffer.byteLength(body), resolvedMaxTokens!);
+  let attempts = 0;
+  let result: InvokeResult | undefined;
+  try {
+    result = await fetchAIJson(resolveApiUrl(), {
+      method: "POST",
+      headers: { "content-type": "application/json", authorization: `Bearer ${ENV.forgeApiKey}` },
+      body,
+    }, () => { attempts++; }) as InvokeResult;
+    if (!result || !Array.isArray(result.choices)) throw new Error("Invalid AI response");
+    return result;
+  } finally {
+    await settleAI(reservation, attempts, result?.usage);
   }
-
-  return (await response.json()) as InvokeResult;
 }
 
 export type ModelInfo = {
@@ -439,16 +401,5 @@ export async function listLLMModels(): Promise<ModelsResponse> {
     ? `${ENV.forgeApiUrl.replace(/\/$/, "")}/v1/models`
     : "https://forge.manus.im/v1/models";
 
-  const response = await fetchWithBackoff(url, {
-    headers: { authorization: `Bearer ${ENV.forgeApiKey}` },
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(
-      `List LLM models failed: ${response.status} ${response.statusText} – ${errorText}`
-    );
-  }
-
-  return (await response.json()) as ModelsResponse;
+  return await fetchAIJson(url, { headers: { authorization: `Bearer ${ENV.forgeApiKey}` } }) as ModelsResponse;
 }
