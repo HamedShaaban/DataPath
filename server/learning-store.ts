@@ -46,9 +46,8 @@ export async function saveLearning(
         .values({ userId, stateJson, revision: 1 });
     } catch (error) {
       if (
-        (error as { cause?: { code?: string } }).cause?.code ===
-          "ER_DUP_ENTRY" ||
-        (error as { code?: string }).code === "ER_DUP_ENTRY"
+        (error as { cause?: { code?: string } }).cause?.code === "23505" ||
+        (error as { code?: string }).code === "23505"
       )
         throw new TRPCError({
           code: "CONFLICT",
@@ -57,7 +56,7 @@ export async function saveLearning(
       throw error;
     }
   } else {
-    const [result] = await db
+    const result = await db
       .update(learningStates)
       .set({ stateJson, revision: revision + 1 })
       .where(
@@ -66,7 +65,7 @@ export async function saveLearning(
           eq(learningStates.revision, revision)
         )
       );
-    if (!result.affectedRows)
+    if (!result.rowCount)
       throw new TRPCError({
         code: "CONFLICT",
         message: "Workspace changed in another tab. Reload before saving.",

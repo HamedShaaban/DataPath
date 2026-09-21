@@ -1,46 +1,58 @@
 import {
-  int,
-  mysqlEnum,
-  mysqlTable,
+  integer,
+  pgEnum,
+  pgTable,
   text,
   timestamp,
   varchar,
   uniqueIndex,
-} from "drizzle-orm/mysql-core";
+} from "drizzle-orm/pg-core";
 
-export const users = mysqlTable("users", {
-  id: int("id").autoincrement().primaryKey(),
+export const userRole = pgEnum("user_role", ["user", "admin"]);
+
+export const users = pgTable("users", {
+  id: integer("id").generatedByDefaultAsIdentity().primaryKey(),
   openId: varchar("openId", { length: 64 }).notNull().unique(),
   name: text("name"),
   email: varchar("email", { length: 320 }),
   loginMethod: varchar("loginMethod", { length: 64 }),
-  role: mysqlEnum("role", ["user", "admin"]).default("user").notNull(),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-  lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
+  role: userRole("role").default("user").notNull(),
+  createdAt: timestamp("createdAt", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("updatedAt", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  lastSignedIn: timestamp("lastSignedIn", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
 });
 
-export const workspaces = mysqlTable("workspaces", {
-  id: int("id").autoincrement().primaryKey(),
-  userId: int("userId").notNull().unique(),
+export const workspaces = pgTable("workspaces", {
+  id: integer("id").generatedByDefaultAsIdentity().primaryKey(),
+  userId: integer("userId").notNull().unique(),
   profileJson: text("profileJson").notNull(),
   skillsJson: text("skillsJson").notNull(),
   projectsJson: text("projectsJson").notNull(),
   sqlJson: text("sqlJson").notNull(),
   studyLogJson: text("studyLogJson").notNull(),
-  weeklyGoal: int("weeklyGoal").notNull().default(5),
+  weeklyGoal: integer("weeklyGoal").notNull().default(5),
   theme: varchar("theme", { length: 16 }).notNull().default("light"),
-  timerRemaining: int("timerRemaining").notNull().default(1500),
-  timerSessions: int("timerSessions").notNull().default(0),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  timerRemaining: integer("timerRemaining").notNull().default(1500),
+  timerSessions: integer("timerSessions").notNull().default(0),
+  createdAt: timestamp("createdAt", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("updatedAt", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
 });
 
-export const interviewQuestions = mysqlTable(
+export const interviewQuestions = pgTable(
   "interviewQuestions",
   {
-    id: int("id").autoincrement().primaryKey(),
-    userId: int("userId").notNull(),
+    id: integer("id").generatedByDefaultAsIdentity().primaryKey(),
+    userId: integer("userId").notNull(),
     questionKey: varchar("questionKey", { length: 64 }).notNull(),
     category: varchar("category", { length: 120 }).notNull(),
     question: text("question").notNull(),
@@ -48,8 +60,12 @@ export const interviewQuestions = mysqlTable(
     followUp: text("followUp").notNull(),
     answerNote: text("answerNote"),
     feedbackJson: text("feedbackJson"),
-    createdAt: timestamp("createdAt").defaultNow().notNull(),
-    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+    createdAt: timestamp("createdAt", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp("updatedAt", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
   },
   table => ({
     ownerQuestionIdx: uniqueIndex("interview_owner_question_idx").on(
@@ -59,21 +75,25 @@ export const interviewQuestions = mysqlTable(
   })
 );
 
-export const studySessions = mysqlTable("studySessions", {
-  id: int("id").autoincrement().primaryKey(),
-  userId: int("userId").notNull(),
+export const studySessions = pgTable("studySessions", {
+  id: integer("id").generatedByDefaultAsIdentity().primaryKey(),
+  userId: integer("userId").notNull(),
   sessionDate: varchar("sessionDate", { length: 10 }).notNull(),
-  minutes: int("minutes").notNull().default(25),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  minutes: integer("minutes").notNull().default(25),
+  createdAt: timestamp("createdAt", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
 });
 
-export const skillProgressHistory = mysqlTable("skillProgressHistory", {
-  id: int("id").autoincrement().primaryKey(),
-  userId: int("userId").notNull(),
-  skillId: int("skillId").notNull(),
+export const skillProgressHistory = pgTable("skillProgressHistory", {
+  id: integer("id").generatedByDefaultAsIdentity().primaryKey(),
+  userId: integer("userId").notNull(),
+  skillId: integer("skillId").notNull(),
   skillName: varchar("skillName", { length: 180 }).notNull(),
   status: varchar("status", { length: 40 }).notNull(),
-  recordedAt: timestamp("recordedAt").defaultNow().notNull(),
+  recordedAt: timestamp("recordedAt", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
 });
 
 export type User = typeof users.$inferSelect;
@@ -84,18 +104,22 @@ export type StudySession = typeof studySessions.$inferSelect;
 export type SkillProgressHistory = typeof skillProgressHistory.$inferSelect;
 
 // Versioned DataPath state is separate from legacy workspaces; upgrades are non-destructive.
-export const learningStates = mysqlTable("learningStates", {
-  userId: int("userId").primaryKey(),
+export const learningStates = pgTable("learningStates", {
+  userId: integer("userId").primaryKey(),
   stateJson: text("stateJson").notNull(),
-  revision: int("revision").notNull().default(1),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  revision: integer("revision").notNull().default(1),
+  updatedAt: timestamp("updatedAt", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
 });
 
-export const localAccounts = mysqlTable("localAccounts", {
-  userId: int("userId").primaryKey(),
+export const localAccounts = pgTable("localAccounts", {
+  userId: integer("userId").primaryKey(),
   email: varchar("email", { length: 320 }).notNull().unique(),
   passwordHash: varchar("passwordHash", { length: 255 }).notNull(),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  createdAt: timestamp("createdAt", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
 });
 
 export type LocalAccount = typeof localAccounts.$inferSelect;

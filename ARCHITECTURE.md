@@ -30,7 +30,7 @@ The dashboard turns that cycle into a daily queue: learn the next available topi
 
 ## Backend and persistence
 
-Express serves the Vite development app or production assets. `server/routers.ts` exposes authentication, public capabilities/catalog, authenticated state operations and the coach. Local passwords use per-account random salts and Node's scrypt; only the hash is stored in `localAccounts`. Sessions use the existing signed HttpOnly cookie. `server/learning-store.ts` performs owner-scoped MySQL operations via Drizzle and atomic revision checks. `learningStates` and `localAccounts` are additive tables; earlier schema/history tables are retained for compatibility and backup access.
+Express serves the Vite development app or production assets. `server/routers.ts` exposes authentication, public capabilities/catalog, authenticated state operations and the coach. Local passwords use per-account random salts and Node's scrypt; only the hash is stored in `localAccounts`. Sessions use the existing signed HttpOnly cookie. `server/learning-store.ts` performs owner-scoped PostgreSQL operations via Drizzle/node-postgres and atomic revision checks. `learningStates` and `localAccounts` are additive tables; earlier schema/history tables are retained for compatibility and backup access.
 
 The original generic roadmap, skill and resource generation endpoints were removed. The old UI, patch scripts and template snapshot were replaced/removed. No automatic conversion from unstructured old plans to verified new topic completion is performed.
 

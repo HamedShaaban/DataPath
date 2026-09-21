@@ -1,5 +1,6 @@
+import { Pool } from "pg";
 import { and, desc, eq } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/mysql2";
+import { drizzle } from "drizzle-orm/node-postgres";
 import {
   InsertUser,
   interviewQuestions,
@@ -11,18 +12,33 @@ import {
 } from "../drizzle/schema";
 import { ENV } from "./_core/env";
 
+let pool: Pool | null = null;
 let _db: ReturnType<typeof drizzle> | null = null;
 
 export async function getDb() {
   if (!_db && process.env.DATABASE_URL) {
     try {
-      _db = drizzle(process.env.DATABASE_URL);
+      pool = new Pool({
+        connectionString: process.env.DATABASE_URL,
+        max: 10,
+        connectionTimeoutMillis: 10000,
+        idleTimeoutMillis: 30000,
+      });
+      pool.on("error", () => console.warn("[Database] Idle connection failed"));
+      _db = drizzle(pool);
     } catch (error) {
-      console.warn("[Database] Failed to connect:", error);
+      console.warn("[Database] Could not initialize connection pool");
       _db = null;
     }
   }
   return _db;
+}
+
+export async function closeDb() {
+  const current = pool;
+  pool = null;
+  _db = null;
+  await current?.end();
 }
 
 export async function upsertUser(user: InsertUser): Promise<void> {
@@ -60,7 +76,7 @@ export async function upsertUser(user: InsertUser): Promise<void> {
   await db
     .insert(users)
     .values(values)
-    .onDuplicateKeyUpdate({ set: updateSet });
+    .onConflictDoUpdate({ target: users.openId, set: updateSet });
 }
 
 export async function getUserByOpenId(openId: string) {
@@ -83,13 +99,16 @@ export async function createLocalAccount(input: {
   const db = await getDb();
   if (!db) throw new Error("Database is not configured");
   return db.transaction(async tx => {
-    const inserted = await tx.insert(users).values({
-      openId: input.openId,
-      name: input.name,
-      email: input.email,
-      loginMethod: "password",
-    });
-    const userId = Number(inserted[0].insertId);
+    const [inserted] = await tx
+      .insert(users)
+      .values({
+        openId: input.openId,
+        name: input.name,
+        email: input.email,
+        loginMethod: "password",
+      })
+      .returning({ id: users.id });
+    const userId = inserted.id;
     await tx.insert(localAccounts).values({
       userId,
       email: input.email,
@@ -146,7 +165,7 @@ export async function saveWorkspace(
   await db
     .insert(workspaces)
     .values({ userId, ...data })
-    .onDuplicateKeyUpdate({ set: data });
+    .onConflictDoUpdate({ target: workspaces.userId, set: data });
   return getWorkspace(userId);
 }
 
@@ -177,7 +196,8 @@ export async function saveInterviewQuestion(
   await db
     .insert(interviewQuestions)
     .values({ userId, ...data })
-    .onDuplicateKeyUpdate({
+    .onConflictDoUpdate({
+      target: [interviewQuestions.userId, interviewQuestions.questionKey],
       set: {
         category: data.category,
         question: data.question,

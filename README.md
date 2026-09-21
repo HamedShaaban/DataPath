@@ -2,7 +2,7 @@
 
 See [PRODUCT_GAPS_AND_BUILD_PLAN.md](./PRODUCT_GAPS_AND_BUILD_PLAN.md) for the prioritised public-pilot backlog and the 90-day delivery plan.
 
-A free, bilingual English/Arabic learning platform for data and AI careers. This is a rebuild of banking-fintech-roadmap on its existing React + Express + tRPC + MySQL stack. The old generic 12-week plan and AI curriculum generators have been removed.
+A free, bilingual English/Arabic learning platform for data and AI careers. This is a rebuild of banking-fintech-roadmap on its existing React + Express + tRPC + PostgreSQL stack. The old generic 12-week plan and AI curriculum generators have been removed.
 
 ## Run locally
 
@@ -45,15 +45,15 @@ Excel and DAX support the specific formula forms described in each exercise, not
 
 ## Enable accounts
 
-1. Create a dedicated MySQL database with `utf8mb4` and a database user restricted to that database. Back up an existing database before upgrading.
-2. Copy `.env.example` to `.env`. Set `DATABASE_URL` and a random `JWT_SECRET` of at least 32 characters (`openssl rand -hex 32`). Never commit `.env`.
+1. Create a dedicated PostgreSQL database (Neon in production) and a database user restricted to it. For existing MySQL data, follow `TASK_2_POSTGRES.md` before switching connections.
+2. Copy `.env.example` to `.env`. Set `DATABASE_URL` (Neon TLS URL in production), optionally `DATABASE_MIGRATION_URL` for direct migration access, and a random `JWT_SECRET` of at least 32 characters (`openssl rand -hex 32`). Never commit `.env`.
 3. Run `pnpm db:migrate` (the existing `pnpm db:push` alias also applies committed migrations). `drizzle.config.ts` loads `.env` automatically.
 4. Restart the server. The sign-in button appears when the database and session secret are configured. Learners can register with a name, email and password of at least 10 characters. Signed-in users use **Save progress**; unsaved changes remain visibly marked.
 5. Optional: configure `VITE_APP_ID`, `VITE_OAUTH_PORTAL_URL` and `OAUTH_SERVER_URL` for the existing **Manus-compatible OAuth service**. Register your exact `/api/oauth/callback` URL. This connector requires HTTPS and its existing service contract; entering a Google/Auth0 issuer alone will not work.
 
 There is no shared demo account or identity fallback. Local password accounts work without OAuth. Production OAuth sign-in requires real provider credentials and has not been exercised against an external account in this delivery.
 
-New learning data goes into `learningStates`, keyed by authenticated user ID. Migration `0004` adds local account credentials without changing legacy records. Existing users and legacy workspaces/interview history remain in their original tables; legacy arbitrary 12-week plans are not automatically converted into curated learning evidence. Keep database backups if the old history is needed.
+New learning data goes into `learningStates`, keyed by authenticated user ID. PostgreSQL migrations live in `drizzle/postgres`; historical MySQL migrations remain in `drizzle` and must not be run against PostgreSQL. Schema migrations do not transfer MySQL rows. Existing users and legacy workspaces/interview history remain in their original tables; legacy arbitrary 12-week plans are not automatically converted into curated learning evidence. Keep database backups if the old history is needed.
 
 ## Enable the AI coach
 
@@ -65,7 +65,7 @@ All core planning, assessment, projects, resources and interview practice work w
 
 ## Production deployment
 
-Recommended initial release: one Node service behind HTTPS plus managed MySQL, as a public beta. Make guest learning available immediately; enable account sync and AI once their integrations are configured and exercised. This project has not been deployed to a public domain.
+Recommended initial release: one Node service behind HTTPS plus Neon PostgreSQL, as a public beta. Make guest learning available immediately; enable account sync and AI once their integrations are configured and exercised. This project has not been deployed to a public domain.
 
 ```sh
 pnpm install --frozen-lockfile
@@ -98,5 +98,5 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for design and [VALIDATION.md](VALIDATION
 
 DataPath منصة مجانية لمسارات البيانات والذكاء الاصطناعي. ابدأ بالأوامر `pnpm install --frozen-lockfile` ثم `pnpm dev` وافتح العنوان الذي يظهر. يمكنك استخدام وضع الزائر فوراً دون إعداد قاعدة بيانات أو ذكاء اصطناعي. غيّر اللغة من أعلى الصفحة، ثم اختر الدور والخبرة والمدة والوقت الأسبوعي. تُحفظ بيانات الزائر في المتصفح؛ صدّر نسخة من الإعدادات.
 
-تسجيل الدخول بالبريد وكلمة المرور يحتاج إعداد قاعدة MySQL وسر جلسة قوي فقط، بينما OAuth اختياري. بعد كل موضوع يوجد اختبار، وبعد كل مهارة اختبار أكبر، مع مراجعات تراكمية تعيد نقاط الضعف إلى الخطة. المدرب الذكي اختياري ويحتاج مفتاح خدمة في الخادم. جميع مسارات التعلم والتدريب المنسقة تعمل بدونه.
+تسجيل الدخول بالبريد وكلمة المرور يحتاج إعداد قاعدة PostgreSQL وسر جلسة قوي فقط، بينما OAuth اختياري. بعد كل موضوع يوجد اختبار، وبعد كل مهارة اختبار أكبر، مع مراجعات تراكمية تعيد نقاط الضعف إلى الخطة. المدرب الذكي اختياري ويحتاج مفتاح خدمة في الخادم. جميع مسارات التعلم والتدريب المنسقة تعمل بدونه.
 The product benchmark and the reasoning behind the evidence-first workflow are documented in [`BENCHMARK.md`](./BENCHMARK.md).
