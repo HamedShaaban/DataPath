@@ -1,3 +1,7 @@
+import { X } from "lucide-react";
+import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { FoundationsUnit } from "@/components/FoundationsUnit";
 import { recordQuizResult } from "@shared/quiz-progress";
 import { sqlChallengeForTopic } from "@shared/practice-navigation";
@@ -237,12 +241,6 @@ export default function Home() {
   const [authOpen, setAuthOpen] = useState(false);
   const authDialog = useRef<HTMLFormElement>(null);
   const authReturnFocus = useRef<HTMLElement | null>(null);
-  useEffect(() => {
-    if (!authOpen) return;
-    const previous = authReturnFocus.current;
-    authDialog.current?.querySelector<HTMLInputElement>("input")?.focus();
-    return () => previous?.focus();
-  }, [authOpen]);
   const [authMode, setAuthMode] = useState<"login" | "register">("login");
   const [authForm, setAuthForm] = useState({
     name: "",
@@ -3134,61 +3132,30 @@ export default function Home() {
           </footer>
         </main>
       </div>
-      {authOpen && (
-        <div className="modal-backdrop" onMouseDown={() => setAuthOpen(false)}>
-          <form
-            className="auth-modal"
-            ref={authDialog}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="auth-dialog-title"
-            onKeyDown={event => {
-              if (event.key === "Escape") {
-                event.preventDefault();
-                setAuthOpen(false);
-              }
-              if (event.key !== "Tab") return;
-              const controls = [
-                ...event.currentTarget.querySelectorAll<HTMLElement>(
-                  "button:not(:disabled), input:not(:disabled), a[href], select:not(:disabled), textarea:not(:disabled)"
-                ),
-              ];
-              const first = controls[0],
-                last = controls.at(-1);
-              if (event.shiftKey && document.activeElement === first) {
-                event.preventDefault();
-                last?.focus();
-              } else if (!event.shiftKey && document.activeElement === last) {
-                event.preventDefault();
-                first?.focus();
-              }
-            }}
-            onMouseDown={event => event.stopPropagation()}
+      <Dialog open={authOpen} onOpenChange={setAuthOpen}>
+        <DialogContent className="auth-modal" showCloseButton={false}
+          onOpenAutoFocus={event => { event.preventDefault(); authDialog.current?.querySelector<HTMLInputElement>("input")?.focus(); }}
+          onCloseAutoFocus={event => { event.preventDefault(); authReturnFocus.current?.focus(); }}>
+          <form ref={authDialog}
             onSubmit={event => {
               event.preventDefault();
               void submitAuth();
             }}
           >
-            <button
-              className="modal-close"
-              type="button"
-              onClick={() => setAuthOpen(false)}
-              aria-label={t("Close", "إغلاق")}
-            >
-              ×
-            </button>
+            <DialogClose asChild><Button variant="ghost" size="icon" className="modal-close" type="button" aria-label={t("Close", "إغلاق")}><X size={18} /></Button></DialogClose>
             <div className="eyebrow">
               {t("KEEP YOUR PROGRESS", "احفظ تقدمك")}
             </div>
-            <h2 id="auth-dialog-title">
+            <DialogTitle>
               {authMode === "login"
                 ? t("Welcome back", "أهلاً بعودتك")
                 : t("Create your free account", "أنشئ حسابك المجاني")}
-            </h2>
+            </DialogTitle>
+            <DialogDescription>{t("Save your learning progress securely across devices.", "احفظ تقدمك في التعلم بأمان عبر أجهزتك.")}</DialogDescription>
             {authMode === "register" && (
               <label>
                 {t("Name", "الاسم")}
-                <input
+                <Input
                   autoFocus
                   value={authForm.name}
                   onChange={e =>
@@ -3202,7 +3169,7 @@ export default function Home() {
             )}
             <label>
               {t("Email", "البريد الإلكتروني")}
-              <input
+              <Input
                 autoFocus={authMode === "login"}
                 type="email"
                 value={authForm.email}
@@ -3214,7 +3181,7 @@ export default function Home() {
             </label>
             <label>
               {t("Password", "كلمة المرور")}
-              <input
+              <Input
                 type="password"
                 value={authForm.password}
                 onChange={e =>
@@ -3226,17 +3193,17 @@ export default function Home() {
               />
               <small>{t("At least 10 characters", "١٠ أحرف على الأقل")}</small>
             </label>
-            {authError && <p className="auth-error">{authError}</p>}
-            <button
-              className="primary"
+            {authError && <p role="alert" className="auth-error">{authError}</p>}
+            <Button
+              type="submit"
               disabled={login.isPending || register.isPending}
             >
               {authMode === "login"
                 ? t("Sign in", "تسجيل الدخول")
                 : t("Create account", "إنشاء الحساب")}
-            </button>
-            <button
-              className="link-button"
+            </Button>
+            <Button
+              variant="link"
               type="button"
               onClick={() => {
                 setAuthMode(authMode === "login" ? "register" : "login");
@@ -3249,18 +3216,18 @@ export default function Home() {
                     "Already have an account? Sign in",
                     "لديك حساب؟ سجل الدخول"
                   )}
-            </button>
+            </Button>
             {caps.data?.oauth && (
-              <button className="secondary" type="button" onClick={startLogin}>
+              <Button variant="secondary" type="button" onClick={startLogin}>
                 {t(
                   "Continue with connected account",
                   "المتابعة بالحساب المتصل"
                 )}
-              </button>
+              </Button>
             )}
           </form>
-        </div>
-      )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

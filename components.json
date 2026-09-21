@@ -3,6 +3,7 @@
   "style": "new-york",
   "rsc": false,
   "tsx": true,
+  "iconLibrary": "lucide",
   "tailwind": {
     "css": "client/src/index.css",
     "baseColor": "neutral",

@@ -1,4 +1,37 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+@theme inline {
+  --color-background: var(--surface);
+  --color-foreground: var(--text);
+  --color-card: var(--surface);
+  --color-card-foreground: var(--text);
+  --color-popover: var(--surface);
+  --color-popover-foreground: var(--text);
+  --color-primary: var(--ui-primary);
+  --color-primary-foreground: var(--ui-primary-foreground);
+  --color-secondary: var(--surface-soft);
+  --color-secondary-foreground: var(--text);
+  --color-muted: var(--surface-soft);
+  --color-muted-foreground: var(--muted);
+  --color-accent: var(--surface-soft);
+  --color-accent-foreground: var(--text);
+  --color-destructive: var(--ui-destructive);
+  --color-border: var(--line);
+  --color-input: var(--line);
+  --color-ring: var(--ui-primary);
+}
+:root {
+  --ui-primary: #245d49;
+  --ui-primary-foreground: #ffffff;
+  --ui-destructive: #b42318;
+}
+[data-theme="dark"] {
+  --ui-primary: #8fc9a7;
+  --ui-primary-foreground: #10261c;
+  --ui-destructive: #f87171;
+}
+
 :root {
   --green: #245d49;
   --muted: #58675f;
@@ -5490,3 +5523,17 @@ textarea:focus-visible {
   color: var(--green);
   cursor: pointer;
 }
+
+/* Portalled shadcn account dialog: constrain the panel, scroll its contents. */
+[data-slot="dialog-content"].auth-modal {
+  position: fixed;
+  width: min(440px, calc(100vw - 2rem));
+  max-height: calc(100dvh - 2rem);
+  overflow-y: auto;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+.auth-modal form { display: grid; gap: 1rem; }
+.auth-modal [data-slot="dialog-description"] { margin: 0; }
+.auth-modal [data-slot="button"] { white-space: normal; height: auto; min-height: 2.5rem; }
