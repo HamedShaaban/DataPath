@@ -275,6 +275,7 @@ export default function Home() {
   );
   const save = trpc.datapath.save.useMutation();
   const logout = trpc.auth.logout.useMutation();
+  const revokeSessions = trpc.auth.revokeAllSessions.useMutation();
   const login = trpc.auth.login.useMutation();
   const register = trpc.auth.register.useMutation();
   const remove = trpc.datapath.remove.useMutation();
@@ -2805,6 +2806,19 @@ export default function Home() {
                 <div className="two-column">
                   <section className="card">
                     <h2>{t("Your learning profile", "ملف تعلمك")}</h2>
+                    {me.data && <div className="setting-row">
+                      <div><strong>{t("Account security", "أمان الحساب")}</strong><small>{t("Sign out on every device, including this one.", "سجل الخروج من كل الأجهزة، بما فيها هذا الجهاز.")}</small></div>
+                      <button className="secondary" disabled={revokeSessions.isPending} onClick={async () => {
+                        if (dirty && !window.confirm(t("Unsaved changes will be lost. Sign out everywhere?", "ستفقد التغييرات غير المحفوظة. هل تريد الخروج من كل الأجهزة؟"))) return;
+                        try {
+                          await revokeSessions.mutateAsync();
+                          utils.datapath.load.reset();
+                          setReady(false);
+                          utils.auth.me.setData(undefined, null);
+                        } catch { window.alert(t("Could not sign out all devices. Please try again.", "تعذر تسجيل الخروج من كل الأجهزة. حاول مرة أخرى.")); }
+                      }}>{t("Sign out all devices", "الخروج من كل الأجهزة")}</button>
+                    </div>}
+
                     <div className="setting-row">
                       <div>
                         <strong>{t("Appearance", "شكل المنصة")}</strong>

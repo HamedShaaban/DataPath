@@ -20,6 +20,7 @@ import { loadLearning, saveLearning, deleteLearning } from "./learning-store";
 import { invokeLLM } from "./_core/llm";
 import { sdk } from "./_core/sdk";
 import { createLocalAccount, getLocalAccount } from "./db";
+import { requestSessionToken, revokeSession, revokeAllSessions } from "./sessions";
 const scrypt = promisify(scryptCallback);
 const emailSchema = z.string().trim().toLowerCase().email().max(320);
 const authCalls = new Map<string, number[]>();
@@ -128,11 +129,17 @@ export const appRouter = router({
           });
         }
       }),
-    logout: publicProcedure.mutation(({ ctx }) => {
+    logout: publicProcedure.mutation(async ({ ctx }) => {
+      await revokeSession(requestSessionToken(ctx.req));
       ctx.res.clearCookie(COOKIE_NAME, {
         ...getSessionCookieOptions(ctx.req),
         maxAge: -1,
       });
+      return { success: true } as const;
+    }),
+    revokeAllSessions: protectedProcedure.mutation(async ({ ctx }) => {
+      await revokeAllSessions(ctx.user.id);
+      ctx.res.clearCookie(COOKIE_NAME, { ...getSessionCookieOptions(ctx.req), maxAge: -1 });
       return { success: true } as const;
     }),
   }),
@@ -145,7 +152,7 @@ export const appRouter = router({
     capabilities: publicProcedure.query(() => ({
       ai: Boolean(process.env.BUILT_IN_FORGE_API_KEY),
       accounts: Boolean(
-        process.env.DATABASE_URL && (process.env.JWT_SECRET?.length || 0) >= 32
+        process.env.DATABASE_URL
       ),
       oauth: Boolean(
         process.env.OAUTH_SERVER_URL &&

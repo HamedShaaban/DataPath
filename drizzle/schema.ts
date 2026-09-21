@@ -1,5 +1,6 @@
 import {
   integer,
+  index,
   pgEnum,
   pgTable,
   text,
@@ -123,3 +124,20 @@ export const localAccounts = pgTable("localAccounts", {
 });
 
 export type LocalAccount = typeof localAccounts.$inferSelect;
+
+// Only a SHA-256 hash of the opaque cookie token is persisted.
+export const sessions = pgTable(
+  "sessions",
+  {
+    id: varchar("id", { length: 64 }).primaryKey(),
+    userId: integer("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    expiresAt: timestamp("expiresAt", { withTimezone: true }).notNull(),
+    revokedAt: timestamp("revokedAt", { withTimezone: true }),
+  },
+  table => [
+    index("sessions_user_idx").on(table.userId),
+    index("sessions_expiry_idx").on(table.expiresAt),
+  ]
+);

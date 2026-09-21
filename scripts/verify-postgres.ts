@@ -139,6 +139,29 @@ try {
     password: credentials.password,
   });
   assert.equal(cookies.length, 2);
+  const sessionStore = await import("../server/sessions");
+  const signedIn = await sessionStore.lookupSession(cookies[0]);
+  assert.ok(signedIn);
+  const stored = await conn.query('SELECT id FROM sessions WHERE "userId"=$1', [signedIn.id]);
+  assert.ok(stored.rows.every(row => !cookies.includes(row.id)));
+  assert.equal(await sessionStore.lookupSession("legacy.jwt.value"), null);
+  const otherToken = await sessionStore.createSession(first.userId);
+  const ctx = { user: signedIn, req: { protocol: "http", headers: { cookie: `app_session_id=${cookies[0]}` } }, res: { clearCookie() {} } } as unknown as TrpcContext;
+  const { COOKIE_NAME } = await import("../shared/const");
+  ctx.req.headers.cookie = `${COOKIE_NAME}=${cookies[0]}`;
+  const { createContext } = await import("../server/_core/context");
+  assert.equal((await createContext({ req: ctx.req, res: ctx.res, info: {} as any })).user?.id, signedIn.id);
+  await appRouter.createCaller(ctx).auth.logout();
+  assert.equal(await sessionStore.lookupSession(cookies[0]), null);
+  assert.ok(await sessionStore.lookupSession(cookies[1]));
+  ctx.req.headers.cookie = `${COOKIE_NAME}=${cookies[1]}`;
+  await appRouter.createCaller(ctx).auth.revokeAllSessions();
+  assert.equal((await createContext({ req: ctx.req, res: ctx.res, info: {} as any })).user, null);
+  assert.ok(await sessionStore.lookupSession(otherToken), "other account must remain signed in");
+  await conn.query(`UPDATE sessions SET "expiresAt"=now() - interval '1 second' WHERE id=$1`, [sessionStore.hashSessionToken(otherToken)]);
+  assert.equal(await sessionStore.lookupSession(otherToken), null);
+  console.log("PASS: opaque sessions, hashed storage, context lookup, expiry, logout, revoke-all and account isolation");
+
   assert.ok(
     (await db.getLocalAccount(credentials.email))?.passwordHash.startsWith(
       "scrypt$"
