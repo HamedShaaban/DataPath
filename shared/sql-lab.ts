@@ -180,7 +180,7 @@ export const sqlLabChallenges: SqlLabChallenge[] = [
     starterSql:
       "SELECT transaction_id, transaction_date\nFROM transactions\nWHERE ",
     hints: [
-      "Use ISO dates so lexical and chronological order agree.",
+      "The column is a PostgreSQL DATE; use ISO date literals (YYYY-MM-DD).",
       "Both boundary dates must be included.",
     ],
     expectedColumns: ["transaction_id", "transaction_date"],

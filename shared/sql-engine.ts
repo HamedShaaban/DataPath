@@ -1,3 +1,4 @@
+import { PGlite, types, type PGliteOptions } from "@electric-sql/pglite";
 import { sqlResultFeedback } from "./sql-result-feedback";
 import { coachSqlError, type SqlCoaching } from "./sql-coaching";
 import { sqlContext, sqlVocabulary, mapSqlRows } from "./sql-context";
@@ -27,7 +28,7 @@ function safeQuery(query: string) {
     return "This lab accepts read-only SELECT or WITH queries.";
   if (blockedSql.test(trimmed))
     return "This lab blocks database changes, file access and external data sources.";
-  if (/[`\[\]{}\\@$!:]|->/.test(trimmed))
+  if (/[`{}\\@$]|->/.test(trimmed))
     return "Use standard SQL expressions only; scripting and external access are unavailable.";
   const statements = trimmed
     .split(";")
@@ -39,34 +40,74 @@ function safeQuery(query: string) {
 
 type LabTables = Record<"customers" | "transactions", SqlLabRow[]>;
 
-async function createLabDatabase(
-  dataset: LabTables = sqlLabTables,
-  sector: Sector = "banking"
-) {
-  const { default: alasql } = await import("alasql");
-  const db = new alasql.Database();
-  db.exec(
+// Each worker owns one disposable, in-memory Postgres instance. The queue also
+// isolates concurrent calls in Node tests; no learner data is persisted here.
+let database: Promise<PGlite> | undefined;
+let pending: Promise<unknown> = Promise.resolve();
+async function getDatabase(options?: PGliteOptions) {
+  if (!database) {
+    database = (async () => {
+      const db = await PGlite.create({
+        ...options,
+        parsers: { ...options?.parsers, [types.DATE]: value => value },
+      });
+      await db.exec(`
+        CREATE ROLE lab_reader NOLOGIN NOSUPERUSER;
+        REVOKE CREATE ON SCHEMA public FROM PUBLIC;
+        REVOKE EXECUTE ON FUNCTION pg_catalog.set_config(text, text, boolean) FROM PUBLIC;
+      `);
+      return db;
+    })().catch(error => {
+      database = undefined;
+      throw error;
+    });
+  }
+  return database;
+}
+async function seedDatabase(db: PGlite, dataset: LabTables, sector: Sector) {
+  await db.exec(
+    `DROP TABLE IF EXISTS transactions, customers, events, entities;`
+  );
+  await db.exec(
     sqlVocabulary(
-      "CREATE TABLE customers (customer_id INT, customer_name STRING, segment STRING)",
+      `
+    CREATE TABLE customers (customer_id INTEGER, customer_name TEXT, segment TEXT);
+    CREATE TABLE transactions (transaction_id INTEGER, customer_id INTEGER,
+      amount INTEGER, status TEXT, transaction_date DATE);
+    GRANT SELECT ON customers, transactions TO lab_reader;
+  `,
       sector
     )
   );
-  db.exec(
-    sqlVocabulary(
-      "CREATE TABLE transactions (transaction_id INT, customer_id INT, amount INT, status STRING, transaction_date STRING)",
-      sector
-    )
+  for (const table of ["customers", "transactions"] as const) {
+    const rows = mapSqlRows(dataset[table], sector);
+    if (!rows.length) continue;
+    const columns = Object.keys(rows[0]);
+    const values: unknown[] = [];
+    const placeholders = rows.map(
+      row =>
+        `(${columns
+          .map(column => {
+            values.push(row[column]);
+            return `$${values.length}`;
+          })
+          .join(", ")})`
+    );
+    await db.query(
+      `INSERT INTO ${sqlVocabulary(table, sector)} (${columns.join(", ")}) VALUES ${placeholders.join(", ")}`,
+      values
+    );
+  }
+}
+async function readQuery(db: PGlite, query: string) {
+  await db.exec(
+    "BEGIN READ ONLY; SET LOCAL ROLE lab_reader; SET LOCAL statement_timeout = '2000ms';"
   );
-  const tables = db.tables as Record<string, { data: SqlLabRow[] }>;
-  tables[sqlVocabulary("customers", sector)].data = mapSqlRows(
-    dataset.customers,
-    sector
-  );
-  tables[sqlVocabulary("transactions", sector)].data = mapSqlRows(
-    dataset.transactions,
-    sector
-  );
-  return db;
+  try {
+    return await db.query<SqlLabRow>(query);
+  } finally {
+    await db.exec("ROLLBACK");
+  }
 }
 
 function rowsEqual(actual: SqlLabRow[], expected: SqlLabRow[]) {
@@ -151,10 +192,11 @@ function hiddenDatasets(): LabTables[] {
   ];
 }
 
-export async function executeSqlChallenge(
+async function executeChallenge(
   challengeId: string,
   query: string,
-  sector: Sector = "banking"
+  sector: Sector = "banking",
+  options?: PGliteOptions
 ): Promise<SqlExecutionResult> {
   const challenge = sqlContext(sector).challenges.find(
     item => item.id === challengeId
@@ -173,29 +215,27 @@ export async function executeSqlChallenge(
     };
 
   try {
-    const raw = (await createLabDatabase(sqlLabTables, sector)).exec(query);
+    const db = await getDatabase(options);
+    await seedDatabase(db, sqlLabTables, sector);
+    const result = await readQuery(db, query);
+    const raw = result.rows;
     if (!Array.isArray(raw)) throw new Error("The query did not return rows.");
     const expected = (
       sector === "banking"
         ? challenge.expectedRows
-        : (await createLabDatabase(sqlLabTables, sector)).exec(
-            challenge.referenceSql
-          )
+        : (await readQuery(db, challenge.referenceSql)).rows
     ) as SqlLabRow[];
     const rows = raw.slice(0, 200) as SqlLabRow[];
-    const columns = rows.length
-      ? Object.keys(rows[0])
-      : challenge.expectedColumns;
+    const columns = result.fields.map(field => field.name);
     const checks: SqlExecutionResult["checks"] = [
       { label: "Query executed successfully", passed: true },
       {
         label: "Returns the required columns",
         passed:
-          !raw.length ||
-          (columns.length === challenge.expectedColumns.length &&
-            challenge.expectedColumns.every(
-              (column, index) => columns[index] === column
-            )),
+          columns.length === challenge.expectedColumns.length &&
+          challenge.expectedColumns.every(
+            (column, index) => columns[index] === column
+          ),
       },
       {
         label: "Returns the expected number of rows",
@@ -219,10 +259,9 @@ export async function executeSqlChallenge(
     for (const [index, dataset] of hiddenDatasets().entries()) {
       let passed = false;
       try {
-        const actual = (await createLabDatabase(dataset, sector)).exec(query);
-        const target = (await createLabDatabase(dataset, sector)).exec(
-          challenge.referenceSql!
-        );
+        await seedDatabase(db, dataset, sector);
+        const actual = (await readQuery(db, query)).rows;
+        const target = (await readQuery(db, challenge.referenceSql)).rows;
         passed =
           Array.isArray(actual) &&
           Array.isArray(target) &&
@@ -297,4 +336,17 @@ export function sqlErrorGuidance(detail: string) {
   if (/parse|syntax|unexpected/i.test(detail))
     return "Check commas, quotes and clause order: SELECT → FROM → WHERE → GROUP BY → HAVING → ORDER BY.";
   return "Run a small SELECT first, then add one filter, join or calculation at a time.";
+}
+
+export function executeSqlChallenge(
+  challengeId: string,
+  query: string,
+  sector: Sector = "banking",
+  options?: PGliteOptions
+): Promise<SqlExecutionResult> {
+  const result = pending.then(() =>
+    executeChallenge(challengeId, query, sector, options)
+  );
+  pending = result.catch(() => undefined);
+  return result;
 }

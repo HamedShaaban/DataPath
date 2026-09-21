@@ -14,12 +14,14 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "test:integration": "node --import tsx scripts/verify-mysql.ts",
-    "predev": "node scripts/prepare-python.mjs",
-    "prebuild": "node scripts/prepare-python.mjs"
+    "test:sql-worker": "node --disallow-code-generation-from-strings --import tsx scripts/verify-sql-worker.ts",
+    "predev": "node scripts/prepare-python.mjs && node scripts/prepare-sql.mjs",
+    "prebuild": "node scripts/prepare-python.mjs && node scripts/prepare-sql.mjs"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.693.0",
     "@aws-sdk/s3-request-presigner": "^3.693.0",
+    "@electric-sql/pglite": "0.5.8",
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-alert-dialog": "^1.1.15",
@@ -51,7 +53,6 @@
     "@trpc/client": "^11.6.0",
     "@trpc/react-query": "^11.6.0",
     "@trpc/server": "^11.6.0",
-    "alasql": "4.19.1",
     "axios": "^1.12.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

@@ -47,10 +47,14 @@ describe("HTTP security", () => {
     const { res } = run({ host: "datapath.example" });
     expect(res.status).toHaveBeenCalledWith(403);
   });
-  it("allows expression compilation only in the network-isolated SQL worker", () => {
+  it("allows WASM only in the SQL worker with runtime-only network access", () => {
     vi.stubEnv("NODE_ENV", "production");
     const main = run({}, "GET", "/").res;
-    const worker = run({}, "GET", "/assets/sql-worker-abc123.js").res;
+    const worker = run(
+      { host: "datapath.example" },
+      "GET",
+      "/assets/sql-worker-abc123.js"
+    ).res;
     const mainPolicy = vi
       .mocked(main.setHeader)
       .mock.calls.find(call => call[0] === "Content-Security-Policy")?.[1];
@@ -58,8 +62,12 @@ describe("HTTP security", () => {
       .mocked(worker.setHeader)
       .mock.calls.find(call => call[0] === "Content-Security-Policy")?.[1];
     expect(mainPolicy).not.toContain("unsafe-eval");
-    expect(workerPolicy).toContain("unsafe-eval");
-    expect(workerPolicy).toContain("connect-src 'none'");
+    expect(workerPolicy).toContain("'wasm-unsafe-eval'");
+    expect(workerPolicy).not.toContain("'unsafe-eval'");
+    expect(workerPolicy).toContain(
+      "connect-src https://datapath.example/sql-runtime/pglite.wasm https://datapath.example/sql-runtime/initdb.wasm https://datapath.example/sql-runtime/pglite.data;"
+    );
+    expect(workerPolicy).not.toContain("connect-src 'self'");
     expect(workerPolicy).toContain("worker-src 'none'");
   });
   it("limits Python network access to self-hosted runtime assets", () => {

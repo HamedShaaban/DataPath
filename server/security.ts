@@ -30,8 +30,8 @@ export function securityMiddleware(
       "Strict-Transport-Security",
       "max-age=31536000; includeSubDomains"
     );
-    // AlaSQL compiles expressions inside a disposable worker. Only that worker
-    // may compile code; its policy disallows network access and child workers.
+    // PostgreSQL runs in a disposable WASM worker with only local runtime
+    // downloads allowed. Account APIs and child workers remain unavailable.
     const isSqlWorker = /^\/assets\/sql-worker-[A-Za-z0-9_-]+\.js$/.test(
       req.path
     );
@@ -46,7 +46,7 @@ export function securityMiddleware(
       isPythonWorker
         ? `default-src 'none'; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval'; connect-src ${runtimeOrigin}/python-runtime/; worker-src 'none'`
         : isSqlWorker
-          ? "default-src 'none'; script-src 'self' 'unsafe-eval'; connect-src 'none'; worker-src 'none'"
+          ? `default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src ${runtimeOrigin}/sql-runtime/pglite.wasm ${runtimeOrigin}/sql-runtime/initdb.wasm ${runtimeOrigin}/sql-runtime/pglite.data; worker-src 'none'`
           : "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'"
     );
   }

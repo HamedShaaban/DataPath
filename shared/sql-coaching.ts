@@ -47,7 +47,7 @@ export function coachSqlError(detail: string, sector: Sector): SqlCoaching {
     advice = {
       title: "Rebuild the query one clause at a time",
       explanation:
-        "Start with a small SELECT and FROM, then add your filter, grouping and sorting. Check commas, parentheses and single quotes around text. This lab uses AlaSQL; some syntax from other databases is unavailable.",
+        "Start with a small SELECT and FROM, then add your filter, grouping and sorting. Check commas, parentheses and single quotes around text. This lab runs PostgreSQL through PGlite; use PostgreSQL syntax.",
       example: "SELECT status FROM transactions WHERE status = 'completed';",
     };
   }

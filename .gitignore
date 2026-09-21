@@ -114,3 +114,5 @@ client/public/__manus__/version.json
 .project-config.json
 
 /client/public/python-runtime/
+
+/client/public/sql-runtime/
