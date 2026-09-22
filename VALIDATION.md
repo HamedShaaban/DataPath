@@ -115,3 +115,9 @@ Validation: Type checking, 186 tests across 23 files, and production build passe
 
 ## AI documentation audit — 2026-09-21
 Inspected the three-mode coach endpoint, provider transport, client consent/display, deterministic recommendations and review schedule. Added eight mocked-provider contract tests covering exact context, CV/interview data, absent model/tools, output bounds, unverified prose, request length and per-process quota. Type checking and all 194 tests in 24 files passed. No runtime implementation changes or live AI calls. Technical supplement: output/pdf/DataPath_AI_Technical_Review.pdf (six pages, rendered and inspected). Current-UI screenshot guide remains incomplete: browser policy verification denied capture again. The older illustrated guide must not be represented as the current screenshot edition.
+
+## Tasks 3–6 — 2026-09-22
+
+Stacked task branches implement PostgreSQL-backed revocable sessions, the existing shadcn layer's Tailwind 4 theme and account-dialog integration, bounded AI calls with persistent budget reservations, and launch preparation. See TASK_3_SESSIONS.md through TASK_6_LAUNCH.md for scope and operational details.
+
+225 tests in 27 files, TypeScript and production build pass; all original 194 cases remain. PostgreSQL migration/persistence/session/budget checks pass. Built SQL worker: 108 combinations; built self-hosted Python: 27. Temporary production server health, asset delivery and shutdown pass. One Playwright smoke test is authored and discovered but not executed: browser policy verification remains blocked. Docker is unavailable. Live Sentry delivery and browser acceptance remain pending; launch readiness is not claimed. PDF unchanged.

@@ -6,3 +6,9 @@ dist
 .git
 .manus-logs
 *.zip
+tmp
+output
+playwright-report
+test-results
+client/public/python-runtime
+client/public/sql-runtime

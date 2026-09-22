@@ -46,9 +46,9 @@ Excel and DAX support the specific formula forms described in each exercise, not
 ## Enable accounts
 
 1. Create a dedicated PostgreSQL database (Neon in production) and a database user restricted to it. For existing MySQL data, follow `TASK_2_POSTGRES.md` before switching connections.
-2. Copy `.env.example` to `.env`. Set `DATABASE_URL` (Neon TLS URL in production), optionally `DATABASE_MIGRATION_URL` for direct migration access, and a random `JWT_SECRET` of at least 32 characters (`openssl rand -hex 32`). Never commit `.env`.
+2. Copy `.env.example` to `.env`. Set `DATABASE_URL` (Neon TLS URL in production), optionally `DATABASE_MIGRATION_URL` for direct migration access. Never commit `.env`.
 3. Run `pnpm db:migrate` (the existing `pnpm db:push` alias also applies committed migrations). `drizzle.config.ts` loads `.env` automatically.
-4. Restart the server. The sign-in button appears when the database and session secret are configured. Learners can register with a name, email and password of at least 10 characters. Signed-in users use **Save progress**; unsaved changes remain visibly marked.
+4. Restart the server. The sign-in button appears when the database is configured. Learners can register with a name, email and password of at least 10 characters. Signed-in users use **Save progress**; unsaved changes remain visibly marked.
 5. Optional: configure `VITE_APP_ID`, `VITE_OAUTH_PORTAL_URL` and `OAUTH_SERVER_URL` for the existing **Manus-compatible OAuth service**. Register your exact `/api/oauth/callback` URL. This connector requires HTTPS and its existing service contract; entering a Google/Auth0 issuer alone will not work.
 
 There is no shared demo account or identity fallback. Local password accounts work without OAuth. Production OAuth sign-in requires real provider credentials and has not been exercised against an external account in this delivery.
@@ -58,6 +58,8 @@ New learning data goes into `learningStates`, keyed by authenticated user ID. Po
 ## Enable the AI coach
 
 Set the server-only `BUILT_IN_FORGE_API_URL` and `BUILT_IN_FORGE_API_KEY` for the existing chat-completions service. The base URL must support `/v1/chat/completions` and structured JSON responses. The existing adapter defaults to its Forge service when no URL is supplied. Do not place secrets in client variables.
+
+Also configure `AI_MODEL`, verified `AI_INPUT_USD_PER_MILLION` and `AI_OUTPUT_USD_PER_MILLION`, and `AI_MONTHLY_CAP_USD`. See `TASK_5_AI_HARDENING.md` for reservation accounting and timeout/retry behavior.
 
 AI requires a signed-in account, explicit user consent and server-side limits (20 requests per user/hour). Only necessary profile information, the current request, curated topics, and the selected interview rubric or CV fields are sent. The AI cannot write learning state or change the curriculum. Unknown topic IDs in responses are rejected. The response is plain text; model advice still needs learner judgment.
 
@@ -76,11 +78,11 @@ pnpm db:migrate  # when enabling accounts / upgrading a database
 NODE_ENV=production pnpm start
 ```
 
-Set `APP_ORIGIN` to the canonical HTTPS origin with no trailing slash and `JWT_SECRET` to a strong random secret. Startup fails without them. Set `TRUST_PROXY=1` only behind one trusted reverse proxy. Ensure the public hostname cannot bypass that proxy. Use `/api/health` for a process health check (it is not a database readiness check).
+Set `APP_ORIGIN` to the canonical HTTPS origin with no trailing slash. Zod validation rejects invalid configuration before startup. JWT_SECRET is no longer used: sessions are revocable database records. Set `TRUST_PROXY=1` only behind one trusted reverse proxy. Ensure the public hostname cannot bypass that proxy. Use `/api/health` for a process health check (it is not a database readiness check).
 
-The production CSP allows self-hosted assets only; the app includes no external fonts, analytics, session replay or debug collector. Request bodies are limited to 128 KB and account state to 60 KB. Export and shorten old notes when approaching the account limit.
+The production CSP permits self-hosted assets and, when configured, the public Sentry ingest origin for error reporting. Worker policies remain restricted to local runtime downloads. No session replay is enabled. Request bodies are limited to 128 KB and account state to 60 KB. Export and shorten old notes when approaching the account limit.
 
-The included rate limiter is process-local, appropriate for the recommended single-instance beta. Use a shared rate-limit store and an edge limit before scaling to multiple instances. Configure database backups, operational monitoring, a support contact and your operator-specific privacy/retention policy before public launch.
+General HTTP/auth throttles are process-local; AI request and monthly-budget limits are persisted in PostgreSQL. Use a shared rate-limit store and an edge limit before scaling to multiple instances. Configure database backups, operational monitoring, a support contact and your operator-specific privacy/retention policy before public launch.
 
 ## Verify
 
@@ -100,3 +102,10 @@ DataPath منصة مجانية لمسارات البيانات والذكاء ا
 
 تسجيل الدخول بالبريد وكلمة المرور يحتاج إعداد قاعدة PostgreSQL وسر جلسة قوي فقط، بينما OAuth اختياري. بعد كل موضوع يوجد اختبار، وبعد كل مهارة اختبار أكبر، مع مراجعات تراكمية تعيد نقاط الضعف إلى الخطة. المدرب الذكي اختياري ويحتاج مفتاح خدمة في الخادم. جميع مسارات التعلم والتدريب المنسقة تعمل بدونه.
 The product benchmark and the reasoning behind the evidence-first workflow are documented in [`BENCHMARK.md`](./BENCHMARK.md).
+
+
+## Launch package (Task 6)
+
+See `TASK_6_LAUNCH.md` for Docker, Sentry, smoke-test setup and verification limits. Runtime Python assets are copied from the locked Pyodide package at build time and requested only when Python practice runs. There is no runtime CDN dependency.
+
+The current test baseline is 225 tests; the original 194 remain. Browser smoke and Docker execution are separate acceptance checks and are not included in that count.

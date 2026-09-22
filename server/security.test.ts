@@ -88,9 +88,8 @@ describe("HTTP security", () => {
   });
   it("refuses insecure production configuration", () => {
     vi.stubEnv("NODE_ENV", "production");
-    vi.stubEnv("JWT_SECRET", "weak");
+    vi.stubEnv("APP_ORIGIN", "http://datapath.example");
     expect(validateProduction).toThrow();
-    vi.stubEnv("JWT_SECRET", "a".repeat(64));
     vi.stubEnv("APP_ORIGIN", "https://datapath.example");
     expect(validateProduction).not.toThrow();
   });

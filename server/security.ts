@@ -1,17 +1,8 @@
+import { parseEnv } from "./_core/env";
 import type { Request, Response, NextFunction } from "express";
 const traffic = new Map<string, { count: number; until: number }>();
 export function validateProduction() {
-  if (process.env.NODE_ENV !== "production") return;
-  const secret = process.env.JWT_SECRET || "";
-  if (secret.length < 32 || /replace|paste|secret_here/i.test(secret))
-    throw new Error(
-      "Production requires a random JWT_SECRET of at least 32 characters"
-    );
-  if (
-    !process.env.APP_ORIGIN?.startsWith("https://") ||
-    new URL(process.env.APP_ORIGIN).origin !== process.env.APP_ORIGIN
-  )
-    throw new Error("Production requires an HTTPS APP_ORIGIN");
+  parseEnv(process.env);
 }
 export function securityMiddleware(
   req: Request,
@@ -41,13 +32,17 @@ export function securityMiddleware(
     const runtimeOrigin = /^[a-z0-9.:[\]-]+$/i.test(host)
       ? `${req.protocol}://${host}`
       : "https://localhost";
+    // Permit only the configured Sentry ingest origin on the document, never workers.
+    const sentryOrigin = process.env.VITE_SENTRY_DSN
+      ? new URL(process.env.VITE_SENTRY_DSN).origin
+      : "";
     res.setHeader(
       "Content-Security-Policy",
       isPythonWorker
         ? `default-src 'none'; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval'; connect-src ${runtimeOrigin}/python-runtime/; worker-src 'none'`
         : isSqlWorker
           ? `default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; connect-src ${runtimeOrigin}/sql-runtime/pglite.wasm ${runtimeOrigin}/sql-runtime/initdb.wasm ${runtimeOrigin}/sql-runtime/pglite.data; worker-src 'none'`
-          : "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'"
+          : `default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' ${sentryOrigin}; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'`
     );
   }
   if (!req.path.startsWith("/api/")) return next();

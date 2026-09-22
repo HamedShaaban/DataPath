@@ -42,7 +42,7 @@ Provider configuration and user consent are explicit. Core features have a deter
 
 ## Security retained and strengthened
 
-- Preserved OAuth nonce binding, JWT verification and authenticated user ownership.
+- Preserved OAuth nonce binding, database session lookup and authenticated user ownership.
 - Removed unrestricted shared demo login, synthetic `id: 1` fallback and cron identities from learner account access.
 - Required strong session secrets; checked session app IDs; kept HttpOnly/Secure cookies and tightened SameSite to Lax.
 - Added same-origin write checks, request limits, body bounds, CSP, HSTS, frame protection and no-store API responses.
