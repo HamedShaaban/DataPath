@@ -3004,57 +3004,57 @@ function SqlPracticeLab({
   onChoose: (id: string) => void;
 }) {
   const { challenges: allSqlChallenges, tables: sqlLabTables } = sqlContext(
-    state.profile.sector
+    state.profile.sector,
   );
   const sqlLabChallenges = allSqlChallenges.filter(
-    challenge =>
-      skillById.sql.topics.find(topic => topic.id === challenge.topicId)!
-        .level <= (requirements(state.profile).sql || 1)
+    (challenge) =>
+      skillById.sql.topics.find((topic) => topic.id === challenge.topicId)!
+        .level <= (requirements(state.profile).sql || 1),
   );
   const [hintCount, setHintCount] = useState(0);
   const [challengeId, setChallengeId] = useState(
-    sqlLabChallenges.some(item => item.id === initialChallengeId)
+    sqlLabChallenges.some((item) => item.id === initialChallengeId)
       ? initialChallengeId
-      : sqlLabChallenges[0].id
+      : sqlLabChallenges[0].id,
   );
-  const challenge = sqlLabChallenges.find(item => item.id === challengeId)!;
+  const challenge = sqlLabChallenges.find((item) => item.id === challengeId)!;
   const [query, setQuery] = useState(
     [...state.labAttempts]
       .reverse()
       .find(
-        attempt =>
+        (attempt) =>
           attempt.challengeId === challengeId &&
-          (attempt.sector || "banking") === state.profile.sector
-      )?.query ?? challenge.starterSql
+          (attempt.sector || "banking") === state.profile.sector,
+      )?.query ?? challenge.starterSql,
   );
   const [result, setResult] = useState<Awaited<
     ReturnType<typeof runSqlInWorker>
   > | null>(null);
   const [running, setRunning] = useState(false);
   const passedIds = new Set(
-    [...passedLabIds(state)].filter(id =>
-      sqlLabChallenges.some(item => item.id === id)
-    )
+    [...passedLabIds(state)].filter((id) =>
+      sqlLabChallenges.some((item) => item.id === id),
+    ),
   );
   const drafts = useRef<Record<string, string>>({});
   const challengeAttempts = state.labAttempts.filter(
-    attempt =>
+    (attempt) =>
       attempt.challengeId === challengeId &&
-      (attempt.sector || "banking") === state.profile.sector
+      (attempt.sector || "banking") === state.profile.sector,
   );
   const scoredAttempts = challengeAttempts.filter(
-    attempt => attempt.checksTotal
+    (attempt) => attempt.checksTotal,
   );
   const firstScore = scoredAttempts[0];
   const latestScore = scoredAttempts[scoredAttempts.length - 1];
   const score = (attempt: typeof firstScore) =>
     Math.round(
-      (100 * (attempt.checksPassed || 0)) / (attempt.checksTotal || 1)
+      (100 * (attempt.checksPassed || 0)) / (attempt.checksTotal || 1),
     );
   const choose = (id: string) => {
     if (running) return;
     drafts.current[challengeId] = query;
-    const nextChallenge = sqlLabChallenges.find(item => item.id === id)!;
+    const nextChallenge = sqlLabChallenges.find((item) => item.id === id)!;
     setChallengeId(id);
     onChoose(id);
     setQuery(
@@ -3062,11 +3062,11 @@ function SqlPracticeLab({
         [...state.labAttempts]
           .reverse()
           .find(
-            attempt =>
+            (attempt) =>
               attempt.challengeId === id &&
-              (attempt.sector || "banking") === state.profile.sector
+              (attempt.sector || "banking") === state.profile.sector,
           )?.query ??
-        nextChallenge.starterSql
+        nextChallenge.starterSql,
     );
     setResult(null);
     setHintCount(0);
@@ -3076,14 +3076,14 @@ function SqlPracticeLab({
     const nextResult = await runSqlInWorker(
       challenge.id,
       query,
-      state.profile.sector
+      state.profile.sector,
     );
     setResult(nextResult);
-    update(current =>
+    update((current) =>
       current.profile.role === state.profile.role &&
       current.profile.sector === state.profile.sector
         ? recordLabAttempt(current, challenge.id, query, nextResult)
-        : current
+        : current,
     );
     setRunning(false);
   };
@@ -3115,95 +3115,110 @@ function SqlPracticeLab({
         </div>
       </div>
 
-      <div className="lab-tabs" aria-label="SQL challenges">
-        {sqlLabChallenges.map((item, index) => (
-          <button
-            key={item.id}
-            disabled={running}
-            aria-pressed={item.id === challengeId}
-            className={item.id === challengeId ? "active" : ""}
-            onClick={() => choose(item.id)}
-          >
-            <span>{String(index + 1).padStart(2, "0")}</span>
-            <b>{item.title}</b>
-            {passedIds.has(item.id) && <Check size={15} />}
-          </button>
-        ))}
-      </div>
-
+      <details className="studio-sql-picker">
+        <summary>
+          SQL exercises · {sqlLabChallenges.length} in your path
+        </summary>
+        <div className="lab-tabs" aria-label="SQL challenges">
+          {sqlLabChallenges.map((item, index) => (
+            <button
+              key={item.id}
+              disabled={running}
+              aria-pressed={item.id === challengeId}
+              className={item.id === challengeId ? "active" : ""}
+              onClick={() => choose(item.id)}
+            >
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <b>{item.title}</b>
+              {passedIds.has(item.id) && <Check size={15} />}
+            </button>
+          ))}
+        </div>
+      </details>
       <div className="lab-workspace">
-        <article className="lab-brief card">
-          <LessonGlossary language={state.profile.language} />
-          <div className="lab-meta">
-            <span>
-              {challenge.level} · {challenge.mode || "Build"}
-            </span>
-            <button
-              className="text-button"
-              onClick={() => openRoadmap(challenge.topicId)}
-            >
-              Open lesson
-            </button>
-          </div>
-          <h3>{challenge.title}</h3>
-          <small>
-            About {practiceMeta(challenge.topicId, "sql").minutes} minutes
-          </small>
-          <p>{challenge.brief}</p>
-          <strong>Your task</strong>
-          <p>{challenge.task}</p>
-          <section className="progressive-hints">
-            <h4>Hints</h4>
-            <ol>
-              {challenge.hints.slice(0, hintCount).map(hint => (
-                <li key={hint}>{hint}</li>
-              ))}
-            </ol>
-            <button
-              className="text-button"
-              disabled={hintCount >= challenge.hints.length}
-              onClick={() => setHintCount(count => count + 1)}
-            >
-              {hintCount >= challenge.hints.length
-                ? "All hints revealed"
-                : `Reveal hint ${hintCount + 1}`}
-            </button>
-          </section>
-          <div className="dataset-preview">
-            <strong>Dataset</strong>
-            {Object.entries(sqlLabTables).map(([name, rows]) => (
-              <details key={name} open={name === "transactions"}>
-                <summary>
-                  {name} · {rows.length} rows
-                </summary>
-                <div className="lab-table-wrap">
-                  <table>
-                    <thead>
-                      <tr>
-                        {Object.keys(rows[0]).map(column => (
-                          <th key={column}>{column}</th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {rows.map((row, rowIndex) => (
-                        <tr key={rowIndex}>
-                          {Object.values(row).map((value, cellIndex) => (
-                            <td key={cellIndex}>
-                              {value === null ? "NULL" : value}
-                            </td>
+        <details
+          className="lab-brief card studio-instructions"
+          key={challenge.id}
+        >
+          <summary>Instructions, dataset & hints</summary>
+          <div className="studio-instructions-body">
+            <LessonGlossary language={state.profile.language} />
+            <div className="lab-meta">
+              <span>
+                {challenge.level} · {challenge.mode || "Build"}
+              </span>
+              <button
+                className="text-button"
+                onClick={() => openRoadmap(challenge.topicId)}
+              >
+                Open lesson
+              </button>
+            </div>
+            <h3>{challenge.title}</h3>
+            <small>
+              About {practiceMeta(challenge.topicId, "sql").minutes} minutes
+            </small>
+            <p>{challenge.brief}</p>
+            <strong>Your task</strong>
+            <p>{challenge.task}</p>
+            <section className="progressive-hints">
+              <h4>Hints</h4>
+              <ol>
+                {challenge.hints.slice(0, hintCount).map((hint) => (
+                  <li key={hint}>{hint}</li>
+                ))}
+              </ol>
+              <button
+                className="text-button"
+                disabled={hintCount >= challenge.hints.length}
+                onClick={() => setHintCount((count) => count + 1)}
+              >
+                {hintCount >= challenge.hints.length
+                  ? "All hints revealed"
+                  : `Reveal hint ${hintCount + 1}`}
+              </button>
+            </section>
+            <div className="dataset-preview">
+              <strong>Dataset</strong>
+              {Object.entries(sqlLabTables).map(([name, rows]) => (
+                <details key={name} open={name === "transactions"}>
+                  <summary>
+                    {name} · {rows.length} rows
+                  </summary>
+                  <div className="lab-table-wrap">
+                    <table>
+                      <thead>
+                        <tr>
+                          {Object.keys(rows[0]).map((column) => (
+                            <th key={column}>{column}</th>
                           ))}
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </details>
-            ))}
+                      </thead>
+                      <tbody>
+                        {rows.map((row, rowIndex) => (
+                          <tr key={rowIndex}>
+                            {Object.values(row).map((value, cellIndex) => (
+                              <td key={cellIndex}>
+                                {value === null ? "NULL" : value}
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </details>
+              ))}
+            </div>
           </div>
-        </article>
+        </details>
 
         <article className="query-console">
+          <div className="studio-sql-task">
+            <span className="eyebrow">{challenge.level} · YOUR TASK</span>
+            <h3>{challenge.title}</h3>
+            <p>{challenge.task}</p>
+          </div>
           <div className="console-bar">
             <span>
               <i /> query.sql
@@ -3224,7 +3239,7 @@ function SqlPracticeLab({
             aria-label="SQL query editor"
             spellCheck={false}
             value={query}
-            onChange={event => setQuery(event.target.value)}
+            onChange={(event) => setQuery(event.target.value)}
           />
           <div className="console-actions">
             <small>Isolated in-browser database · SELECT queries only</small>
@@ -3253,7 +3268,7 @@ function SqlPracticeLab({
                   <span>{result.message}</span>
                 </div>
                 <div className="query-checks">
-                  {result.checks.map(check => (
+                  {result.checks.map((check) => (
                     <span
                       className={check.passed ? "passed" : "failed"}
                       key={check.label}
@@ -3293,7 +3308,7 @@ function SqlPracticeLab({
                   >
                     <h3>What to check next</h3>
                     <ul>
-                      {result.resultFeedback.map(item => (
+                      {result.resultFeedback.map((item) => (
                         <li key={item}>{item}</li>
                       ))}
                     </ul>
@@ -3321,7 +3336,7 @@ function SqlPracticeLab({
                     <table>
                       <thead>
                         <tr>
-                          {result.columns.map(column => (
+                          {result.columns.map((column) => (
                             <th key={column}>{column}</th>
                           ))}
                         </tr>
@@ -3329,7 +3344,7 @@ function SqlPracticeLab({
                       <tbody>
                         {result.rows.map((row, rowIndex) => (
                           <tr key={rowIndex}>
-                            {result.columns.map(column => (
+                            {result.columns.map((column) => (
                               <td key={column}>
                                 {row[column] == null ? "NULL" : row[column]}
                               </td>
@@ -3349,7 +3364,7 @@ function SqlPracticeLab({
         <h3>Your progress on this challenge</h3>
         <p>
           {challengeAttempts.length} saved attempts ·{" "}
-          {challengeAttempts.filter(attempt => attempt.passed).length}{" "}
+          {challengeAttempts.filter((attempt) => attempt.passed).length}{" "}
           successful
           {firstScore && latestScore && (
             <>

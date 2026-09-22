@@ -4,6 +4,9 @@ import {
   ChevronDown,
   ArrowUpRight,
   SlidersHorizontal,
+  Maximize2,
+  Minimize2,
+  SquareTerminal,
 } from "lucide-react";
 import {
   missionDataset,
@@ -51,6 +54,7 @@ export function PracticeHub({
   initialTopicId?: string;
 }) {
   const panel = useRef<HTMLDivElement>(null);
+  const [focusMode, setFocusMode] = useState(false);
   const [catalogueOpen, setCatalogueOpen] = useState(true);
   const [exerciseSearch, setExerciseSearch] = useState("");
   const challenges = practiceChallenges(state.profile);
@@ -174,10 +178,20 @@ export function PracticeHub({
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
   return (
-    <section className="practice-hub">
+    <section
+      className={`practice-hub practice-studio${focusMode ? " practice-focus-mode" : ""}`}
+    >
       <div className="card practice-header">
         <div className="practice-header-actions">
           <span className="eyebrow">YOUR PRACTICE STUDIO</span>
+          <button
+            className="secondary practice-focus-toggle"
+            aria-pressed={focusMode}
+            onClick={() => setFocusMode(value => !value)}
+          >
+            {focusMode ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+            {focusMode ? "Show exercise browser" : "Focus on workspace"}
+          </button>
           <a
             className="secondary"
             href="/guides/practice-lab-user-guide.pdf"
@@ -196,25 +210,6 @@ export function PracticeHub({
           and calculation checks are separate from self-reviewed case
           submissions.
         </p>
-        <label>
-          Practise a skill
-          <select
-            value={skill}
-            disabled={running}
-            onChange={e => {
-              if (selected) drafts.current[selected] = answer;
-              setSkill(e.target.value);
-              setMode("");
-            }}
-          >
-            <option value="">All skills in my path</option>
-            {Object.keys(required).map(id => (
-              <option key={id} value={id}>
-                {skillById[id].title.en}
-              </option>
-            ))}
-          </select>
-        </label>
       </div>
       {recommendation && (
         <section
@@ -265,6 +260,25 @@ export function PracticeHub({
         </button>
         {catalogueOpen && (
           <div id="exercise-picker-content" className="picker-content">
+            <label className="studio-skill-filter">
+              Practise a skill
+              <select
+                value={skill}
+                disabled={running}
+                onChange={e => {
+                  if (selected) drafts.current[selected] = answer;
+                  setSkill(e.target.value);
+                  setMode("");
+                }}
+              >
+                <option value="">All skills in my path</option>
+                {Object.keys(required).map(id => (
+                  <option key={id} value={id}>
+                    {skillById[id].title.en}
+                  </option>
+                ))}
+              </select>
+            </label>
             <label className="picker-search">
               <Search size={16} />
               <input
@@ -275,8 +289,20 @@ export function PracticeHub({
               />
             </label>
             <p className="picker-hint">
-              Choose a challenge to open your workspace.
+              Pick an exercise. Your workspace opens alongside.
             </p>
+            {(exerciseSearch || skill) && (
+              <button
+                className="text-button"
+                disabled={running}
+                onClick={() => {
+                  setExerciseSearch("");
+                  setSkill("");
+                }}
+              >
+                Clear filters
+              </button>
+            )}
             <div className="practice-grid" aria-label="Practice formats">
               {!!required.sql &&
                 (!skill || skill === "sql") &&
@@ -369,7 +395,35 @@ export function PracticeHub({
           </div>
         )}
       </section>
-      <div ref={panel} tabIndex={-1} className="practice-active-panel">
+      <div
+        ref={panel}
+        tabIndex={-1}
+        className="practice-active-panel"
+        aria-label="Exercise workspace"
+      >
+        {!mode && (
+          <section className="studio-workspace-empty">
+            <span>
+              <SquareTerminal size={36} />
+            </span>
+            <p className="eyebrow">A SPACE TO TRY, TEST AND LEARN</p>
+            <h2>Choose your next challenge</h2>
+            <p>
+              Open an exercise from the browser, or start the recommendation
+              above. Instructions, your editor and feedback will appear here.
+            </p>
+            <div>
+              <span>01 · Read the task</span>
+              <span>02 · Try your solution</span>
+              <span>03 · Learn from the checks</span>
+            </div>
+            {focusMode && (
+              <button className="secondary" onClick={() => setFocusMode(false)}>
+                Browse exercises
+              </button>
+            )}
+          </section>
+        )}
         {mode === "sql" && renderSql(sqlTarget || undefined)}
         {mode === "exercise" && challenge && (
           <section
@@ -396,71 +450,96 @@ export function PracticeHub({
             </p>
             <p>{challenge.task}</p>
             <div className="practice-workspace">
-              <aside className="practice-reference">
-                <div className="practice-lesson">
-                  <h3>Before you practise</h3>
-                  <LessonGlossary language={state.profile.language} />
-                  <p>{challenge.lesson}</p>
-                  <button
-                    className="text-button"
-                    onClick={() => openLesson(challenge.topicId)}
-                  >
-                    Open this roadmap lesson →
-                  </button>
-                </div>
-                <details open>
-                  <summary>
-                    Synthetic {sectorById[state.profile.sector].title} dataset
-                  </summary>
-                  <div className="lab-table-wrap">
-                    <table>
-                      <thead>
-                        <tr>
-                          {Object.keys(rows[0]).map(k => (
-                            <th key={k}>{k}</th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {rows.map((row, rowIndex) => (
-                          <tr key={rowIndex}>
-                            {Object.values(row).map((value, i) => (
-                              <td key={i}>{value === null ? "NULL" : value}</td>
+              <details
+                className="practice-reference studio-instructions"
+                key={challenge.id}
+              >
+                <summary>
+                  Instructions, dataset & hints <ChevronDown size={17} />
+                </summary>
+                <div className="studio-instructions-body">
+                  <div className="practice-lesson">
+                    <h3>Before you practise</h3>
+                    <LessonGlossary language={state.profile.language} />
+                    <p>{challenge.lesson}</p>
+                    <button
+                      className="text-button"
+                      onClick={() => openLesson(challenge.topicId)}
+                    >
+                      Open this roadmap lesson →
+                    </button>
+                  </div>
+                  <details open>
+                    <summary>
+                      Synthetic {sectorById[state.profile.sector].title} dataset
+                    </summary>
+                    <div className="lab-table-wrap">
+                      <table>
+                        <thead>
+                          <tr>
+                            {Object.keys(rows[0]).map(k => (
+                              <th key={k}>{k}</th>
                             ))}
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                  <button className="secondary" onClick={download}>
-                    Download CSV for Excel, Power BI or notebooks
-                  </button>
-                </details>
-                <section className="progressive-hints">
-                  <h3>Hints, one step at a time</h3>
-                  <ol>
-                    {challenge.hints.slice(0, hintCount).map(hint => (
-                      <li key={hint}>{hint}</li>
-                    ))}
-                  </ol>
-                  <button
-                    className="secondary"
-                    disabled={hintCount >= challenge.hints.length}
-                    onClick={() => setHintCount(count => count + 1)}
-                  >
-                    {hintCount >= challenge.hints.length
-                      ? "All hints revealed"
-                      : `Reveal hint ${hintCount + 1}`}
-                  </button>
-                </section>
-                {challenge.kind === "excel" || challenge.kind === "dax" ? (
-                  <p className="notice">
-                    This is a focused formula exercise supporting the expression
-                    described above, not a full Excel or Power BI runtime.
-                  </p>
-                ) : null}
-              </aside>
+                        </thead>
+                        <tbody>
+                          {rows.map((row, rowIndex) => (
+                            <tr key={rowIndex}>
+                              {Object.values(row).map((value, i) => (
+                                <td key={i}>
+                                  {value === null ? "NULL" : value}
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                    <button className="secondary" onClick={download}>
+                      Download CSV for Excel, Power BI or notebooks
+                    </button>
+                  </details>
+                  <section className="progressive-hints">
+                    <h3>Hints, one step at a time</h3>
+                    <ol>
+                      {challenge.hints.slice(0, hintCount).map(hint => (
+                        <li key={hint}>{hint}</li>
+                      ))}
+                    </ol>
+                    <button
+                      className="secondary"
+                      disabled={hintCount >= challenge.hints.length}
+                      onClick={() => setHintCount(count => count + 1)}
+                    >
+                      {hintCount >= challenge.hints.length
+                        ? "All hints revealed"
+                        : `Reveal hint ${hintCount + 1}`}
+                    </button>
+                  </section>
+                  {challenge.kind === "excel" || challenge.kind === "dax" ? (
+                    <p className="notice">
+                      This is a focused formula exercise supporting the
+                      expression described above, not a full Excel or Power BI
+                      runtime.
+                    </p>
+                  ) : null}
+                </div>
+              </details>
               <div className="practice-answer-panel">
+                <div className="studio-editor-heading">
+                  <span>
+                    {challenge.kind === "python"
+                      ? "solution.py"
+                      : challenge.kind === "case"
+                        ? "Your submission"
+                        : "Your solution"}
+                  </span>
+                  <small>
+                    {challenge.kind === "case"
+                      ? "Self-reviewed evidence"
+                      : "Checked against exercise requirements"}
+                  </small>
+                </div>
                 {challenge.mission && (
                   <section
                     className="mission-checkpoints"
@@ -585,7 +664,10 @@ export function PracticeHub({
                   </button>
                 </div>
                 {result && (
-                  <div className="practice-feedback" role="status">
+                  <div
+                    className={`practice-feedback studio-feedback ${result.reviewOnly ? "review" : result.passed ? "passed" : "needs-work"}`}
+                    role="status"
+                  >
                     <h3>
                       {result.reviewOnly
                         ? "Submission saved"
@@ -594,6 +676,12 @@ export function PracticeHub({
                           : "Needs work"}
                     </h3>
                     <p>{result.message}</p>
+                    {result.checks.length > 0 && (
+                      <strong className="studio-check-count">
+                        {result.checks.filter(check => check.passed).length} /{" "}
+                        {result.checks.length} checks passed
+                      </strong>
+                    )}
                     {result.output !== undefined && (
                       <pre>Result: {result.output}</pre>
                     )}
