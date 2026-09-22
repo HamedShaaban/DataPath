@@ -1,0 +1,298 @@
+import {
+  ArrowRight,
+  ArrowUpRight,
+  BookOpen,
+  Check,
+  Clock3,
+  FolderKanban,
+  Map,
+  RotateCcw,
+  SquareTerminal,
+  Target,
+} from "lucide-react";
+import { useState } from "react";
+import { careerById, sectorById, skillById } from "@shared/catalog";
+import { makePlan, type LearningState } from "@shared/learning";
+import { dashboardWeek } from "@shared/dashboard-progress";
+
+type Destination = "lab" | "projects" | "proof" | "roadmap";
+export function LearningDashboard({
+  state,
+  openLesson,
+  navigate,
+  editPath,
+  startBasics,
+}: {
+  state: LearningState;
+  openLesson: (skillId: string, topicId?: string) => void;
+  navigate: (page: Destination) => void;
+  editPath: () => void;
+  startBasics: () => void;
+}) {
+  const [showAll, setShowAll] = useState(false);
+  const ar = state.profile.language === "ar";
+  const t = (en: string, arabic: string) => (ar ? arabic : en);
+  const title = (value: { en: string; ar: string }) =>
+    ar ? value.ar : value.en;
+  const plan = makePlan(state);
+  const done = plan.topics.filter(topic => topic.done).length;
+  const next = plan.topics.find(
+    topic =>
+      !topic.done &&
+      topic.prerequisites.every(id => state.completed.includes(id))
+  );
+  const first =
+    state.profile.experience === "new" && !state.firstLesson?.completed;
+  const week = dashboardWeek(state);
+  const skills = Object.keys(plan.required);
+  const review = plan.topics.find(topic =>
+    state.reviewTopics.includes(topic.id)
+  );
+  const formatTime = (minutes: number) =>
+    `${Math.round((minutes / 60) * 10) / 10} ${t("h", "س")}`;
+  return (
+    <div className="learning-home">
+      <div className="learning-path-strip">
+        <span>
+          <Map size={18} />
+          <strong>{title(careerById[state.profile.role].title)}</strong>
+          <span>{sectorById[state.profile.sector].title}</span>
+        </span>
+        <button className="text-button" onClick={editPath}>
+          {t("Edit my path", "تعديل مساري")} <ArrowUpRight size={15} />
+        </button>
+      </div>
+      <div className="learning-start-grid">
+        <section
+          className="learning-spotlight"
+          aria-labelledby="learning-next-title"
+        >
+          <span className="learning-kicker">
+            <span />
+            {t("YOUR NEXT STEP", "خطوتك القادمة")}
+          </span>
+          <div className="learning-spotlight-body">
+            <span className="learning-icon">
+              <BookOpen size={28} />
+            </span>
+            <div>
+              <p className="learning-course-label">
+                {first
+                  ? t("No experience needed", "لا تحتاج خبرة سابقة")
+                  : next
+                    ? title(skillById[next.skillId].title)
+                    : t("Put your skills to work", "طبّق مهاراتك")}
+              </p>
+              <h2 id="learning-next-title">
+                {first
+                  ? t("Your first look at data", "خطوتك الأولى مع البيانات")
+                  : next
+                    ? title(next.title)
+                    : t(
+                        "Build something you can show",
+                        "أنشئ مشروعاً يعكس مهاراتك"
+                      )}
+              </h2>
+              <p>
+                {first
+                  ? t(
+                      "Start with a small table and one question. We’ll guide you through it.",
+                      "ابدأ بجدول صغير وسؤال واحد. سنرشدك خطوة بخطوة."
+                    )
+                  : next
+                    ? t(
+                        "Pick up the next topic in your path, then put it into practice.",
+                        "تعلّم الموضوع التالي في مسارك ثم طبّقه عملياً."
+                      )
+                    : t(
+                        "Turn what you have learned into a portfolio project.",
+                        "حوّل ما تعلمته إلى مشروع تضيفه لأعمالك."
+                      )}
+              </p>
+            </div>
+          </div>
+          <div className="learning-spotlight-footer">
+            <button
+              className="learning-continue"
+              onClick={() =>
+                first
+                  ? startBasics()
+                  : next
+                    ? openLesson(next.skillId, next.id)
+                    : navigate("projects")
+              }
+            >
+              {first
+                ? t("Start my first lesson", "ابدأ درسي الأول")
+                : next
+                  ? t("Continue learning", "متابعة التعلم")
+                  : t("Open my project", "افتح مشروعي")}
+              <ArrowRight size={19} />
+            </button>
+            <span>
+              <Clock3 size={15} />
+              {first
+                ? t("Go at your own pace", "تعلّم على وتيرتك")
+                : next
+                  ? `${next.hours} ${t("hours for this topic · estimated", "ساعات لهذا الموضوع · تقديرياً")}`
+                  : t("Your work, your pace", "مشروعك على وتيرتك")}
+            </span>
+          </div>
+        </section>
+        <aside className="learning-week" aria-labelledby="learning-week-title">
+          <div className="learning-panel-heading">
+            <h2 id="learning-week-title">{t("This week", "هذا الأسبوع")}</h2>
+            <Target size={20} />
+          </div>
+          <p>{t("A little progress, regularly.", "تقدم بسيط، باستمرار.")}</p>
+          <div className="learning-week-total">
+            <strong>{formatTime(week.minutes)}</strong>
+            <span>/ {formatTime(week.target)}</span>
+          </div>
+          <progress
+            value={week.minutes}
+            max={week.target}
+            aria-label={t("Weekly learning goal", "هدف التعلم الأسبوعي")}
+          />
+          <p>
+            {week.remaining
+              ? `${formatTime(week.remaining)} ${t("left to reach your goal", "لتحقيق هدفك")}`
+              : t(
+                  "Weekly goal reached. Well done!",
+                  "حققت هدف الأسبوع. أحسنت!"
+                )}
+          </p>
+          <button className="text-button" onClick={() => navigate("proof")}>
+            {t("View my progress", "عرض تقدمي")}
+            <ArrowRight size={16} />
+          </button>
+          <small>
+            {t(
+              "Based on logged study sessions · resets Monday",
+              "بناءً على جلسات الدراسة المسجلة · يبدأ الاثنين"
+            )}
+          </small>
+        </aside>
+      </div>
+      <div
+        className="learning-shortcuts"
+        aria-label={t("Learning shortcuts", "اختصارات التعلم")}
+      >
+        <button onClick={() => navigate("lab")}>
+          <span className="learning-shortcut-icon">
+            <SquareTerminal size={22} />
+          </span>
+          <span>
+            <strong>{t("Try it in practice", "جرّب عملياً")}</strong>
+            <small>
+              {t("Exercises matched to your path", "تمارين تناسب مسارك")}
+            </small>
+          </span>
+          <ArrowUpRight size={19} />
+        </button>
+        <button
+          onClick={() =>
+            review ? openLesson(review.skillId, review.id) : navigate("roadmap")
+          }
+        >
+          <span className="learning-shortcut-icon">
+            <RotateCcw size={22} />
+          </span>
+          <span>
+            <strong>
+              {review
+                ? t("Revisit a topic", "راجع موضوعاً")
+                : t("Explore my roadmap", "استكشف مساري")}
+            </strong>
+            <small>
+              {review
+                ? title(review.title)
+                : t("See how your skills connect", "اكتشف ترابط مهاراتك")}
+            </small>
+          </span>
+          <ArrowUpRight size={19} />
+        </button>
+        <button onClick={() => navigate("projects")}>
+          <span className="learning-shortcut-icon">
+            <FolderKanban size={22} />
+          </span>
+          <span>
+            <strong>{t("Build my portfolio", "ابنِ ملف أعمالي")}</strong>
+            <small>
+              {t(
+                "Turn learning into a real project",
+                "حوّل التعلم إلى مشروع حقيقي"
+              )}
+            </small>
+          </span>
+          <ArrowUpRight size={19} />
+        </button>
+      </div>
+      <section
+        className="learning-skills"
+        aria-labelledby="learning-skills-title"
+      >
+        <div className="learning-panel-heading">
+          <div>
+            <span className="learning-kicker">
+              {t("THE BIG PICTURE", "الصورة الكاملة")}
+            </span>
+            <h2 id="learning-skills-title">
+              {t("Your skills, taking shape", "مهاراتك تنمو خطوة بخطوة")}
+            </h2>
+          </div>
+          <span className="learning-completion">
+            {done} / {plan.topics.length}{" "}
+            {t("topics completed", "موضوعات مكتملة")}
+          </span>
+        </div>
+        <div className="learning-skill-grid" id="dashboard-skill-list">
+          {(showAll ? skills : skills.slice(0, 4)).map((id, index) => {
+            const topics = plan.topics.filter(topic => topic.skillId === id);
+            const completed = topics.filter(topic => topic.done).length;
+            return (
+              <button
+                key={id}
+                className="learning-skill-card"
+                onClick={() => openLesson(id)}
+              >
+                <span className="learning-skill-top">
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  {completed === topics.length ? (
+                    <Check size={17} />
+                  ) : (
+                    <ArrowUpRight size={17} />
+                  )}
+                </span>
+                <strong>{title(skillById[id].title)}</strong>
+                <span>
+                  {completed} / {topics.length} {t("topics", "موضوعات")}
+                </span>
+                <progress
+                  value={completed}
+                  max={topics.length || 1}
+                  aria-label={title(skillById[id].title)}
+                />
+              </button>
+            );
+          })}
+        </div>
+        {skills.length > 4 && (
+          <button
+            className="text-button learning-show-skills"
+            aria-expanded={showAll}
+            aria-controls="dashboard-skill-list"
+            onClick={() => setShowAll(!showAll)}
+          >
+            {showAll
+              ? t("Show fewer skills", "عرض مهارات أقل")
+              : t(
+                  `Show all ${skills.length} skills`,
+                  `عرض كل المهارات (${skills.length})`
+                )}
+          </button>
+        )}
+      </section>
+    </div>
+  );
+}

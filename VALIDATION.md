@@ -121,3 +121,9 @@ Inspected the three-mode coach endpoint, provider transport, client consent/disp
 Stacked task branches implement PostgreSQL-backed revocable sessions, the existing shadcn layer's Tailwind 4 theme and account-dialog integration, bounded AI calls with persistent budget reservations, and launch preparation. See TASK_3_SESSIONS.md through TASK_6_LAUNCH.md for scope and operational details.
 
 225 tests in 27 files, TypeScript and production build pass; all original 194 cases remain. PostgreSQL migration/persistence/session/budget checks pass. Built SQL worker: 108 combinations; built self-hosted Python: 27. Temporary production server health, asset delivery and shutdown pass. One Playwright smoke test is authored and discovered but not executed: browser policy verification remains blocked. Docker is unavailable. Live Sentry delivery and browser acceptance remain pending; launch readiness is not claimed. PDF unchanged.
+
+## Dashboard and navigation — 2026-09-22
+
+New learning dashboard replaces the previous mission/journal layout with a specific next-lesson action, Monday-based weekly goal from logged study sessions, practice/review/project shortcuts, and expandable per-skill progress cards. Beginners see the dashboard plus their existing guided lessons; their first action focuses the first-lesson section. Lesson actions set both the skill and exact lesson target. Navigation groups learning, resources and career destinations. No dependencies or database changes.
+
+TypeScript, all 227 tests and the production build pass. Two new tests cover week boundaries, future-session exclusion and exceeding the weekly goal. Light/dark and narrow-screen styles are implemented, but rendered visual/keyboard acceptance remains unverified: an attempt to open the local preview was denied by the browser's administrator-policy verification. Deployment remains paused; this work is on ui-dashboard-navigation, not pushed to Render's main branch.

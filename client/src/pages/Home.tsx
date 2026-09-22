@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+import { LearningDashboard } from "@/components/LearningDashboard";
 import { X } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -549,6 +551,8 @@ export default function Home() {
                 ["dashboard", "lab", "proof"].includes(id)
             )
             .map(([id, en, ar, Icon]) => (
+              <Fragment key={id}>
+              {["dashboard", "resources", "interviews"].includes(id) && <span className="navigation-section-label">{id === "dashboard" ? t("LEARN", "تعلّم") : id === "resources" ? t("RESOURCES", "مصادر") : t("YOUR CAREER", "مستقبلك المهني")}</span>}
               <button
                 key={id}
                 className={page === id ? "nav-item active" : "nav-item"}
@@ -570,6 +574,7 @@ export default function Home() {
                 </span>
                 {id === "coach" && <span className="tiny-pill">AI</span>}
               </button>
+              </Fragment>
             ))}
           {state.profile.experience === "new" && (
             <button
@@ -771,7 +776,7 @@ export default function Home() {
                   </div>
                   <h1>
                     {page === "dashboard"
-                      ? t("Your next move.", "خطوتك القادمة.")
+                      ? t("Let’s make progress.", "لنتقدم خطوة جديدة.")
                       : navigation.find(n => n[0] === page)?.[
                           lang === "ar" ? 2 : 1
                         ] ||
@@ -796,9 +801,15 @@ export default function Home() {
                   {t("FREE TO LEARN", "التعلم مجاني")}
                 </span>
               </div>
+              {page === "dashboard" && <LearningDashboard state={state}
+                editPath={() => setEditing(true)}
+                navigate={target => { setExploreAll(true); setPage(target); }}
+                startBasics={() => { const element = document.getElementById("dashboard-basics"); element?.scrollIntoView({ block: "start" }); element?.focus(); }}
+                openLesson={(skillId, topicId = "") => { setSelectedSkill(skillId); setLessonTarget(topicId); setExploreAll(true); setPage("roadmap"); }}
+              />}
               {(page === "dashboard" || page === "lab") &&
                 state.profile.experience === "new" && (
-                  <>
+                  <section id="dashboard-basics" tabIndex={-1} aria-label={t("Your first lessons", "دروسك الأولى")}>
                     <FirstLesson
                       key={stateOwner}
                       progress={state.firstLesson}
@@ -828,260 +839,7 @@ export default function Home() {
                         ? "Use Save progress above to save these steps to your account."
                         : "Progress saves automatically in this browser. Switching browsers or clearing browser data can remove it. Use Settings to export a backup."}
                     </p>
-                  </>
-                )}
-              {page === "dashboard" &&
-                (state.profile.experience !== "new" ||
-                  state.firstLesson?.completed) && (
-                  <div className="mission-dashboard">
-                    <section className="mission-main">
-                      <div className="mission-title">
-                        <span className="eyebrow">
-                          {t("YOUR DIRECTION", "اتجاهك")}
-                        </span>
-                        <button
-                          className="text-button"
-                          onClick={() => setEditing(true)}
-                        >
-                          {t("Change path", "غيّر المسار")}{" "}
-                          <ArrowUpRight size={16} />
-                        </button>
-                      </div>
-                      <h2 className="destination-title">{txt(role.title)}</h2>
-                      <p className="destination-context">
-                        {sector.title} <span> / </span> {state.profile.weeks}{" "}
-                        {t("weeks", "أسابيع")} <span> / </span>{" "}
-                        {state.profile.hoursPerWeek}{" "}
-                        {t("hours a week", "ساعات أسبوعياً")}
-                      </p>
-                      <section className="focus-session">
-                        <div className="focus-number" aria-hidden="true">
-                          {String(next?.week || 1).padStart(2, "0")}
-                        </div>
-                        <div className="focus-content">
-                          <span className="eyebrow">
-                            {t("NEXT FOCUSED SESSION", "جلسة التعلم القادمة")}
-                          </span>
-                          <h3>
-                            {next
-                              ? txt(next.title)
-                              : t("Make your work speak.", "دع عملك يتحدث.")}
-                          </h3>
-                          <p>
-                            {next
-                              ? txt(skillById[next.skillId].title)
-                              : t(
-                                  "Bring your skills together in a portfolio project.",
-                                  "اجمع مهاراتك في مشروع عملي."
-                                )}
-                          </p>
-                          <button
-                            onClick={() => {
-                              if (next) setSelectedSkill(next.skillId);
-                              setPage(next ? "roadmap" : "projects");
-                            }}
-                          >
-                            {t("Let’s get into it", "لنبدأ")}{" "}
-                            <ArrowRight size={20} />
-                          </button>
-                          <small>
-                            {next
-                              ? `${next.hours} ${t("estimated hours", "ساعات تقديرية")}`
-                              : t(
-                                  "Your next chapter starts with a project",
-                                  "خطوتك القادمة تبدأ بمشروع"
-                                )}
-                          </small>
-                        </div>
-                      </section>
-                      <div className="studio-section-heading">
-                        <h3>{t("Your working spaces", "مساحات عملك")}</h3>
-                        <span>
-                          {t(
-                            "A skill becomes yours when you use it.",
-                            "تمتلك المهارة عندما تستخدمها."
-                          )}
-                        </span>
-                      </div>
-                      <div className="studio-destinations">
-                        <button onClick={() => setPage("lab")}>
-                          <SquareTerminal size={29} />
-                          <span>01 / {t("EXPERIMENT", "جرّب")}</span>
-                          <h3>{t("The Practice Lab", "معمل التطبيق")}</h3>
-                          <p>
-                            {t(
-                              "Open a dataset. Test an idea. Find the answer.",
-                              "افتح البيانات. اختبر فكرتك. اكتشف الإجابة."
-                            )}
-                          </p>
-                          <ArrowUpRight />
-                        </button>
-                        <button onClick={() => setPage("projects")}>
-                          <FolderKanban size={29} />
-                          <span>02 / {t("CREATE", "أنشئ")}</span>
-                          <h3>{t("Your project desk", "مكتب مشاريعك")}</h3>
-                          <p>{txt(project.title)}</p>
-                          <ArrowUpRight />
-                        </button>
-                        <button onClick={() => setPage("interviews")}>
-                          <MessageSquare size={29} />
-                          <span>03 / {t("PREPARE", "استعد")}</span>
-                          <h3>{t("The interview room", "غرفة المقابلات")}</h3>
-                          <p>
-                            {t(
-                              "Practise explaining the decisions behind your work.",
-                              "تدرّب على شرح القرارات وراء عملك."
-                            )}
-                          </p>
-                          <ArrowUpRight />
-                        </button>
-                      </div>
-                      <div className="studio-section-heading">
-                        <h3>{t("Skills on your route", "مهارات على طريقك")}</h3>
-                        <button
-                          className="text-button"
-                          onClick={() => setPage("roadmap")}
-                        >
-                          {t("Full roadmap", "المسار الكامل")}{" "}
-                          <ArrowRight size={16} />
-                        </button>
-                      </div>
-                      <div className="route-list">
-                        {requiredIds.slice(0, 6).map((id, index) => (
-                          <button
-                            key={id}
-                            onClick={() => {
-                              setSelectedSkill(id);
-                              setPage("roadmap");
-                            }}
-                          >
-                            <span>{String(index + 1).padStart(2, "0")}</span>
-                            <strong>{txt(skillById[id].title)}</strong>
-                            <small>
-                              {
-                                plan.topics.filter(
-                                  topic => topic.skillId === id && !topic.done
-                                ).length
-                              }{" "}
-                              {t("topics remaining", "موضوعات متبقية")}
-                            </small>
-                            <ArrowUpRight size={17} />
-                          </button>
-                        ))}
-                      </div>
-                    </section>
-                    <aside className="journey-journal">
-                      <span className="eyebrow">
-                        {t("THE BIG PICTURE", "الصورة الكاملة")}
-                      </span>
-                      <h3>
-                        {t("Every session counts.", "كل جلسة تصنع فارقاً.")}
-                      </h3>
-                      <div className="journal-progress">
-                        <svg viewBox="0 0 120 120" aria-hidden="true">
-                          <circle cx="60" cy="60" r="51" />
-                          <circle
-                            cx="60"
-                            cy="60"
-                            r="51"
-                            strokeDasharray={`${percent * 3.2044} 320.44`}
-                          />
-                        </svg>
-                        <strong>
-                          {percent}
-                          <small>%</small>
-                        </strong>
-                      </div>
-                      <p className="journal-caption">
-                        {completed} / {plan.topics.length}{" "}
-                        {t("topics completed", "موضوعات مكتملة")}
-                      </p>
-                      <div className="journal-metrics">
-                        <div>
-                          <strong>
-                            {Math.round(
-                              (state.sessions.reduce(
-                                (sum, session) => sum + session.minutes,
-                                0
-                              ) /
-                                60) *
-                                10
-                            ) / 10}
-                            <small>{t("hours logged", "ساعات مسجلة")}</small>
-                          </strong>
-                        </div>
-                        <div>
-                          <strong>
-                            {plan.remainingHours}
-                            <small>
-                              {t(
-                                "hours remaining · est.",
-                                "ساعات متبقية تقديرياً"
-                              )}
-                            </small>
-                          </strong>
-                        </div>
-                      </div>
-                      <h4>{t("Your journey", "رحلتك")}</h4>
-                      <ol className="journal-timeline">
-                        {(
-                          [
-                            [
-                              "roadmap",
-                              t("Learn the foundations", "تعلّم الأساسيات"),
-                            ],
-                            [
-                              "lab",
-                              t("Put it into practice", "طبّق ما تعلمته"),
-                            ],
-                            [
-                              "projects",
-                              t("Build your evidence", "ابنِ إثبات مهاراتك"),
-                            ],
-                            ["interviews", t("Tell your story", "احكِ قصتك")],
-                          ] as const
-                        ).map(([target, title], index) => (
-                          <li key={target}>
-                            <button onClick={() => setPage(target)}>
-                              <span>{index + 1}</span>
-                              {title}
-                              <ArrowUpRight size={14} />
-                            </button>
-                          </li>
-                        ))}
-                      </ol>
-                      <div className="journal-review">
-                        <RotateCcw size={20} />
-                        <h4>
-                          {reviewNext
-                            ? t(
-                                "Ready for a revisit?",
-                                "هل أنت مستعد للمراجعة؟"
-                              )
-                            : t("Keep your momentum.", "واصل تقدمك.")}
-                        </h4>
-                        <p>
-                          {reviewNext
-                            ? txt(reviewNext.title)
-                            : t(
-                                "Your next session is waiting. Small steps add up.",
-                                "جلستك القادمة بانتظارك. الخطوات الصغيرة تتراكم."
-                              )}
-                        </p>
-                        <button
-                          className="text-button"
-                          onClick={() => {
-                            if (reviewNext)
-                              setSelectedSkill(reviewNext.skillId);
-                            setPage("roadmap");
-                          }}
-                        >
-                          {t("Open roadmap", "افتح المسار")}{" "}
-                          <ArrowRight size={15} />
-                        </button>
-                      </div>
-                    </aside>
-                  </div>
+                  </section>
                 )}
               {page === "roadmap" && (
                 <>
