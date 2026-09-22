@@ -842,7 +842,26 @@ export default function Home() {
                   </section>
                 )}
               {page === "roadmap" && (
-                <>
+                <div className="roadmap-explorer">
+                  <section className="roadmap-overview" aria-labelledby="roadmap-overview-title">
+                    <div>
+                      <span className="eyebrow">{t("YOUR LEARNING ROUTE", "مسار تعلمك")}</span>
+                      <h2 id="roadmap-overview-title">{t("One skill at a time.", "مهارة واحدة في كل خطوة.")}</h2>
+                      <p>{t("Choose a skill, follow its lessons, and check what you can do. Your next step is ready below.", "اختر مهارة، تابع دروسها، واختبر ما تعلمته. خطوتك التالية بالأسفل.")}</p>
+                      <div className="roadmap-overview-stats"><span><strong>{requiredIds.length}</strong> {t("skill areas", "مجالات مهارية")}</span><span><strong>{completed}/{plan.topics.length}</strong> {t("topics completed", "موضوعات مكتملة")}</span><span><strong>{plan.remainingHours}</strong> {t("hours left · estimated", "ساعات متبقية · تقديرياً")}</span></div>
+                    </div>
+                    <div className="roadmap-next-step">
+                      <span className="eyebrow">{next ? t("RECOMMENDED NEXT", "الخطوة المقترحة") : t("PUT IT TOGETHER", "اجمع مهاراتك")}</span>
+                      <h3>{next ? txt(next.title) : t("Your portfolio project", "مشروع ملف أعمالك")}</h3>
+                      <p>{next ? txt(skillById[next.skillId].title) : t("Apply your learning to a real scenario.", "طبّق ما تعلمته على سيناريو عملي.")}</p>
+                      <button className="primary" onClick={() => {
+                        if (!next) { setPage("projects"); return; }
+                        setSelectedSkill(next.skillId); setLessonTarget(next.id);
+                        const element = document.getElementById(`lesson-${next.id}`) as HTMLDetailsElement | null;
+                        if (element) { element.open = true; element.scrollIntoView({ block: "center" }); element.querySelector("summary")?.focus(); }
+                      }}>{next ? t("Open next lesson", "افتح الدرس التالي") : t("Open project", "افتح المشروع")} <ArrowRight size={16} /></button>
+                    </div>
+                  </section>
                   <details className="foundation-entry">
                     <summary>
                       Start with the foundations: reliable totals and averages
@@ -888,6 +907,8 @@ export default function Home() {
                       "تُستبعد المهارات التي قيّمت إتقانك لها ذاتياً من الفجوات، وهذا ليس اعتماداً. يشمل كل مسار مشروعاً للتحقق العملي."
                     )}
                   </p>
+                  <details className="roadmap-domain-disclosure">
+                    <summary>{t("How your learning connects to", "كيف يرتبط تعلمك بمجال")} {sector.title}</summary>
                   <section className="domain-brief">
                     <div className="domain-heading">
                       <span className="eyebrow">INDUSTRY LENS</span>
@@ -916,6 +937,7 @@ export default function Home() {
                       </p>
                     </div>
                   </section>
+                  </details>
                   <div
                     className="learning-cycle"
                     aria-label={t("Learning cycle", "دورة التعلم")}
@@ -970,13 +992,13 @@ export default function Home() {
                           id ===
                           (requiredIds.includes(selectedSkill)
                             ? selectedSkill
-                            : requiredIds[0]);
+                            : next?.skillId || requiredIds[0]);
                         return (
                           <button
                             key={id}
                             className={active ? "selected" : ""}
                             aria-current={active ? "true" : undefined}
-                            onClick={() => setSelectedSkill(id)}
+                            onClick={() => { setLessonTarget(""); setSelectedSkill(id); }}
                           >
                             <span className="skill-picker-top">
                               <span className="skill-picker-number">
@@ -986,6 +1008,7 @@ export default function Home() {
                               <ArrowRight size={16} />
                             </span>
                             <span className="skill-picker-meta">
+                              {next?.skillId === id && <span className="roadmap-skill-next">{t("Next lesson here", "درسك التالي هنا")}</span>}
                               {done} / {topics.length}{" "}
                               {t("topics completed", "موضوعات مكتملة")}
                             </span>
@@ -1012,16 +1035,17 @@ export default function Home() {
                               ? selectedSkill
                               : requiredIds.includes(selectedSkill)
                                 ? selectedSkill
-                                : requiredIds[0],
+                                : next?.skillId || requiredIds[0],
                           skill = skillById[id];
                         return (
-                          <section className="card" key={id}>
+                          <section className="card roadmap-lesson-panel" key={id}>
                             <div className="section-top">
                               <h2>{txt(skill.title)}</h2>
                               <span className="soft-tag">
                                 {t("Target", "الهدف")} {plan.required[id]}/3
                               </span>
                             </div>
+                            <p className="roadmap-legend">{t("You can read any lesson. Complete its prerequisites and checks to record completion.", "يمكنك قراءة أي درس. أكمل المتطلبات والاختبارات لتسجيل إتمامه.")}</p>
                             {[1, 2, 3].map(level => (
                               <div className="level-block" key={level}>
                                 <h3>
@@ -1054,7 +1078,7 @@ export default function Home() {
                                     );
                                     return (
                                       <details
-                                        className="topic"
+                                        className={`topic roadmap-topic${next?.id === topic.id ? " roadmap-topic-next" : ""}${done ? " roadmap-topic-done" : ""}`}
                                         key={topic.id}
                                         id={`lesson-${topic.id}`}
                                       >
@@ -1072,7 +1096,7 @@ export default function Home() {
                                               topic.id.split("-").pop()
                                             )}
                                           </span>
-                                          <span>{txt(topic.title)}</span>
+                                          <span className="roadmap-topic-heading"><strong>{txt(topic.title)}</strong><span className={`roadmap-topic-state ${done ? "complete" : locked ? "prerequisite" : "ready"}`}>{done ? t("Completed", "مكتمل") : next?.id === topic.id ? t("Your next lesson", "درسك التالي") : locked ? t("Prerequisites needed", "متطلبات سابقة") : item ? t("Ready to learn", "جاهز للتعلم") : t("Explore this topic", "استكشف الموضوع")}</span></span>
                                           <small>
                                             {item
                                               ? `${topic.hours} ${t("hrs", "ساعات")} · ${t("Week", "أسبوع")} ${item.week || "✓"}`
@@ -1084,6 +1108,16 @@ export default function Home() {
                                           <ChevronDown size={15} />
                                         </summary>
                                         <div className="topic-body">
+                                          {locked && <div className="roadmap-prerequisites"><strong>{t("Start with these lessons", "ابدأ بهذه الدروس")}</strong><p>{t("These build the knowledge needed for this topic.", "تؤسس هذه الدروس للمعرفة اللازمة لهذا الموضوع.")}</p><div>{item?.prerequisites.filter(prerequisite => !state.completed.includes(prerequisite)).map(prerequisite => {
+                                            const prerequisiteSkill = skills.find(value => value.topics.some(value => value.id === prerequisite));
+                                            const prerequisiteTopic = prerequisiteSkill?.topics.find(value => value.id === prerequisite);
+                                            return prerequisiteSkill && prerequisiteTopic ? <button className="secondary" key={prerequisite} onClick={() => {
+                                              setSelectedSkill(prerequisiteSkill.id); setLessonTarget(prerequisite);
+                                              const element = document.getElementById(`lesson-${prerequisite}`) as HTMLDetailsElement | null;
+                                              if (element) { element.open = true; element.scrollIntoView({ block: "center" }); element.querySelector("summary")?.focus(); }
+                                            }}>{txt(prerequisiteTopic.title)} <ArrowRight size={14} /></button> : null;
+                                          })}</div></div>}
+
                                           <div className="lesson-guide">
                                             <span className="eyebrow">
                                               {t(
@@ -1390,7 +1424,7 @@ export default function Home() {
                       }
                     }}
                   />
-                </>
+                </div>
               )}
               {page === "lab" &&
                 state.profile.experience === "new" &&

@@ -133,3 +133,9 @@ TypeScript, all 227 tests and the production build pass. Two new tests cover wee
 Redesigned Practice Lab into a compact searchable exercise sidebar and a larger workspace. Skill filtering now lives with exercise search; clear filters and a guided empty state help navigation. Focus mode hides exercise navigation and recommendations while keeping an explicit exit control. Instructions/datasets/hints and the SQL challenge list use keyboard-operable native disclosures. Task requirements remain visible above the editor. Editors resize vertically; non-SQL results show passed-check counts and preserve the distinction between execution checks and self-review. Narrow layouts stack the bounded exercise browser above the workspace.
 
 No dependencies, database, execution engine or saved-state schema changed. All 227 tests, TypeScript and production build pass. Browser visual, keyboard and responsive acceptance remain pending because administrator-policy verification blocks browser access. Local branch ui-practice-workspace; deployment remains paused.
+
+## Interactive roadmap — phase 3, 2026-09-22
+
+Added a roadmap overview with progress, workload and a specific next-lesson action. The default skill selection follows the next available lesson. Skill cards identify where that lesson sits, and lesson rows distinguish completed, ready, prerequisite-needed and exploratory content. Unmet prerequisites have direct lesson links and retain existing completion/assessment gates. Industry context is collapsible to prioritize learning navigation. Styles cover narrow layouts and existing light/dark tokens. No dependencies, data model or assessment-rule changes.
+
+All 227 tests, TypeScript and the production build pass. Browser visual/keyboard acceptance is still outstanding under the previously observed administrator-policy block. Changes are local on ui-interactive-roadmap; deployment remains paused.
