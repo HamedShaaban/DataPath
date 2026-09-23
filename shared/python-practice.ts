@@ -39,12 +39,30 @@ export function pythonFixtures(sector: Sector, challengeId?: string) {
     { id: 13, entity: "Edge", category: "Test", value: -7, status: "completed" },
     { id: 14, entity: "Edge", category: "Test", value: 12, status: "completed" }
   );
+  if (["python-category-totals", "python-top-three"].includes(challengeId || "")) fixtures.push([
+    { id: 24, entity: "A", category: "Z", value: 10, status: "completed" },
+    { id: 21, entity: "B", category: "A", value: 10, status: "completed" },
+    { id: 22, entity: "C", category: "Z", value: -10, status: "completed" },
+    { id: 23, entity: "D", category: "A", value: 0, status: "completed" },
+    { id: 25, entity: "E", category: "Absent", value: null, status: "completed" },
+    { id: 26, entity: "F", category: "Absent", value: 999, status: "pending" },
+    { id: 20, entity: "G", category: "A", value: 10, status: "completed" },
+  ]);
   return fixtures;
 }
 export function expectedPython(
   id: string,
   rows: ReturnType<typeof practiceDataset>
 ) {
+  if (id === "python-category-totals") {
+    const totals = new Map<string, number>();
+    for (const row of rows) if (row.status === "completed" && row.value !== null)
+      totals.set(row.category, (totals.get(row.category) ?? 0) + row.value);
+    return [...totals].sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0);
+  }
+  if (id === "python-top-three") return rows
+    .filter(r => r.status === "completed" && r.value !== null)
+    .sort((a, b) => b.value! - a.value! || a.id - b.id).slice(0, 3).map(r => r.id);
   if (id === "python-clean")
     return rows
       .filter(r => r.value === null)

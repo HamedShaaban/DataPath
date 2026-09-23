@@ -227,3 +227,9 @@ All 268 tests across 36 files, TypeScript and production build pass. No dependen
 Added reproducible CONTENT_AUDIT.md covering all career and advanced focused paths, with separate authored-example, checked-practice and self-review coverage. Regression checks cover all 22 career paths and 28 focused skills at levels 1–3 across nine industries: prerequisite order, exercise links, unique exercise IDs and topic quizzes. Fixed stale progress bounds (252 topics / 108 SQL passes) by deriving limits from the current catalogs, preserving existing saved data. Generic topic prompts and Arabic example parity remain content gaps documented in the report; no claim of full curriculum completeness.
 
 All 270 tests, TypeScript and production build pass. No dependencies or database schema changes. Deployment deferred.
+
+## Deeper checked practice — 2026-09-23
+
+Added intermediate per-customer SQL ranking, intermediate Python grouped totals, and advanced Python top-three selection. Tasks define tie-breaking, empty input, missing values, zero and negative adjustments. Python profiling work explicitly distinguishes tested output from unmeasured memory usage. Added a fifth fixture for category/tie cases and removed the UI's hard-coded four-dataset success claim. Refreshed curriculum coverage report.
+
+All 273 tests, TypeScript and build pass. Real Python tests cover correct and zero-dropping solutions across nine industries; SQL tests reject missing partitioning. Built SQL worker passes 126 exercise/industry combinations; self-hosted Python assets pass 54 combinations. Existing exercises' expected results unchanged. No dependencies or schema changes.

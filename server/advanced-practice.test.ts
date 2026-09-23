@@ -50,3 +50,25 @@ it("checks streamed summaries on real Python and rejects repeated passes and har
   py.globals.set("_dp_source", `def solve(rows):\n    return ${JSON.stringify(expected[0])}`);
   expect(JSON.parse(await py.runPythonAsync(pythonHarnessFor(c.id)))).not.toEqual(expected);
 }, 20000);
+
+it("checks grouped totals and top-k ties on real Python across all industries", async () => {
+  const { businessSectors } = await import('../shared/catalog');
+  const py = await loadPyodide({ indexURL: dirname(createRequire(import.meta.url).resolve('pyodide/package.json')) });
+  const p = newState().profile;
+  Object.assign(p, {learningMode:'skill', focusSkill:'python', targetLevel:3});
+  for (const sector of businessSectors) for (const id of ['python-category-totals','python-top-three']) {
+    const c = practiceChallenges(p).find(c=>c.id===id)!;
+    const fixtures = pythonFixtures(sector.id,id);
+    py.globals.set('_dp_source',c.reference!);
+    py.globals.set('_dp_fixtures',JSON.stringify(fixtures));
+    expect(JSON.parse(await py.runPythonAsync(pythonHarnessFor(id)))).toEqual(fixtures.map(rows=>expectedPython(id,rows)));
+    const bad = c.reference!.replace("row['value'] is not None", "row['value']").replace("row['value'] is None", "not row['value']");
+    py.globals.set('_dp_source',bad);
+    expect(JSON.parse(await py.runPythonAsync(pythonHarnessFor(id)))).not.toEqual(fixtures.map(rows=>expectedPython(id,rows)));
+  }
+});
+it('rejects global ranking when a per-customer rank is requested', async () => {
+  const c = sqlLabChallenges.find(c=>c.id==='sql-customer-ranking')!;
+  expect((await executeSqlChallenge(c.id,c.referenceSql)).passed).toBe(true);
+  expect((await executeSqlChallenge(c.id,c.referenceSql.replace('PARTITION BY customer_id ',''))).passed).toBe(false);
+});

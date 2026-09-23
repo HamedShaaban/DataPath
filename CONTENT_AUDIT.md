@@ -9,15 +9,15 @@ Generated from the current catalog. Counts describe coverage, not teaching quali
 | Data Business Analyst | 33 | 7 | 6 | 7 | 23 |
 | Product Analyst | 46 | 11 | 12 | 8 | 33 |
 | Analytics Engineer | 46 | 7 | 7 | 7 | 34 |
-| Data Engineer | 65 | 10 | 10 | 12 | 48 |
+| Data Engineer | 65 | 10 | 11 | 12 | 47 |
 | Cloud Data Engineer | 51 | 8 | 8 | 9 | 37 |
 | Data Architect | 58 | 8 | 9 | 10 | 43 |
 | Database Administrator | 43 | 7 | 7 | 8 | 31 |
-| Data Scientist | 52 | 14 | 12 | 8 | 38 |
-| Machine Learning Engineer | 55 | 5 | 4 | 9 | 45 |
-| AI Engineer | 55 | 5 | 4 | 10 | 44 |
-| Generative AI Engineer | 55 | 5 | 4 | 10 | 44 |
-| MLOps Engineer | 58 | 8 | 7 | 10 | 46 |
+| Data Scientist | 52 | 14 | 13 | 8 | 37 |
+| Machine Learning Engineer | 55 | 5 | 5 | 9 | 44 |
+| AI Engineer | 55 | 5 | 5 | 10 | 43 |
+| Generative AI Engineer | 55 | 5 | 5 | 10 | 43 |
+| MLOps Engineer | 58 | 8 | 8 | 10 | 45 |
 | Data Governance Specialist | 39 | 3 | 4 | 6 | 30 |
 | Data Quality Analyst | 42 | 11 | 9 | 6 | 30 |
 | Data Steward | 36 | 7 | 5 | 6 | 26 |
@@ -25,9 +25,9 @@ Generated from the current catalog. Counts describe coverage, not teaching quali
 | Marketing Data Analyst | 49 | 14 | 11 | 9 | 34 |
 | Risk Data Analyst | 46 | 11 | 10 | 7 | 33 |
 | BI Developer | 46 | 8 | 8 | 7 | 33 |
-| Data Platform Engineer | 62 | 10 | 10 | 10 | 47 |
+| Data Platform Engineer | 62 | 10 | 11 | 10 | 46 |
 | SQL (advanced focused) | 10 | 7 | 7 | 3 | 3 |
-| Python (advanced focused) | 10 | 3 | 3 | 3 | 6 |
+| Python (advanced focused) | 10 | 3 | 4 | 3 | 5 |
 | Excel (advanced focused) | 9 | 4 | 1 | 1 | 7 |
 | Statistics (advanced focused) | 9 | 2 | 1 | 1 | 8 |
 | Data cleaning (advanced focused) | 12 | 4 | 2 | 2 | 10 |

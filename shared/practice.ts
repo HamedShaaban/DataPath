@@ -247,6 +247,24 @@ export function practiceChallenges(profile: Profile): PracticeChallenge[] {
       result.push(c);
   };
   add({
+    id: "python-category-totals", skillId: "python", topicId: "python-5", kind: "python",
+    title: "Test a grouped industry summary",
+    task: "Write solve(rows) returning a list of [category, total] pairs, sorted by category. Sum known values from completed records only. Keep groups with a zero total; exclude groups with no eligible records. Return [] for empty input. Categories are strings. Test missing values, negative adjustments and changing category names.",
+    starter: "def solve(rows):\n    totals = {}\n    return []",
+    reference: "def solve(rows):\n    totals = {}\n    for row in rows:\n        if row['status'] == 'completed' and row['value'] is not None:\n            key = row['category']\n            totals[key] = totals.get(key, 0) + row['value']\n    return [[key, totals[key]] for key in sorted(totals)]",
+    hints: ["Filter status and None before creating a group.", "Accumulate values in a dictionary keyed by category.", "Sort category keys, not totals; preserve zero totals."],
+    rubric: [], lesson: "Test a transformation with more than one group and with values that cancel. Group membership and output order are part of the contract.",
+  });
+  add({
+    id: "python-top-three", skillId: "python", topicId: "python-7", kind: "python",
+    title: "Build a compact top-three review queue",
+    task: "Write solve(rows) returning up to three IDs for completed records with known values, ordered by value descending, then ID ascending for ties. IDs are unique integers. Include zero and negative values. Return [] when none qualify. Keep a candidate list of three records after each iteration instead of sorting the entire input. Checks verify output, not memory usage; explain the O(n) fixed-k scan in your notes.",
+    starter: "def solve(rows):\n    candidates = []\n    return []",
+    reference: "def solve(rows):\n    candidates = []\n    for row in rows:\n        if row['status'] != 'completed' or row['value'] is None:\n            continue\n        candidates.append(row)\n        candidates.sort(key=lambda r: (-r['value'], r['id']))\n        del candidates[3:]\n    return [r['id'] for r in candidates]",
+    hints: ["Discard pending records and None, not zero.", "A composite key (-value, id) gives descending values with ascending ID ties.", "After each insertion, remove candidates beyond position three; the candidate buffer is bounded by four during insertion."],
+    rubric: [], lesson: "For a fixed k, maintaining a small candidate buffer uses O(k) extra space and O(n) time. These checks validate answers; use profiling to substantiate memory claims.",
+  });
+  add({
     id: "python-stream-summary", skillId: "python", topicId: "python-10", kind: "python",
     title: "Summarise a one-pass data stream",
     task: "Write solve(rows) for a one-pass iterable of dictionaries, not a list. Return [count, total, minimum, maximum] for completed records with a known value. Ignore pending records and None, but include zero and negative values. If none qualify return [0, 0, None, None]. Consume rows only once; use running accumulators instead of materializing the stream. Automated checks verify results and one-pass compatibility, not peak memory usage.",

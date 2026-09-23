@@ -211,7 +211,7 @@ describe("Curated knowledge graph and planning", () => {
     expect(parsed.profile.avatarData).toBe("");
   });
   it("validates guided SQL work and returns the expected banking result", async () => {
-    expect(sqlLabChallenges).toHaveLength(13);
+    expect(sqlLabChallenges).toHaveLength(14);
     const passed = await executeSqlChallenge(
       "sql-select-filter",
       "SELECT transaction_id, amount FROM transactions WHERE status = 'completed' AND amount >= 500 ORDER BY amount DESC;"

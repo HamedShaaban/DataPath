@@ -63,7 +63,8 @@ export function runPythonPractice(
                 "Changed values and input order",
                 "Empty input",
                 id === "python-stream-summary" ? "Zero, negatives, missing values and pending records" : "Zero, missing values and pending records",
-              ][index],
+                "Category groups, ties and negative adjustments",
+              ][index] || `Dataset ${index + 1}`,
               passed:
                 typeof expected === "number"
                   ? typeof actual === "number" &&
@@ -77,7 +78,7 @@ export function runPythonPractice(
             checks,
             output: JSON.stringify(outputs[0]),
             message: passed
-              ? "Your Python function passed all four datasets."
+              ? `Your Python function passed all ${fixtures.length} datasets.`
               : pythonOutputFeedback(
                   outputs,
                   fixtures.map(rows => expectedPython(id, rows)),

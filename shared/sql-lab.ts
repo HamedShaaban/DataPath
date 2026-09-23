@@ -465,4 +465,19 @@ export const sqlLabChallenges: SqlLabChallenge[] = [
       { day: "2026-08-08", total_amount: 0 },
     ],
   },
+  {
+    id: "sql-customer-ranking", topicId: "sql-5", title: "Rank each customer's completed payments", level: "Intermediate",
+    brief: "Build a per-customer review queue without mixing independent groups.",
+    task: "Return customer_id, transaction_id, amount and ROW_NUMBER as payment_rank for completed transactions. Restart ranks for each customer. Within each customer rank amount descending, breaking ties with transaction_id ascending. Sort output by customer_id ascending, then payment_rank ascending.",
+    starterSql: "SELECT customer_id, transaction_id, amount,\n  ROW_NUMBER() OVER () AS payment_rank\nFROM transactions\nWHERE status = 'completed';",
+    referenceSql: "SELECT customer_id, transaction_id, amount, ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY amount DESC, transaction_id ASC) AS payment_rank FROM transactions WHERE status = 'completed' ORDER BY customer_id, payment_rank",
+    hints: ["PARTITION BY restarts the window for each customer.", "Filter completed records before ranking.", "Use transaction_id as a deterministic tie-breaker inside the window, and order the final result explicitly."],
+    expectedColumns: ["customer_id", "transaction_id", "amount", "payment_rank"],
+    expectedRows: [
+      { customer_id: 1, transaction_id: 101, amount: 720, payment_rank: 1 },
+      { customer_id: 2, transaction_id: 105, amount: 510, payment_rank: 1 },
+      { customer_id: 2, transaction_id: 102, amount: 340, payment_rank: 2 },
+      { customer_id: 3, transaction_id: 104, amount: 950, payment_rank: 1 },
+    ],
+  },
 ];
