@@ -5812,3 +5812,9 @@ textarea:focus-visible {
 .placement-check > .secondary { margin-top: 16px; }
 .placement-result { padding: 18px; border-inline-start: 3px solid var(--green); background: var(--surface); margin-top: 18px; }
 @media (max-width: 650px) { .placement-check { padding: 14px; } }
+
+.pace-suggestion { padding: 22px; margin-block: 22px; border: 1px solid var(--green); border-radius: 16px; background: var(--surface-soft); }
+.pace-suggestion h3 { margin-block: 10px; color: var(--text); }
+.pace-suggestion p { color: var(--muted); max-width: 70ch; }
+.pace-suggestion .button-row { margin-top: 18px; }
+@media (max-width: 650px) { .pace-suggestion { padding: 16px; } }

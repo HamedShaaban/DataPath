@@ -1,3 +1,4 @@
+import { suggestPace } from "@shared/pace";
 import { PlacementCheck } from "@/components/PlacementCheck";
 import { PathExplorer } from "@/components/PathExplorer";
 import { learningPathTitle } from "@shared/learning";
@@ -3953,6 +3954,15 @@ function Onboarding({
   const patch = (v: Partial<Profile>) =>
     update(s => ({ ...s, profile: { ...s.profile, ...v } }));
   const req = requirements(p);
+  const [autoPace, setAutoPace] = useState(!state.onboarded);
+  const suggestedPace = suggestPace(state);
+  useEffect(() => {
+    if (step !== 2 || !autoPace) return;
+    update(current => current.profile.weeks === suggestedPace.weeks && current.profile.hoursPerWeek === suggestedPace.hoursPerWeek
+      ? current
+      : { ...current, profile: { ...current.profile, weeks: suggestedPace.weeks, hoursPerWeek: suggestedPace.hoursPerWeek } });
+  }, [step, autoPace, suggestedPace.weeks, suggestedPace.hoursPerWeek]);
+
   return (
     <div className="onboarding">
       <div className="onboarding-intro">
@@ -4364,8 +4374,18 @@ function Onboarding({
                 estimate, not a job-readiness deadline.
               </div>
             )}
+            <section className="pace-suggestion" aria-label={t("Suggested learning pace", "الوتيرة المقترحة")}>
+              <span className="eyebrow">{autoPace ? t("SUGGESTED PACE APPLIED", "تم تطبيق الوتيرة المقترحة") : t("YOUR CUSTOM PACE", "وتيرتك المخصصة")}</span>
+              <h3>{t(`${suggestedPace.hoursPerWeek} hours a week · ${suggestedPace.weeks} weeks`, `${suggestedPace.hoursPerWeek} ساعات أسبوعياً · ${suggestedPace.weeks} أسبوعاً`)}</h3>
+              <p>{t(`Based on ${suggestedPace.remainingHours} remaining learning hours, including your project, with approximately 15% extra time for review and interruptions. Your selected skills, target levels, starting point and saved progress shape the estimate.`, `بناءً على ${suggestedPace.remainingHours} ساعة تعلم متبقية تشمل المشروع، مع نحو 15٪ وقت إضافي للمراجعة والانقطاعات. تعتمد المدة على المهارات والمستويات ونقطة البداية والتقدم المحفوظ.`)}</p>
+              <p>{t("This is a suggested schedule, not a deadline. Change either field below to use your own pace.", "هذا جدول مقترح وليس موعداً إلزامياً. غيّر أي حقل أدناه لاستخدام وتيرتك الخاصة.")}</p>
+              <div className="button-row">
+                <button type="button" className={autoPace ? "primary" : "secondary"} aria-pressed={autoPace} onClick={() => { setAutoPace(true); patch({ hoursPerWeek: suggestedPace.hoursPerWeek, weeks: suggestedPace.weeks }); }}>{t("Use suggested pace", "استخدام الوتيرة المقترحة")}</button>
+                <button type="button" className={!autoPace ? "primary" : "secondary"} aria-pressed={!autoPace} onClick={() => setAutoPace(false)}>{t("Set my own pace", "تحديد وتيرتي")}</button>
+              </div>
+            </section>
             <div className="form-grid">
-              <label hidden={beginnerSetup}>
+              <label>
                 {t(
                   "Desired completion period (weeks)",
                   "مدة الإكمال المرغوبة (أسابيع)"
@@ -4376,11 +4396,10 @@ function Onboarding({
                   max={104}
                   required
                   value={p.weeks}
-                  onChange={e =>
-                    patch({
-                      weeks: Math.max(1, Math.min(104, Number(e.target.value))),
-                    })
-                  }
+                  onChange={e => {
+                    setAutoPace(false);
+                    patch({ weeks: Math.max(1, Math.min(104, Math.round(Number(e.target.value)))) });
+                  }}
                 />
               </label>
               <label>
@@ -4391,14 +4410,10 @@ function Onboarding({
                   max={60}
                   required
                   value={p.hoursPerWeek}
-                  onChange={e =>
-                    patch({
-                      hoursPerWeek: Math.max(
-                        1,
-                        Math.min(60, Number(e.target.value))
-                      ),
-                    })
-                  }
+                  onChange={e => {
+                    setAutoPace(false);
+                    patch({ hoursPerWeek: Math.max(1, Math.min(60, Math.round(Number(e.target.value)))) });
+                  }}
                 />
               </label>
               <label>
