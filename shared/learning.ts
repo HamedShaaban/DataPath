@@ -2,6 +2,7 @@ import { authoredLessons } from "./authored-lessons";
 import { z } from "zod";
 import { interviewCases } from "./interview-cases";
 import {
+  businessSectors,
   careers,
   careerById,
   skills,
@@ -10,6 +11,7 @@ import {
   copy,
   type Lang,
 } from "./catalog";
+import { sqlLabChallenges } from "./sql-lab";
 import { technicalQuizBank } from "./quiz-bank";
 const skillId = z
   .string()
@@ -106,7 +108,7 @@ export const learningStateSchema = z.object({
     )
     .optional(),
   profile: profileSchema,
-  completed: z.array(topicId).max(252),
+  completed: z.array(topicId).max(skills.reduce((count, skill) => count + skill.topics.length, 0)),
   evidence: z.record(topicId, z.string().max(1000)),
   diagnostics: z.record(
     skillId,
@@ -127,7 +129,7 @@ export const learningStateSchema = z.object({
     .max(500)
     .default([]),
   certifiedSkills: z.array(skillId).max(28).default([]),
-  reviewTopics: z.array(topicId).max(252).default([]),
+  reviewTopics: z.array(topicId).max(skills.reduce((count, skill) => count + skill.topics.length, 0)).default([]),
   practiceAttempts: z
     .array(
       z.object({
@@ -152,7 +154,7 @@ export const learningStateSchema = z.object({
     .max(30)
     .default([]),
   completedPracticeIds: z.array(z.string().max(160)).max(300).default([]),
-  passedLabIds: z.array(z.string().max(100)).max(108).default([]),
+  passedLabIds: z.array(z.string().max(100)).max(sqlLabChallenges.length * businessSectors.length).default([]),
   labAttempts: z
     .array(
       z.object({

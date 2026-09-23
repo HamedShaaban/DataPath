@@ -221,3 +221,9 @@ Deployment remains deferred at the user's request. Moved the next-lesson action 
 Browser access worked for this pass. Inspected dashboard and pace setup in light/dark mode, roadmap and practice at 390px, and the Python workspace at 1440px. Opened all main destinations at 390px and checked document width for horizontal overflow. Verified expanded mobile navigation and keyboard activation of the navigation collapse and Return to guided practice; the guided lesson returned correctly. Restored light theme, collapsed navigation, dashboard and normal viewport. No learner answers, attempts, profile settings or progress were submitted. This is targeted visual/navigation coverage, not exhaustive accessibility, account, or deployment acceptance.
 
 All 268 tests across 36 files, TypeScript and production build pass. No dependencies, database changes or PDF updates. Local branch fix-responsive-ui-audit.
+
+## Path content audit — 2026-09-23
+
+Added reproducible CONTENT_AUDIT.md covering all career and advanced focused paths, with separate authored-example, checked-practice and self-review coverage. Regression checks cover all 22 career paths and 28 focused skills at levels 1–3 across nine industries: prerequisite order, exercise links, unique exercise IDs and topic quizzes. Fixed stale progress bounds (252 topics / 108 SQL passes) by deriving limits from the current catalogs, preserving existing saved data. Generic topic prompts and Arabic example parity remain content gaps documented in the report; no claim of full curriculum completeness.
+
+All 270 tests, TypeScript and production build pass. No dependencies or database schema changes. Deployment deferred.
