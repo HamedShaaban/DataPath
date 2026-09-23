@@ -819,6 +819,7 @@ export default function Home() {
                 </span>
               </div>
               {page === "dashboard" && <LearningDashboard state={state}
+                openPractice={(skillId, topicId) => { setLabSkillTarget(skillId); setLabTopicTarget(topicId); setIndependentPractice(true); setPage("lab"); }}
                 editPath={() => setEditing(true)}
                 navigate={target => { setExploreAll(true); setPage(target); }}
                 startBasics={() => { const element = document.getElementById("dashboard-basics"); element?.scrollIntoView({ block: "start" }); element?.focus(); }}

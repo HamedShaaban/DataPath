@@ -5818,3 +5818,13 @@ textarea:focus-visible {
 .pace-suggestion p { color: var(--muted); max-width: 70ch; }
 .pace-suggestion .button-row { margin-top: 18px; }
 @media (max-width: 650px) { .pace-suggestion { padding: 16px; } }
+
+.weekly-study-plan { padding: 24px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); }
+.weekly-study-plan > p { color: var(--muted); font-size: 13px; }
+.weekly-study-plan ol { list-style: none; padding: 0; margin-block: 20px 0; display: grid; gap: 12px; }
+.weekly-study-plan li { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 18px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-soft); }
+.weekly-study-plan li > div { min-width: 0; }
+.weekly-study-plan h3 { font-size: 16px; margin-block: 6px; overflow-wrap: anywhere; }
+.weekly-study-plan li p, .weekly-study-plan li small { color: var(--muted); font-size: 12px; }
+.weekly-study-plan li button { flex-shrink: 0; }
+@media (max-width: 650px) { .weekly-study-plan { padding: 16px; } .weekly-study-plan li { align-items: stretch; flex-direction: column; } }

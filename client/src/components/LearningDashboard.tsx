@@ -1,3 +1,4 @@
+import { WeeklyStudyPlan } from "./WeeklyStudyPlan";
 import { learningPathTitle } from "@shared/learning";
 import {
   ArrowRight,
@@ -20,12 +21,14 @@ type Destination = "lab" | "projects" | "proof" | "roadmap";
 export function LearningDashboard({
   state,
   openLesson,
+  openPractice,
   navigate,
   editPath,
   startBasics,
 }: {
   state: LearningState;
   openLesson: (skillId: string, topicId?: string) => void;
+  openPractice: (skillId: string, topicId: string) => void;
   navigate: (page: Destination) => void;
   editPath: () => void;
   startBasics: () => void;
@@ -63,6 +66,12 @@ export function LearningDashboard({
           {t("Edit my path", "تعديل مساري")} <ArrowUpRight size={15} />
         </button>
       </div>
+      <WeeklyStudyPlan state={state} start={activity => {
+        if (activity.kind === "basics") startBasics();
+        else if (activity.kind === "project") navigate("projects");
+        else if (activity.kind === "practice" && activity.practiceInLab) openPractice(activity.skillId!, activity.topicId!);
+        else openLesson(activity.skillId!, activity.topicId!);
+      }} />
       <div className="learning-start-grid">
         <section
           className="learning-spotlight"
