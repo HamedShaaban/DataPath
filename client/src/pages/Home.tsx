@@ -11,6 +11,7 @@ import { sqlChallengeForTopic } from "@shared/practice-navigation";
 import {
   guestStorageKey,
   readGuestStorage,
+  readGuestForImport,
   writeGuestStorage,
 } from "@/lib/guest-storage";
 import { selectedProof } from "@shared/proof-export";
@@ -2830,8 +2831,15 @@ export default function Home() {
                                 "استبدال مساحة الحساب بتقدم الزائر؟ احفظ بعد ذلك للتأكيد."
                               )
                             )
-                          )
-                            update(() => readGuest());
+                          ) {
+                            try {
+                              const guest = readGuestForImport(localStorage);
+                              update(() => guest);
+                              setNotice(t("Guest progress imported. Save progress to keep it in your account.", "تم استيراد تقدم الزائر. احفظ التقدم للاحتفاظ به في حسابك."));
+                            } catch {
+                              setNotice(t("No readable guest save was found. Your account workspace has not changed.", "لم يتم العثور على تقدم زائر قابل للقراءة. لم تتغير مساحة حسابك."));
+                            }
+                          }
                         }}
                       >
                         {t("Bring in guest progress", "استيراد تقدم الزائر")}
