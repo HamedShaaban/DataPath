@@ -693,6 +693,18 @@ export function PracticeHub({
                         </li>
                       ))}
                     </ul>
+                    {!result.passed && !result.reviewOnly && hintCount < challenge.hints.length && (
+                      <div className="progressive-hints">
+                        <strong>A small nudge</strong>
+                        {hintCount > 0 && <p>{challenge.hints[hintCount - 1]}</p>}
+                        <button className="secondary" onClick={() => setHintCount(count => count + 1)}>
+                          Reveal hint {hintCount + 1}
+                        </button>
+                      </div>
+                    )}
+                    {!result.passed && !result.reviewOnly && hintCount === challenge.hints.length && hintCount > 0 && (
+                      <p>{challenge.hints[hintCount - 1]}</p>
+                    )}
                     {!result.passed && !result.reviewOnly && (
                       <button
                         className="text-button"

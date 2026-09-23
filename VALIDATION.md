@@ -233,3 +233,7 @@ All 270 tests, TypeScript and production build pass. No dependencies or database
 Added intermediate per-customer SQL ranking, intermediate Python grouped totals, and advanced Python top-three selection. Tasks define tie-breaking, empty input, missing values, zero and negative adjustments. Python profiling work explicitly distinguishes tested output from unmeasured memory usage. Added a fifth fixture for category/tie cases and removed the UI's hard-coded four-dataset success claim. Refreshed curriculum coverage report.
 
 All 273 tests, TypeScript and build pass. Real Python tests cover correct and zero-dropping solutions across nine industries; SQL tests reject missing partitioning. Built SQL worker passes 126 exercise/industry combinations; self-hosted Python assets pass 54 combinations. Existing exercises' expected results unchanged. No dependencies or schema changes.
+
+## Specific practice feedback — 2026-09-23
+
+Python failures now identify empty-input, eligibility, grouping and ranking boundary concepts from failed checks without exposing hidden expected answers. Existing type/runtime guidance remains first. Failed submissions offer progressive hints directly beside feedback and retain the relevant-lesson link. All 274 tests, TypeScript and build pass. No dependencies, schema changes or deployment.

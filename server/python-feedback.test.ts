@@ -19,3 +19,10 @@ it("distinguishes missing returns, wrong types and generalisation failures", () 
     "hard-coding"
   );
 });
+it('links failed edge-case categories to a concrete concept without revealing hidden answers', () => {
+  expect(pythonOutputFeedback([1,1,1], [1,1,0], [true,true,false])).toContain('accumulator initialization');
+  expect(pythonOutputFeedback([1,1,0,2], [1,1,0,0], [true,true,true,false])).toContain('None separately from zero');
+  for (const [id,concept] of [['python-top-three','composite sort keys'],['python-category-totals','grouping keys']]) {
+    expect(pythonOutputFeedback([],[],[true,true,true,true,false],id)).toContain(concept);
+  }
+});

@@ -82,7 +82,8 @@ export function runPythonPractice(
               : pythonOutputFeedback(
                   outputs,
                   fixtures.map(rows => expectedPython(id, rows)),
-                  checks.map(check => check.passed)
+                  checks.map(check => check.passed),
+                  id
                 ),
           });
         } catch {
