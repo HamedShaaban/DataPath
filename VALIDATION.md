@@ -237,3 +237,9 @@ All 273 tests, TypeScript and build pass. Real Python tests cover correct and ze
 ## Specific practice feedback — 2026-09-23
 
 Python failures now identify empty-input, eligibility, grouping and ranking boundary concepts from failed checks without exposing hidden expected answers. Existing type/runtime guidance remains first. Failed submissions offer progressive hints directly beside feedback and retain the relevant-lesson link. All 274 tests, TypeScript and build pass. No dependencies, schema changes or deployment.
+
+## Portfolio project blueprints — 2026-09-23
+
+Projects now include four milestones with deliverables and acceptance criteria, relevant topic coverage, and downloadable synthetic industry CSV data. Career families define suitable artifacts and validation methods; focused paths follow the selected skill/depth. Small starter data is explicitly unsuitable for statistical/model-quality claims. Completion remains self-reviewed. Fixed the static 12-hour label to use the project's actual estimate (8 hours for focused projects).
+
+All 276 tests, TypeScript and build pass, including every career/industry blueprint and every focused skill/depth. No new dependencies or persistence/schema changes. UI acceptance continues in the student journey pass.

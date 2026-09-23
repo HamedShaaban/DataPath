@@ -5855,3 +5855,9 @@ textarea:focus-visible {
 /* Keep exercise headings compact while retaining space around the code editor. */
 .studio-shell .practice-studio .practice-answer-panel > .eyebrow,
 .studio-shell .practice-studio .practice-answer-panel > p { margin: 0; }
+
+.project-blueprint { min-width: 0; margin-block: 24px; padding: 20px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface-soft); overflow-wrap: anywhere; }
+.project-milestones { display: grid; gap: 12px; margin-block: 18px; }
+.project-blueprint details { min-width: 0; padding: 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+.project-blueprint summary { cursor: pointer; font-weight: 600; }
+.project-blueprint button { white-space: normal; max-width: 100%; }

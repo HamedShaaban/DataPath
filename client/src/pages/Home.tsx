@@ -1,3 +1,4 @@
+import { ProjectBlueprint } from "../components/ProjectBlueprint";
 import { applyCatchUp } from "@shared/catch-up";
 import { suggestPace } from "@shared/pace";
 import { PlacementCheck } from "@/components/PlacementCheck";
@@ -2204,8 +2205,8 @@ export default function Home() {
                 <section className="card project-card">
                   <span className="soft-tag">
                     {t(
-                      "PERSONAL PORTFOLIO · 12 ESTIMATED HOURS",
-                      "معرض أعمال شخصي · ١٢ ساعة تقديرية"
+                      `PERSONAL PORTFOLIO · ${project.hours} ESTIMATED HOURS`,
+                      `معرض أعمال شخصي · ${project.hours} ساعة تقديرية`
                     )}
                   </span>
                   <h2>{txt(project.title)}</h2>
@@ -2248,6 +2249,7 @@ export default function Home() {
                       )}
                     </li>
                   </ol>
+                  <ProjectBlueprint profile={state.profile} />
                   <ProjectChecklist
                     key={project.id}
                     title={txt(project.title)}
