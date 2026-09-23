@@ -139,3 +139,9 @@ No dependencies, database, execution engine or saved-state schema changed. All 2
 Added a roadmap overview with progress, workload and a specific next-lesson action. The default skill selection follows the next available lesson. Skill cards identify where that lesson sits, and lesson rows distinguish completed, ready, prerequisite-needed and exploratory content. Unmet prerequisites have direct lesson links and retain existing completion/assessment gates. Industry context is collapsible to prioritize learning navigation. Styles cover narrow layouts and existing light/dark tokens. No dependencies, data model or assessment-rule changes.
 
 All 227 tests, TypeScript and the production build pass. Browser visual/keyboard acceptance is still outstanding under the previously observed administrator-policy block. Changes are local on ui-interactive-roadmap; deployment remains paused.
+
+## Lesson experience — phase 4, 2026-09-22
+
+Added bilingual Understand → Try it → Check yourself navigation with focusable section targets and reduced-motion-aware scrolling. Objectives precede worked examples; practice and evidence prompts guide learners toward recording results. A completion checklist reflects existing prerequisite, evidence and passed-quiz requirements without changing the gates. Quizzes show answered counts and correct answers alongside explanations after submission. Styles use existing theme tokens and responsive layouts. No dependencies, database or saved-state schema changes.
+
+All 227 tests, TypeScript and production build pass. Rendered visual/keyboard acceptance remains unverified because browser administrator-policy verification denied access. Work is local on ui-lesson-experience; deployment remains paused and the PDF guide is unchanged.

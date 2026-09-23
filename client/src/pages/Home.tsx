@@ -1,3 +1,4 @@
+import { LessonSteps, LessonCompletion } from "@/components/LessonSteps";
 import { Fragment } from "react";
 import { LearningDashboard } from "@/components/LearningDashboard";
 import { X } from "lucide-react";
@@ -1108,6 +1109,7 @@ export default function Home() {
                                           <ChevronDown size={15} />
                                         </summary>
                                         <div className="topic-body">
+                                          <LessonSteps topicId={topic.id} arabic={lang === "ar"} prerequisitesReady={!locked} />
                                           {locked && <div className="roadmap-prerequisites"><strong>{t("Start with these lessons", "ابدأ بهذه الدروس")}</strong><p>{t("These build the knowledge needed for this topic.", "تؤسس هذه الدروس للمعرفة اللازمة لهذا الموضوع.")}</p><div>{item?.prerequisites.filter(prerequisite => !state.completed.includes(prerequisite)).map(prerequisite => {
                                             const prerequisiteSkill = skills.find(value => value.topics.some(value => value.id === prerequisite));
                                             const prerequisiteTopic = prerequisiteSkill?.topics.find(value => value.id === prerequisite);
@@ -1118,7 +1120,7 @@ export default function Home() {
                                             }}>{txt(prerequisiteTopic.title)} <ArrowRight size={14} /></button> : null;
                                           })}</div></div>}
 
-                                          <div className="lesson-guide">
+                                          <div className="lesson-guide" id={`lesson-${topic.id}-learn`} tabIndex={-1}>
                                             <span className="eyebrow">
                                               {t(
                                                 "WHAT THIS LESSON COVERS",
@@ -1136,21 +1138,6 @@ export default function Home() {
                                               topicId={topic.id}
                                               title={txt(topic.title)}
                                             />
-                                            {guide.workedExample && (
-                                              <div className="worked-example">
-                                                <h4>Worked example</h4>
-                                                <pre>
-                                                  {id === "sql"
-                                                    ? sqlVocabulary(
-                                                        guide.workedExample,
-                                                        state.profile.sector
-                                                      )
-                                                    : guide.workedExample}
-                                                </pre>
-                                                <h4>Common mistake to test</h4>
-                                                <p>{guide.commonMistake}</p>
-                                              </div>
-                                            )}
                                             <h4>
                                               {t(
                                                 "By the end, you should be able to:",
@@ -1166,7 +1153,22 @@ export default function Home() {
                                                 )
                                               )}
                                             </ul>
-                                            <div className="practice-brief">
+                                            {guide.workedExample && (
+                                              <div className="worked-example">
+                                                <h4>Worked example</h4>
+                                                <pre>
+                                                  {id === "sql"
+                                                    ? sqlVocabulary(
+                                                        guide.workedExample,
+                                                        state.profile.sector
+                                                      )
+                                                    : guide.workedExample}
+                                                </pre>
+                                                <h4>Common mistake to test</h4>
+                                                <p>{guide.commonMistake}</p>
+                                              </div>
+                                            )}
+                                            <div className="practice-brief lesson-practice-step" id={`lesson-${topic.id}-practice`} tabIndex={-1}>
                                               <strong>
                                                 {t(
                                                   "Hands-on task",
@@ -1273,7 +1275,7 @@ export default function Home() {
                                                 }))
                                               }
                                               placeholder={t(
-                                                "What did you build or learn? Include a project link if available.",
+                                                "What did you try? What result did you get? Explain one check you used. Add a project link if useful.",
                                                 "ماذا بنيت أو تعلمت؟ أضف رابط المشروع إن وجد."
                                               )}
                                             />
@@ -1286,6 +1288,9 @@ export default function Home() {
                                               )}
                                             </p>
                                           )}
+                                          <section className="lesson-check-step" id={`lesson-${topic.id}-check`} tabIndex={-1} aria-label={t("Check your understanding", "اختبر فهمك")}>
+                                          <h4>{t("Check your understanding", "اختبر فهمك")}</h4>
+                                          <p>{t("Answer the questions, then read the explanation for each answer. You can retry after reviewing.", "أجب عن الأسئلة ثم اقرأ تفسير كل إجابة. يمكنك إعادة المحاولة بعد المراجعة.")}</p>
                                           <QuizCard
                                             compact
                                             title={t(
@@ -1298,6 +1303,7 @@ export default function Home() {
                                             state={state}
                                             update={update}
                                           />
+                                          <LessonCompletion arabic={lang === "ar"} hasEvidence={Boolean((state.evidence[topic.id] || "").trim())} passed={latestPassed(state, "topic", topic.id)} prerequisitesReady={!locked} />
                                           <button
                                             className="primary small"
                                             disabled={
@@ -1343,6 +1349,7 @@ export default function Home() {
                                                   "تحديد كمكتمل"
                                                 )}
                                           </button>
+                                          </section>
                                         </div>
                                       </details>
                                     );
@@ -3562,6 +3569,7 @@ function QuizCard({
               `درجة النجاح: ${passMark}٪. الإجابات الخاطئة تعيد موضوعاتها للمراجعة.`
             )}
           </p>
+          <div className="quiz-answer-progress" role="status">{t(`${Object.keys(answers).length} of ${questions.length} answered`, `تمت الإجابة عن ${Object.keys(answers).length} من ${questions.length}`)}</div>
           {questions.map((question, questionIndex) => (
             <fieldset key={question.id}>
               <legend>
@@ -3597,6 +3605,7 @@ function QuizCard({
                       ? t("Correct", "صح")
                       : t("Not quite", "مش صح")}
                   </strong>
+                  {answers[question.id] !== question.answer && <p><strong>{t("Correct answer:", "الإجابة الصحيحة:")}</strong> {question.options[question.answer][lang]}</p>}
                   <p>{question.explanation[lang]}</p>
                 </div>
               )}
