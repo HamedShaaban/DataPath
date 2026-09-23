@@ -4,7 +4,7 @@ export type SqlLabChallenge = {
   id: string;
   topicId: string;
   title: string;
-  level: "Beginner" | "Intermediate";
+  level: "Beginner" | "Intermediate" | "Advanced";
   brief: string;
   task: string;
   starterSql: string;
@@ -70,6 +70,7 @@ export const sqlLabTables = {
 } satisfies Record<string, SqlLabRow[]>;
 
 export const sqlLabChallenges: SqlLabChallenge[] = [
+
   {
     id: "sql-select-filter",
     referenceSql:
@@ -447,6 +448,21 @@ export const sqlLabChallenges: SqlLabChallenge[] = [
         customer_id: 5,
         customer_name: "Salma",
       },
+    ],
+  },
+  {
+    id: "sql-date-spine", topicId: "sql-10", title: "Fill missing days in a daily report", level: "Advanced",
+    brief: "A daily industry report must show quiet days as zero rather than silently omitting them.",
+    task: "Return day (YYYY-MM-DD text) and total_amount for every calendar day from the earliest to latest transaction_date across all transactions. Sum only completed transactions, use zero for days without completed activity, and sort day ascending. If no transactions exist, return no rows. Practise a bounded recursive date spine.",
+    starterSql: "WITH RECURSIVE days(day) AS (\n  SELECT MIN(transaction_date) FROM transactions HAVING COUNT(*) > 0\n  UNION ALL\n  -- Add the next day and stop at the latest transaction date.\n)\nSELECT day FROM days;",
+    referenceSql: "WITH RECURSIVE days(day) AS (SELECT MIN(transaction_date) FROM transactions HAVING COUNT(*) > 0 UNION ALL SELECT day + 1 FROM days WHERE day < (SELECT MAX(transaction_date) FROM transactions)) SELECT d.day::text AS day, COALESCE(SUM(t.amount), 0) AS total_amount FROM days d LEFT JOIN transactions t ON t.transaction_date = d.day AND t.status = 'completed' GROUP BY d.day ORDER BY d.day",
+    hints: ["Use all transactions to determine the reporting range, including pending and declined activity.", "Place the completed-status condition in the join so quiet days survive.", "Ensure the recursive term stops; handle the empty anchor separately."],
+    expectedColumns: ["day", "total_amount"],
+    expectedRows: [
+      { day: "2026-08-02", total_amount: 720 }, { day: "2026-08-03", total_amount: 340 },
+      { day: "2026-08-04", total_amount: 0 }, { day: "2026-08-05", total_amount: 950 },
+      { day: "2026-08-06", total_amount: 0 }, { day: "2026-08-07", total_amount: 510 },
+      { day: "2026-08-08", total_amount: 0 },
     ],
   },
 ];

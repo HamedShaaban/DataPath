@@ -1,7 +1,7 @@
 import { practiceDataset, type Sector } from "./industry-practice";
-export function pythonFixtures(sector: Sector) {
+export function pythonFixtures(sector: Sector, challengeId?: string) {
   const rows = practiceDataset(sector);
-  return [
+  const fixtures = [
     rows,
     rows
       .map(row => ({
@@ -35,6 +35,11 @@ export function pythonFixtures(sector: Sector) {
       },
     ],
   ];
+  if (challengeId === "python-stream-summary") fixtures[3].push(
+    { id: 13, entity: "Edge", category: "Test", value: -7, status: "completed" },
+    { id: 14, entity: "Edge", category: "Test", value: 12, status: "completed" }
+  );
+  return fixtures;
 }
 export function expectedPython(
   id: string,
@@ -49,6 +54,7 @@ export function expectedPython(
     .filter(r => r.status === "completed" && r.value !== null)
     .map(r => r.value!);
   const total = values.reduce((a, b) => a + b, 0);
+  if (id === "python-stream-summary") return [values.length, total, values.length ? Math.min(...values) : null, values.length ? Math.max(...values) : null];
   return id === "python-debug"
     ? values.length
       ? total / values.length
@@ -72,3 +78,21 @@ if not callable(_namespace.get('solve')):
 _outputs = [_namespace['solve'](rows) for rows in _dp_json.loads(_dp_fixtures)]
 _dp_json.dumps(_outputs)
 `;
+
+// Only this exercise changes the input contract; existing exercises still receive lists.
+export function pythonHarnessFor(id: string) {
+  if (id !== "python-stream-summary") return pythonHarness;
+  return pythonHarness.replace(
+    "_outputs = [_namespace['solve'](rows) for rows in _dp_json.loads(_dp_fixtures)]",
+    `class _OnePassRows:
+    def __init__(self, rows):
+        self._rows = rows
+        self._used = False
+    def __iter__(self):
+        if self._used:
+            raise ValueError('One-pass input: rows cannot be traversed twice. Update all accumulators in a single loop.')
+        self._used = True
+        return iter(self._rows)
+_outputs = [_namespace['solve'](_OnePassRows(rows)) for rows in _dp_json.loads(_dp_fixtures)]`
+  );
+}

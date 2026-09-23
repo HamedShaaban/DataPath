@@ -1,4 +1,6 @@
 export function pythonErrorFeedback(error: string) {
+  if (/One-pass input/.test(error))
+    return "This source can only be traversed once. Calculate count, total and bounds in the same loop instead of calling separate passes.";
   if (/IndentationError|TabError/.test(error))
     return "Check indentation: use consistent spaces inside solve(rows), loops and conditions. Avoid mixing tabs and spaces.";
   if (/SyntaxError/.test(error))

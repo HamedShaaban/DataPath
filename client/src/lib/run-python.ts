@@ -5,7 +5,7 @@ import {
 import {
   pythonFixtures,
   expectedPython,
-  pythonHarness,
+  pythonHarnessFor,
 } from "@shared/python-practice";
 import type { Sector } from "@shared/industry-practice";
 import type { PracticeResult } from "@shared/practice";
@@ -33,7 +33,7 @@ export function runPythonPractice(
           ),
         45000
       );
-      const fixtures = pythonFixtures(sector);
+      const fixtures = pythonFixtures(sector, id);
       worker.onmessage = ({ data }) => {
         if (data.stage === "ready") {
           clearTimeout(timer);
@@ -62,7 +62,7 @@ export function runPythonPractice(
                 "Practice dataset",
                 "Changed values and input order",
                 "Empty input",
-                "Zero, missing values and pending records",
+                id === "python-stream-summary" ? "Zero, negatives, missing values and pending records" : "Zero, missing values and pending records",
               ][index],
               passed:
                 typeof expected === "number"
@@ -93,7 +93,7 @@ export function runPythonPractice(
       worker.postMessage({
         source,
         fixtures: JSON.stringify(fixtures),
-        harness: pythonHarness,
+        harness: pythonHarnessFor(id),
       });
     } catch {
       fail("This browser could not start Python practice.");

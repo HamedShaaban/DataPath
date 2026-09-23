@@ -247,6 +247,15 @@ export function practiceChallenges(profile: Profile): PracticeChallenge[] {
       result.push(c);
   };
   add({
+    id: "python-stream-summary", skillId: "python", topicId: "python-10", kind: "python",
+    title: "Summarise a one-pass data stream",
+    task: "Write solve(rows) for a one-pass iterable of dictionaries, not a list. Return [count, total, minimum, maximum] for completed records with a known value. Ignore pending records and None, but include zero and negative values. If none qualify return [0, 0, None, None]. Consume rows only once; use running accumulators instead of materializing the stream. Automated checks verify results and one-pass compatibility, not peak memory usage.",
+    starter: "def solve(rows):\n    # Track count, total and bounds in one pass.\n    return [0, 0, None, None]",
+    reference: "def solve(rows):\n    count, total, low, high = 0, 0, None, None\n    for row in rows:\n        value = row['value']\n        if row['status'] != 'completed' or value is None:\n            continue\n        count += 1\n        total += value\n        low = value if low is None else min(low, value)\n        high = value if high is None else max(high, value)\n    return [count, total, low, high]",
+    hints: ["Do not call len(rows), index rows, or traverse it again.", "Initialize bounds with None; zero is not a safe minimum for positive-only data.", "Update every accumulator within the same eligible-record branch."],
+    rubric: [], lesson: "A one-pass source cannot be rewound. Count, total and bounds can be calculated together without retaining all records.",
+  });
+  add({
     id: "python-total",
     skillId: "python",
     topicId: "python-2",

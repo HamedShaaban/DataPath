@@ -8,7 +8,7 @@ import { practiceChallenges } from "../shared/practice";
 import {
   pythonFixtures,
   expectedPython,
-  pythonHarness,
+  pythonHarnessFor,
 } from "../shared/python-practice";
 const root = resolve("dist/public/python-runtime");
 const { loadPyodide } = await import(
@@ -17,17 +17,19 @@ const { loadPyodide } = await import(
 const py = await loadPyodide({ indexURL: root + "/" });
 const state = newState();
 state.profile.role = "data-scientist";
+state.profile.tools = ["cleaning"];
+state.profile.skillTargets = { python: 3 };
 let checked = 0;
 for (const sector of businessSectors) {
   state.profile.sector = sector.id;
   for (const challenge of practiceChallenges(state.profile).filter(
     c => c.kind === "python"
   )) {
-    const fixtures = pythonFixtures(sector.id);
+    const fixtures = pythonFixtures(sector.id, challenge.id);
     py.globals.set("_dp_source", challenge.reference!);
     py.globals.set("_dp_fixtures", JSON.stringify(fixtures));
     assert.deepEqual(
-      JSON.parse(await py.runPythonAsync(pythonHarness)),
+      JSON.parse(await py.runPythonAsync(pythonHarnessFor(challenge.id))),
       fixtures.map(rows => expectedPython(challenge.id, rows))
     );
     checked++;

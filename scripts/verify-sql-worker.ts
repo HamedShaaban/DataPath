@@ -54,8 +54,10 @@ const send = (data: unknown) =>
   });
 try {
   const start = performance.now();
+  let checked = 0;
   for (const sector of businessSectors) {
     for (const challenge of sqlContext(sector.id).challenges) {
+      checked++;
       const result = await send({
         challengeId: challenge.id,
         query: challenge.referenceSql,
@@ -84,7 +86,7 @@ try {
   assert.equal(invalid.executed, false);
   assert.equal(invalid.message, "The lab could not start. Please try again.");
   console.log(
-    `Built worker: 108 challenge/industry combinations passed using only local runtime assets; ${Math.round(performance.now() - start)} ms. Public message shape retained.`
+    `Built worker: ${checked} challenge/industry combinations passed using only local runtime assets; ${Math.round(performance.now() - start)} ms. Public message shape retained.`
   );
 } finally {
   await worker.terminate();
