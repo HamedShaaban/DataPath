@@ -1,3 +1,4 @@
+import { PathExplorer } from "@/components/PathExplorer";
 import { learningPathTitle } from "@shared/learning";
 import { LessonSteps, LessonCompletion } from "@/components/LessonSteps";
 import { Fragment } from "react";
@@ -4141,27 +4142,7 @@ function Onboarding({
               question. Data Analyst is a starting suggestion; you can explore
               careers and industries later.
             </p>
-            <details>
-              <summary>Explore all career choices</summary>
-              <div className="role-grid">
-                {careers.map(r => (
-                  <button
-                    type="button"
-                    className={
-                      p.role === r.id ? "role-card selected" : "role-card"
-                    }
-                    key={r.id}
-                    onClick={() => patch({ role: r.id, skillTargets: {} })}
-                  >
-                    <span className="role-radio">
-                      {p.role === r.id && <Check size={12} />}
-                    </span>
-                    <strong>{r.title[lang]}</strong>
-                    <small>{r.description[lang]}</small>
-                  </button>
-                ))}
-              </div>
-            </details>
+            <PathExplorer state={state} lang={lang} onChoose={role => patch({ role, skillTargets: {} })} />
             </>}
             <label>
               Target business sector

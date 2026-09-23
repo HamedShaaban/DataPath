@@ -5777,3 +5777,27 @@ textarea:focus-visible {
 .skill-targets { padding-block: 20px; border-block: 1px solid var(--line); margin-block: 20px; }
 .skill-targets .secondary { margin-top: 16px; }
 @media (max-width: 650px) { .focused-path-setup { grid-template-columns: minmax(0, 1fr); padding: 16px; } }
+
+/* Searchable career previews; browsing never commits a profile change. */
+.path-explorer { margin-block: 24px; }
+.path-explorer header { margin-bottom: 20px; }
+.path-explorer header p, .path-explorer > p { color: var(--muted); }
+.path-explorer .search-field > span { display: flex; align-items: center; gap: 8px; }
+.path-explorer-layout { display: grid; grid-template-columns: minmax(220px, .8fr) minmax(0, 1.2fr); gap: 20px; align-items: start; }
+.path-explorer-list { display: grid; gap: 10px; max-height: 620px; overflow-y: auto; padding: 4px; }
+.path-preview-option { display: grid; gap: 7px; width: 100%; text-align: start; padding: 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--text); }
+.path-preview-option small { color: var(--muted); }
+.path-preview-option.selected { border-color: var(--green); background: var(--surface-soft); box-shadow: inset 3px 0 var(--green); }
+.path-preview-option > span { font-size: 11px; color: var(--green); }
+.path-explorer-preview { min-width: 0; padding: 22px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface-soft); }
+.path-explorer-preview > p { color: var(--muted); font-size: 13px; }
+.path-preview-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-block: 20px; }
+.path-preview-stats > strong { font-size: 24px; }
+.path-preview-stats small { display: block; font-size: 11px; font-weight: 400; color: var(--muted); }
+.path-preview-skills { list-style: none; padding: 0; margin-block: 12px 20px; }
+.path-preview-skills li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; padding-block: 8px; border-bottom: 1px solid var(--line); }
+.path-preview-skills strong { font-size: 12px; color: var(--green); }
+.path-preview-topics { max-height: 280px; overflow-y: auto; padding-inline-start: 22px; }
+.path-preview-topics li { margin-block: 8px; overflow-wrap: anywhere; }
+.path-explorer-preview > .primary { width: 100%; margin-top: 20px; }
+@media (max-width: 750px) { .path-explorer-layout { grid-template-columns: minmax(0, 1fr); } .path-explorer-list { max-height: 320px; } .path-explorer-preview { padding: 16px; } }
