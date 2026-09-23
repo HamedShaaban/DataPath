@@ -26,9 +26,9 @@ import {
 import { sqlLabChallenges } from "../shared/sql-lab";
 import { executeSqlChallenge } from "../shared/sql-engine";
 describe("Curated knowledge graph and planning", () => {
-  it("has 18 bilingual roles with valid requirements and 252 bilingual topics", () => {
-    expect(careers).toHaveLength(18);
-    expect(skills.flatMap(s => s.topics)).toHaveLength(252);
+  it("has 22 bilingual roles with valid requirements and 254 bilingual topics", () => {
+    expect(careers).toHaveLength(22);
+    expect(skills.flatMap(s => s.topics)).toHaveLength(254);
     const ids = skills.flatMap(s => s.topics.map(t => t.id));
     expect(new Set(ids).size).toBe(ids.length);
     for (const role of careers) {

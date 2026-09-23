@@ -359,6 +359,18 @@ export function practiceChallenges(profile: Profile): PracticeChallenge[] {
       lesson:
         "Define numerator, denominator and exclusions before calculating a rate. A completion rate does not describe value, profitability or causal impact.",
     });
+  for (const skillId of ["sql", "python"]) {
+    if (required[skillId] !== 3) continue;
+    const sql = skillId === "sql";
+    result.push({
+      id: `advanced-${skillId}-10`, skillId, topicId: `${skillId}-10`, kind: "case",
+      title: sql ? "Audit a recursive hierarchy" : "Build a bounded-memory pipeline",
+      task: `${sectorById[profile.sector].title}: ${sql ? "Model a synthetic organizational hierarchy. Write a recursive query, include a cycle case, and demonstrate termination and correct depth." : "Process synthetic records with a generator. Validate totals, empty input, invalid rows and a second iteration. Explain which operations retain data in memory."} Use no private customer data.`,
+      starter: "", hints: [sql ? "Track visited identifiers and stop when an identifier repeats." : "Consume each record once; do not materialize the whole input."],
+      rubric: ["Reproducible example included", "Edge case tested", "Result reconciled", "Limitations explained"],
+      lesson: "This submission is self-reviewed. Include code and observed results; completion is not independent verification.",
+    });
+  }
   return result;
 }
 export type PracticeResult = {
@@ -432,7 +444,7 @@ export function evaluatePractice(
   };
 }
 export function practiceKey(profile: Profile, id: string) {
-  return `${profile.role}:${profile.sector}:${id}`;
+  return `${profile.learningMode === "skill" ? `skill-${profile.focusSkill}` : profile.role}:${profile.sector}:${id}`;
 }
 export function recordPractice(
   state: LearningState,

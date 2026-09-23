@@ -1,3 +1,4 @@
+import { learningPathTitle } from "@shared/learning";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -11,7 +12,7 @@ import {
   Target,
 } from "lucide-react";
 import { useState } from "react";
-import { careerById, sectorById, skillById } from "@shared/catalog";
+import { sectorById, skillById } from "@shared/catalog";
 import { makePlan, type LearningState } from "@shared/learning";
 import { dashboardWeek } from "@shared/dashboard-progress";
 
@@ -55,7 +56,7 @@ export function LearningDashboard({
       <div className="learning-path-strip">
         <span>
           <Map size={18} />
-          <strong>{title(careerById[state.profile.role].title)}</strong>
+          <strong>{title(learningPathTitle(state.profile))}</strong>
           <span>{sectorById[state.profile.sector].title}</span>
         </span>
         <button className="text-button" onClick={editPath}>

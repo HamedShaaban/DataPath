@@ -30,6 +30,10 @@ export const profileSchema = z.object({
       "Invalid avatar"
     )
     .default(""),
+  learningMode: z.enum(["career", "skill"]).default("career"),
+  focusSkill: skillId.default("sql"),
+  targetLevel: z.number().int().min(1).max(3).default(2),
+  skillTargets: z.record(skillId, z.number().int().min(1).max(3)).default({}),
   role: z.string().refine(id => Boolean(careerById[id]), "Choose a career"),
   experience: z.enum(["new", "junior", "mid", "expert"]),
   tools: z.array(skillId).max(28),
@@ -58,6 +62,10 @@ export const profileSchema = z.object({
 });
 export type Profile = z.infer<typeof profileSchema>;
 export const defaultProfile: Profile = {
+  learningMode: "career",
+  focusSkill: "sql",
+  targetLevel: 2,
+  skillTargets: {},
   displayName: "",
   avatarData: "",
   role: "data-analyst",
@@ -165,8 +173,8 @@ export const learningStateSchema = z.object({
     .record(z.string().max(100), z.string().max(5000))
     .refine(v => Object.keys(v).length <= 100),
   completedProjects: z
-    .array(z.string().refine(id => careers.some(r => `project-${r.id}` === id)))
-    .max(18)
+    .array(z.string().refine(id => careers.some(r => `project-${r.id}` === id) || skills.some(skill => `project-skill-${skill.id}` === id)))
+    .max(careers.length + skills.length)
     .default([]),
   applications: z
     .array(
@@ -516,11 +524,21 @@ export function lessonGuide(topicIdValue: string, language: Lang) {
         : `Practice: apply ${topic.title.en} to a small dataset, break the solution with an unexpected case, then fix it and record what changed.`,
   };
 }
+export function learningPathTitle(profile: Profile) {
+  return profile.learningMode === "skill"
+    ? copy(`${skillById[profile.focusSkill].title.en} learning path`, `مسار ${skillById[profile.focusSkill].title.ar}`)
+    : careerById[profile.role].title;
+}
 export function requirements(profile: Profile) {
-  const required = { ...careerById[profile.role].requirements };
-  profile.tools.forEach(id => {
-    required[id] = Math.max(required[id] || 0, 2);
-  });
+  const required: Record<string, number> = profile.learningMode === "skill"
+    ? { [profile.focusSkill]: profile.targetLevel }
+    : { ...careerById[profile.role].requirements };
+  if (profile.learningMode !== "skill") {
+    profile.tools.forEach(id => { required[id] = Math.max(required[id] || 0, 2); });
+    Object.keys(required).forEach(id => {
+      if (profile.skillTargets[id]) required[id] = profile.skillTargets[id];
+    });
+  }
   function expand(id: string) {
     Object.entries(dependencies[id] || {}).forEach(([dep, level]) => {
       if ((required[dep] || 0) < level) {
@@ -530,6 +548,13 @@ export function requirements(profile: Profile) {
     });
   }
   Object.keys(required).forEach(expand);
+  if (profile.learningMode === "career") {
+    // A learner may deepen a prerequisite too; never lower its required minimum.
+    Object.keys(required).forEach(id => {
+      required[id] = Math.max(required[id], profile.skillTargets[id] || 0);
+    });
+    Object.keys(required).forEach(expand);
+  }
   return required;
 }
 export function makePlan(state: LearningState) {
@@ -573,11 +598,8 @@ export function makePlan(state: LearningState) {
       done: !remaining,
     };
   });
-  const projectHours = state.completedProjects.includes(
-    `project-${state.profile.role}`
-  )
-    ? 0
-    : 12;
+  const project = projectFor(state.profile);
+  const projectHours = state.completedProjects.includes(project.id) ? 0 : project.hours;
   const totalHours = elapsed + projectHours;
   return {
     required,
@@ -956,6 +978,15 @@ export function interviewBank(profile: Profile) {
 }
 export function projectFor(profile: Profile) {
   const role = careerById[profile.role];
+  if (profile.learningMode === "skill") {
+    const skill = skillById[profile.focusSkill];
+    return {
+      id: `project-skill-${skill.id}`,
+      title: copy(`${skill.title.en} applied project`, `مشروع تطبيقي: ${skill.title.ar}`),
+      brief: copy(`Use ${skill.title.en} to answer a question in your selected industry using public or synthetic data. Demonstrate the topics in your chosen level, test an edge case and document the result and limitations.`, `استخدم ${skill.title.ar} للإجابة عن سؤال في مجالك ببيانات عامة أو اصطناعية. طبّق موضوعات مستواك واختبر حالة خاصة ووثّق النتائج والقيود.`),
+      skills: Object.keys(requirements(profile)), hours: 8,
+    };
+  }
   const briefs: Record<string, ReturnType<typeof copy>> = {
     analytics: copy(
       "Build a decision-ready dashboard from a public dataset. Define KPIs, clean the data, validate totals and write a one-page recommendation.",

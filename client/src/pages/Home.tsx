@@ -1,3 +1,4 @@
+import { learningPathTitle } from "@shared/learning";
 import { LessonSteps, LessonCompletion } from "@/components/LessonSteps";
 import { Fragment } from "react";
 import { LearningDashboard } from "@/components/LearningDashboard";
@@ -801,7 +802,7 @@ export default function Home() {
                           "A clear direction. The right skills. A career built by you.",
                           "اتجاه واضح. مهارات مناسبة. ومستقبل مهني تبنيه بنفسك."
                         )
-                      : txt(role.title) +
+                      : txt(learningPathTitle(state.profile)) +
                         " · " +
                         t(
                           "Built around your goals, at your pace.",
@@ -1462,7 +1463,7 @@ export default function Home() {
                   state.firstLesson?.completed ||
                   independentPractice) && (
                   <PracticeHub
-                    key={`${stateOwner}:${state.profile.role}:${state.profile.sector}`}
+                    key={`${stateOwner}:${state.profile.role}:${state.profile.sector}:${state.profile.learningMode}:${state.profile.focusSkill}:${state.profile.targetLevel}:${JSON.stringify(state.profile.skillTargets)}`}
                     state={state}
                     update={update}
                     initialSkill={labSkillTarget}
@@ -2360,7 +2361,7 @@ export default function Home() {
                       onClick={() =>
                         download(
                           "DataPath-CV.txt",
-                          `${state.cv.name}\n${txt(role.title)}\n\n${state.cv.summary}\n\n${state.cv.achievements}\n\n${state.cv.links}`
+                          `${state.cv.name}\n${txt(learningPathTitle(state.profile))}\n\n${state.cv.summary}\n\n${state.cv.achievements}\n\n${state.cv.links}`
                         )
                       }
                     >
@@ -2474,7 +2475,7 @@ export default function Home() {
                         <input
                           name="role"
                           maxLength={120}
-                          defaultValue={txt(role.title)}
+                          defaultValue={txt(learningPathTitle(state.profile))}
                         />
                       </label>
                       <label>
@@ -2705,7 +2706,7 @@ export default function Home() {
                       </div>
                     </div>
                     <p>
-                      {txt(role.title)} · {state.profile.weeks}{" "}
+                      {txt(learningPathTitle(state.profile))} · {state.profile.weeks}{" "}
                       {t("weeks", "أسبوعاً")}
                     </p>
                     <button
@@ -3998,10 +3999,33 @@ function Onboarding({
             </div>
             <p>
               {t(
-                "Choose a role to explore. You can change direction whenever you need.",
-                "اختر دوراً لاستكشافه. يمكنك تغيير اتجاهك متى احتجت."
+                "Choose a career or a focused skill path. You can change direction whenever you need.",
+                "اختر مساراً مهنياً أو مهارة محددة. يمكنك تغيير اتجاهك متى احتجت."
               )}
             </p>
+            <fieldset className="learning-mode-picker">
+              <legend>{t("What would you like to learn?", "ماذا تريد أن تتعلم؟")}</legend>
+              <div className="button-row">
+                {(["career", "skill"] as const).map(mode => <button type="button" key={mode} className={p.learningMode === mode ? "primary" : "secondary"} aria-pressed={p.learningMode === mode} onClick={() => { setBeginnerSetup(false); patch({ learningMode: mode }); }}>
+                  {mode === "career" ? t("Full career path", "مسار مهني كامل") : t("One tool, skill or language", "أداة أو مهارة أو لغة")}
+                </button>)}
+              </div>
+            </fieldset>
+            {p.learningMode === "skill" ? <div className="focused-path-setup">
+              <label>{t("Choose your focus", "اختر مجال التركيز")}
+                <select value={p.focusSkill} onChange={e => patch({ focusSkill: e.target.value })}>
+                  {skills.map(skill => <option key={skill.id} value={skill.id}>{skill.title[lang]}</option>)}
+                </select>
+              </label>
+              <label>{t("Target depth", "المستوى المستهدف")}
+                <select value={p.targetLevel} onChange={e => patch({ targetLevel: Number(e.target.value) })}>
+                  <option value={1}>{t("Beginner — foundations", "مبتدئ — الأساسيات")}</option>
+                  <option value={2}>{t("Intermediate — practical application", "متوسط — التطبيق العملي")}</option>
+                  <option value={3}>{t("Advanced — deeper techniques", "متقدم — تقنيات متعمقة")}</option>
+                </select>
+              </label>
+              <p>{t("Your plan includes the selected depth and required foundation skills. Industry choices still customize your practice context.", "تشمل خطتك المستوى المحدد والمهارات الأساسية اللازمة. يخصص اختيار المجال سياق التدريب.")}</p>
+            </div> : <>
             <button
               type="button"
               className={
@@ -4081,7 +4105,7 @@ function Onboarding({
                       type="button"
                       className="chip"
                       key={role.id}
-                      onClick={() => patch({ role: role.id })}
+                      onClick={() => patch({ role: role.id, skillTargets: {} })}
                     >
                       {role.title[lang]}
                       <ArrowRight size={13} />
@@ -4097,6 +4121,8 @@ function Onboarding({
                 setBeginnerSetup(true);
                 patch({
                   experience: "new",
+                  learningMode: "career",
+                  skillTargets: {},
                   role: "data-analyst",
                   sector: "general",
                   tools: [],
@@ -4125,7 +4151,7 @@ function Onboarding({
                       p.role === r.id ? "role-card selected" : "role-card"
                     }
                     key={r.id}
-                    onClick={() => patch({ role: r.id })}
+                    onClick={() => patch({ role: r.id, skillTargets: {} })}
                   >
                     <span className="role-radio">
                       {p.role === r.id && <Check size={12} />}
@@ -4136,6 +4162,7 @@ function Onboarding({
                 ))}
               </div>
             </details>
+            </>}
             <label>
               Target business sector
               <select
@@ -4251,8 +4278,9 @@ function Onboarding({
             </div>
             <details>
               <summary>
-                I already have some experience — choose tools and assess skills
+                {t("Customize tools, target levels and your starting point", "خصص الأدوات والمستويات ونقطة البداية")}
               </summary>
+              {p.learningMode === "career" && <>
               <h3>
                 {t(
                   "Tools and skills you are interested in (optional)",
@@ -4279,6 +4307,17 @@ function Onboarding({
                   </button>
                 ))}
               </div>
+              </>}
+              {p.learningMode === "career" && <section className="skill-targets">
+                <h3>{t("Customize target levels", "تخصيص المستويات المستهدفة")}</h3>
+                <p>{t("These are learning goals, not your current ability. Required foundations can raise a lower target.", "هذه أهداف تعلم وليست تقييمًا لقدراتك الحالية. قد ترفع المتطلبات الأساسية المستوى الأدنى.")}</p>
+                <div className="assessment-grid">{Object.keys(req).map(id => <label key={id}>{skillById[id].title[lang]}
+                  <select value={p.skillTargets[id] || req[id]} onChange={e => patch({ skillTargets: { ...p.skillTargets, [id]: Number(e.target.value) } })}>
+                    {[1, 2, 3].map(level => <option key={level} value={level}>{level === 1 ? t("Beginner", "مبتدئ") : level === 2 ? t("Intermediate", "متوسط") : t("Advanced", "متقدم")}</option>)}
+                  </select>
+                </label>)}</div>
+                <button type="button" className="secondary" onClick={() => patch({ skillTargets: {} })}>{t("Restore role recommendations", "استعادة توصيات الدور")}</button>
+              </section>}
               <h3>{t("Self-assessment", "التقييم الذاتي")}</h3>
               <p>
                 {t(
@@ -4394,7 +4433,7 @@ function Onboarding({
             <div className="plan-preview">
               <Target size={26} />
               <div>
-                <h3>{careerById[p.role].title[lang]}</h3>
+                <h3>{learningPathTitle(p)[lang]}</h3>
                 <p>
                   {Object.keys(req).length} {t("skill areas", "مجالات مهارية")}{" "}
                   · {makePlan(state).remainingHours}{" "}

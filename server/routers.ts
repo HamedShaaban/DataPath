@@ -1,3 +1,4 @@
+import { requirements } from "../shared/learning";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import {
@@ -225,7 +226,10 @@ export const appRouter = router({
                 content: JSON.stringify({
                   mode: input.mode,
                   request: input.message,
-                  role: input.state.profile.role,
+                  role: input.state.profile.learningMode === "career" ? input.state.profile.role : undefined,
+                  learningMode: input.state.profile.learningMode,
+                  focusSkill: input.state.profile.learningMode === "skill" ? input.state.profile.focusSkill : undefined,
+                  targetLevels: requirements(input.state.profile),
                   experience: input.state.profile.experience,
                   goals: input.state.profile.goals,
                   roleDescription: input.state.profile.description,

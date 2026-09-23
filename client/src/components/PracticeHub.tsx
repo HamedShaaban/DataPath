@@ -1,3 +1,4 @@
+import { learningPathTitle } from "@shared/learning";
 import { LessonGlossary } from "./LessonGlossary";
 import {
   Search,
@@ -18,7 +19,7 @@ import {
   practiceMeta,
 } from "@shared/practice-recommendation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { careerById, skillById, sectorById } from "@shared/catalog";
+import { skillById, sectorById } from "@shared/catalog";
 import { requirements, type LearningState } from "@shared/learning";
 import {
   practiceChallenges,
@@ -145,7 +146,7 @@ export function PracticeHub({
       }
       setResult(next);
       update(current =>
-        current.profile.role === state.profile.role &&
+        practiceKey(current.profile, challenge.id) === practiceKey(state.profile, challenge.id) &&
         current.profile.sector === state.profile.sector
           ? recordPractice(
               current,
@@ -201,7 +202,7 @@ export function PracticeHub({
           </a>
         </div>
         <h2>
-          {careerById[state.profile.role].title.en} ·{" "}
+          {learningPathTitle(state.profile).en} ·{" "}
           {sectorById[state.profile.sector].title}
         </h2>
         <p>{industryBrief(state.profile.sector)}</p>

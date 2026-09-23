@@ -22,6 +22,20 @@ const q = (
 });
 
 export const technicalQuizBank: Record<string, TechnicalQuestion[]> = {
+  "sql-10": [
+    q("Which part initializes a recursive CTE?", "ما الذي يبدأ الاستعلام التكراري؟", [["The anchor term", "الجزء الأساسي"], ["ORDER BY", "الترتيب"], ["The final alias", "الاسم النهائي"]], 0, "The anchor produces the initial rows before recursive evaluation.", "ينتج الجزء الأساسي الصفوف الأولية قبل التكرار."),
+    q("What reliably detects a repeated node on a traversal path?", "ما الذي يكشف عقدة مكررة في المسار؟", [["Rename the node column", "غيّر اسم العمود"], ["Track visited node identifiers", "تتبع معرفات العقد التي تمت زيارتها"], ["Sort by depth", "رتب حسب العمق"]], 1, "A visited-key path can detect cycles before revisiting a node.", "يكشف مسار المعرفات المزارة الدورات قبل تكرار الزيارة."),
+    q("Does UNION guarantee termination when depth changes each iteration?", "هل يضمن UNION التوقف عندما يتغير العمق كل مرة؟", [["Yes, it compares only node IDs", "نعم، يقارن معرف العقدة فقط"], ["Yes, recursion stops at ten rows", "نعم، يتوقف عند عشرة صفوف"], ["No, rows with different depths remain distinct", "لا، الصفوف ذات الأعماق المختلفة تبقى مميزة"]], 2, "UNION deduplicates whole result rows, not only node identifiers.", "يزيل UNION تكرار الصف الكامل وليس معرف العقدة فقط."),
+    q("What does a maximum depth limit establish?", "ماذا يضمن حد العمق؟", [["A traversal bound, not proof the hierarchy is valid", "حدًا للتنقل وليس إثبات صحة الهيكل"], ["Absence of all cycles", "غياب كل الدورات"], ["Every node was visited", "زيارة كل العقد"]], 0, "A limit bounds work but may truncate valid deeper nodes.", "يحد العمل لكنه قد يستبعد عقدًا أعمق صالحة."),
+    q("Which input is essential for a cycle-safety test?", "ما المدخل الضروري لاختبار منع الدورات؟", [["Only sorted labels", "تسميات مرتبة فقط"], ["A path that leads back to an earlier node", "مسار يعود إلى عقدة سابقة"], ["Only a single root", "جذر واحد فقط"]], 1, "A repeated node tests the actual termination condition.", "تختبر العقدة المكررة شرط التوقف الفعلي."),
+  ],
+  "python-10": [
+    q("What does calling a generator function return?", "ماذا تعيد دالة مولدة عند استدعائها؟", [["A list of all results", "قائمة بكل النتائج"], ["The sum of results", "مجموع النتائج"], ["A generator to consume lazily", "مولد للاستهلاك الكسول"]], 2, "Execution advances when the generator is consumed.", "يتقدم التنفيذ عند استهلاك المولد."),
+    q("What happens after sum() exhausts a generator?", "ماذا يحدث بعد استهلاك sum للمولد؟", [["A second traversal produces no remaining items", "لا ينتج الاجتياز الثاني عناصر متبقية"], ["It restarts automatically", "يبدأ تلقائياً من جديد"], ["It returns the same total again", "يعيد نفس المجموع"]], 0, "Recreate the generator or arrange a single-pass calculation.", "أعد إنشاء المولد أو نظّم الحساب في مرور واحد."),
+    q("Which operation materializes generator output?", "أي عملية تخزن مخرجات المولد كلها؟", [["A yielding filter", "مرشح يستخدم yield"], ["list(generator)", "list(generator)"], ["next(generator)", "next(generator)"]], 1, "list() collects all remaining results in memory.", "تجمع list كل النتائج المتبقية في الذاكرة."),
+    q("What is needed for bounded-memory processing?", "ما المطلوب لمعالجة بذاكرة محدودة؟", [["Only use a generator name", "استخدام اسم مولد فقط"], ["Sort every row in memory", "ترتيب كل الصفوف في الذاكرة"], ["Both source and consumer avoid unbounded buffering", "تجنب التخزين غير المحدود في المصدر والمستهلك"]], 2, "Lazy production alone cannot prevent a consumer from retaining everything.", "الإنتاج الكسول وحده لا يمنع المستهلك من الاحتفاظ بكل شيء."),
+    q("How should an empty stream total be tested?", "كيف تختبر مجموع تدفق فارغ؟", [["Use an empty source separately from an exhausted generator", "استخدم مصدرًا فارغًا منفصلًا عن مولد مستهلك"], ["Ignore empty inputs", "تجاهل المدخلات الفارغة"], ["Reuse an already consumed stream only", "أعد استخدام تدفق مستهلك فقط"]], 0, "Empty source and exhaustion are different cases even if both yield no rows.", "المصدر الفارغ والنفاد حالتان مختلفتان ولو لم ينتجا صفوفًا."),
+  ],
   "sql-1": [
     q(
       "Which query returns active customers created during 2025?",

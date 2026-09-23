@@ -51,6 +51,8 @@ describe("AI documentation contract audit (mock provider)", () => {
         "mode",
         "request",
         "role",
+        "learningMode",
+        "targetLevels",
         "experience",
         "goals",
         "roleDescription",
@@ -65,6 +67,17 @@ describe("AI documentation contract audit (mock provider)", () => {
     expect(payload.cv).toBeUndefined();
     expect(payload.sector).toBeUndefined();
     expect(payload.question).toBeNull();
+  });
+  it("sends the focused skill and depth instead of the retained career choice", async () => {
+    const state = newState();
+    Object.assign(state.profile, { learningMode: "skill", focusSkill: "sql", targetLevel: 3 });
+    await caller().datapath.coach({ state, mode: "coach", message: "Help with recursive SQL", consent: true });
+    const payload = JSON.parse(vi.mocked(invokeLLM).mock.calls[0][0].messages[1].content as string);
+    expect(payload.learningMode).toBe("skill");
+    expect(payload.focusSkill).toBe("sql");
+    expect(payload.targetLevels).toEqual({ sql: 3 });
+    expect(payload.role).toBeUndefined();
+    expect(payload.topics.every((topic: { id: string }) => topic.id.startsWith("sql-"))).toBe(true);
   });
   it("sends the full CV object only in CV mode", async () => {
     const state = newState();

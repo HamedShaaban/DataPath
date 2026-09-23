@@ -5767,3 +5767,13 @@ textarea:focus-visible {
   .studio-shell :is(.resource-card, .skill-tile) { transition: none; }
   .studio-shell :is(.resource-card, .skill-tile):hover { transform: none; }
 }
+
+/* Flexible career and focused skill setup. */
+.learning-mode-picker { border: 1px solid var(--line); padding: 20px; margin: 20px 0; border-radius: 14px; background: var(--surface-soft); }
+.learning-mode-picker legend { padding-inline: 8px; font-weight: 700; }
+.learning-mode-picker .button-row > button { flex: 1 1 220px; }
+.focused-path-setup { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; padding: 20px; border: 1px solid var(--line); border-radius: 14px; margin-bottom: 24px; }
+.focused-path-setup > p { grid-column: 1/-1; color: var(--muted); margin: 0; }
+.skill-targets { padding-block: 20px; border-block: 1px solid var(--line); margin-block: 20px; }
+.skill-targets .secondary { margin-top: 16px; }
+@media (max-width: 650px) { .focused-path-setup { grid-template-columns: minmax(0, 1fr); padding: 16px; } }

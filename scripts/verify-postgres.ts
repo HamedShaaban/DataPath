@@ -154,6 +154,11 @@ try {
   // A guest workspace explicitly imported and saved survives logout and re-login.
   const journey = newState();
   journey.onboarded = true;
+  journey.profile.learningMode = "skill";
+  journey.profile.focusSkill = "sql";
+  journey.profile.targetLevel = 3;
+  journey.profile.skillTargets = { python: 3 };
+  journey.completedProjects = ["project-skill-sql"];
   journey.completed = ["sql-1"];
   journey.evidence["sql-1"] = "Checked filtered results";
   await appRouter.createCaller(ctx).datapath.save({ state: journey, revision: 0 });
