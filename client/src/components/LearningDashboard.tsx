@@ -1,3 +1,4 @@
+import { progressEvidence } from "@shared/progress-evidence";
 import { WeeklyStudyPlan } from "./WeeklyStudyPlan";
 import { learningPathTitle } from "@shared/learning";
 import {
@@ -39,6 +40,7 @@ export function LearningDashboard({
   const title = (value: { en: string; ar: string }) =>
     ar ? value.ar : value.en;
   const plan = makePlan(state);
+  const evidence = progressEvidence(state);
   const done = plan.topics.filter(topic => topic.done).length;
   const next = plan.topics.find(
     topic =>
@@ -238,6 +240,15 @@ export function LearningDashboard({
           <ArrowUpRight size={19} />
         </button>
       </div>
+      <section className="evidence-progress" aria-label={t("What your progress means", "ماذا يعني تقدمك")}>
+        <h2>{t("Your progress, clearly", "تقدمك بوضوح")}</h2>
+        <p>{t("These are different kinds of evidence—not interchangeable completion scores. Practice counts use retained attempts for your current path and industry.", "هذه أنواع مختلفة من الأدلة وليست درجات إكمال متبادلة. يعتمد التدريب على المحاولات المحفوظة لمسارك ومجالك الحاليين.")}</p>
+        <div className="evidence-progress-grid">
+          <button onClick={() => navigate("lab")}><strong>{evidence.practiced}</strong><span>{t("Exercises practised", "تمارين تمت ممارستها")}</span><small>{t("Attempted, whether passed or still improving", "محاولات ناجحة أو لا تزال تحتاج تحسيناً")}</small></button>
+          <button onClick={() => navigate("roadmap")}><strong>{evidence.quizzesPassed}/{evidence.topicCount}</strong><span>{t("Topic quizzes passed", "اختبارات موضوعات مجتازة")}</span><small>{t("Based on each topic's latest quiz result", "حسب أحدث نتيجة لاختبار كل موضوع")}</small></button>
+          <button onClick={() => navigate("projects")}><strong>{evidence.projectRecorded ? "1" : "0"}</strong><span>{t("Project demonstration recorded", "عرض مشروع مسجل")}</span><small>{t("Notes plus your completion check; self-reviewed, not independently verified", "ملاحظات مع تأكيد الإكمال؛ مراجعة ذاتية وليست تحققاً مستقلاً")}</small></button>
+        </div>
+      </section>
       <section
         className="learning-skills"
         aria-labelledby="learning-skills-title"
