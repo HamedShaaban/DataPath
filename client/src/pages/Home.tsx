@@ -1,3 +1,4 @@
+import { applyCatchUp } from "@shared/catch-up";
 import { suggestPace } from "@shared/pace";
 import { PlacementCheck } from "@/components/PlacementCheck";
 import { PathExplorer } from "@/components/PathExplorer";
@@ -819,6 +820,7 @@ export default function Home() {
                 </span>
               </div>
               {page === "dashboard" && <LearningDashboard state={state}
+                adjustPace={hours => update(current => applyCatchUp(current, hours))}
                 openPractice={(skillId, topicId) => { setLabSkillTarget(skillId); setLabTopicTarget(topicId); setIndependentPractice(true); setPage("lab"); }}
                 editPath={() => setEditing(true)}
                 navigate={target => { setExploreAll(true); setPage(target); }}

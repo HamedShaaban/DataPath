@@ -207,3 +207,9 @@ All 264 tests across 34 files, TypeScript, production build and whitespace check
 ## Progress evidence labels — 2026-09-23
 
 Dashboard distinguishes retained exercise attempts for the current path/industry, latest passing topic quizzes, and a project completion check backed by notes. Project evidence is explicitly self-reviewed, not independently verified. All 265 tests, TypeScript and production build pass, including separation of failures, passing quizzes, industries and project notes. No data changes or new dependencies; browser visual acceptance remains unverified. Local branch feature-progress-evidence; deployment paused.
+
+## Catch-up pace — 2026-09-23
+
+Dashboard includes an optional catch-up disclosure with editable weekly hours, a remaining-duration preview and explicit apply. The calculation uses remaining lessons/project work plus a 15% review buffer. It rejects invalid hours, schedules beyond 104 weeks and unnecessary changes when no work remains. Applying updates only profile hoursPerWeek/weeks: completed work, attempts, notes and logged time stay unchanged. This is a pace adjustment, not an anchored calendar deadline. Signed-in learners retain the existing explicit Save progress flow.
+
+All 268 tests across 36 files, TypeScript, production build and whitespace checks pass. Tests verify preservation of all non-pace state, reduced remaining work, slower schedules and invalid/bounded inputs. No dependencies or database changes. Browser visual/keyboard acceptance remains outstanding under the existing restriction. Local branch feature-catch-up-pace stacks on feature-progress-evidence, preserving one task per branch. Deployment paused; PDF unchanged.

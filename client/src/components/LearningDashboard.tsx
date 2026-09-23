@@ -1,3 +1,4 @@
+import { CatchUpPace } from "./CatchUpPace";
 import { progressEvidence } from "@shared/progress-evidence";
 import { WeeklyStudyPlan } from "./WeeklyStudyPlan";
 import { learningPathTitle } from "@shared/learning";
@@ -25,6 +26,7 @@ export function LearningDashboard({
   openPractice,
   navigate,
   editPath,
+  adjustPace,
   startBasics,
 }: {
   state: LearningState;
@@ -32,6 +34,7 @@ export function LearningDashboard({
   openPractice: (skillId: string, topicId: string) => void;
   navigate: (page: Destination) => void;
   editPath: () => void;
+  adjustPace: (hours: number) => void;
   startBasics: () => void;
 }) {
   const [showAll, setShowAll] = useState(false);
@@ -68,6 +71,7 @@ export function LearningDashboard({
           {t("Edit my path", "تعديل مساري")} <ArrowUpRight size={15} />
         </button>
       </div>
+      <CatchUpPace state={state} onApply={adjustPace} />
       <WeeklyStudyPlan state={state} start={activity => {
         if (activity.kind === "basics") startBasics();
         else if (activity.kind === "project") navigate("projects");
