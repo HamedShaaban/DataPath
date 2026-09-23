@@ -827,7 +827,7 @@ export default function Home() {
                 startBasics={() => { const element = document.getElementById("dashboard-basics"); element?.scrollIntoView({ block: "start" }); element?.focus(); }}
                 openLesson={(skillId, topicId = "") => { setSelectedSkill(skillId); setLessonTarget(topicId); setExploreAll(true); setPage("roadmap"); }}
               />}
-              {(page === "dashboard" || page === "lab") &&
+              {(page === "dashboard" || (page === "lab" && !independentPractice)) &&
                 state.profile.experience === "new" && (
                   <section id="dashboard-basics" tabIndex={-1} aria-label={t("Your first lessons", "دروسك الأولى")}>
                     <FirstLesson

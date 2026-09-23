@@ -5842,3 +5842,16 @@ textarea:focus-visible {
 .catch-up-pace > div { padding: 0 20px 20px; }
 .catch-up-pace p { color: var(--muted); font-size: 13px; max-width: 72ch; }
 .catch-up-pace label { max-width: 300px; }
+
+/* Verified mobile navigation: all destinations stay reachable without sideways scrolling. */
+@media (max-width: 650px) {
+  .studio-shell .sidebar nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; max-height: 228px; overflow-x: hidden; overflow-y: auto; gap: 6px; padding: 4px; }
+  .studio-shell .sidebar nav .nav-item { display: flex; flex-direction: row; justify-content: flex-start; width: 100%; min-width: 0; min-height: 44px; padding: 10px; white-space: normal; text-align: start; font-size: 12px; }
+  .studio-shell .sidebar nav .nav-item > span { min-width: 0; overflow-wrap: anywhere; }
+  .studio-shell .sidebar nav .nav-item svg { flex-shrink: 0; }
+  .studio-shell .onboarding-card input[type="number"] { background: var(--surface); color: var(--text); }
+}
+
+/* Keep exercise headings compact while retaining space around the code editor. */
+.studio-shell .practice-studio .practice-answer-panel > .eyebrow,
+.studio-shell .practice-studio .practice-answer-panel > p { margin: 0; }

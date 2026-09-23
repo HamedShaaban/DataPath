@@ -71,13 +71,6 @@ export function LearningDashboard({
           {t("Edit my path", "تعديل مساري")} <ArrowUpRight size={15} />
         </button>
       </div>
-      <CatchUpPace state={state} onApply={adjustPace} />
-      <WeeklyStudyPlan state={state} start={activity => {
-        if (activity.kind === "basics") startBasics();
-        else if (activity.kind === "project") navigate("projects");
-        else if (activity.kind === "practice" && activity.practiceInLab) openPractice(activity.skillId!, activity.topicId!);
-        else openLesson(activity.skillId!, activity.topicId!);
-      }} />
       <div className="learning-start-grid">
         <section
           className="learning-spotlight"
@@ -190,6 +183,13 @@ export function LearningDashboard({
           </small>
         </aside>
       </div>
+      <CatchUpPace state={state} onApply={adjustPace} />
+      <WeeklyStudyPlan state={state} start={activity => {
+        if (activity.kind === "basics") startBasics();
+        else if (activity.kind === "project") navigate("projects");
+        else if (activity.kind === "practice" && activity.practiceInLab) openPractice(activity.skillId!, activity.topicId!);
+        else openLesson(activity.skillId!, activity.topicId!);
+      }} />
       <div
         className="learning-shortcuts"
         aria-label={t("Learning shortcuts", "اختصارات التعلم")}
