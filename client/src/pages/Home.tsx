@@ -1,3 +1,4 @@
+import { PlacementCheck } from "@/components/PlacementCheck";
 import { PathExplorer } from "@/components/PathExplorer";
 import { learningPathTitle } from "@shared/learning";
 import { LessonSteps, LessonCompletion } from "@/components/LessonSteps";
@@ -4257,6 +4258,10 @@ function Onboarding({
                 />
               </label>
             </div>
+            <details className="placement-disclosure">
+              <summary>{t("Not sure of your level? Try an optional placement check", "غير متأكد من مستواك؟ جرّب فحصًا اختياريًا")}</summary>
+              <PlacementCheck key={Object.keys(req).join(":")} state={state} lang={lang} skillIds={Object.keys(req)} onApply={(id, level) => patch({ assessment: { ...p.assessment, [id]: level } })} />
+            </details>
             <details>
               <summary>
                 {t("Customize tools, target levels and your starting point", "خصص الأدوات والمستويات ونقطة البداية")}
