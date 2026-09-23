@@ -145,3 +145,9 @@ All 227 tests, TypeScript and the production build pass. Browser visual/keyboard
 Added bilingual Understand → Try it → Check yourself navigation with focusable section targets and reduced-motion-aware scrolling. Objectives precede worked examples; practice and evidence prompts guide learners toward recording results. A completion checklist reflects existing prerequisite, evidence and passed-quiz requirements without changing the gates. Quizzes show answered counts and correct answers alongside explanations after submission. Styles use existing theme tokens and responsive layouts. No dependencies, database or saved-state schema changes.
 
 All 227 tests, TypeScript and production build pass. Rendered visual/keyboard acceptance remains unverified because browser administrator-policy verification denied access. Work is local on ui-lesson-experience; deployment remains paused and the PDF guide is unchanged.
+
+## Shared UI polish — phase 5, 2026-09-23
+
+Added resource-guide result counts, whitespace-normalized search, clear-search action and a bilingual empty state. Shared workspace styles improve keyboard focus contrast using theme tokens, wrapping of long resource/coach/project text, flexible filter controls, small-screen resource cards and button sizing. Resource-card hover motion respects reduced-motion preferences. No dependencies, database or persistence changes.
+
+All 227 tests across 28 files, TypeScript, production build and diff whitespace checks pass. Local preview was unavailable because no server was listening on port 3010; restarted the built app in local test mode and verified HTTP 200. Opening the preview was requested through Codex. Browser visual/keyboard acceptance remains unverified under the existing browser-policy limitation; this is not a completed visual audit of every page. Work is local on ui-site-polish, with deployment paused and PDF unchanged.

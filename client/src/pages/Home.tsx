@@ -391,6 +391,17 @@ export default function Home() {
     t => !t.done && t.prerequisites.every(id => state.completed.includes(id))
   );
   const requiredIds = Object.keys(plan.required);
+  const resourceSearch = search.trim().toLowerCase();
+  const matchingResourceIds = requiredIds.filter(id =>
+    `${skillById[id].title.en} ${skillById[id].title.ar} ${skillById[id].resource.title}`
+      .toLowerCase().includes(resourceSearch)
+  );
+  const matchingPaidResources = state.profile.resources === "mixed"
+    ? paidResources.filter(resource =>
+        resource.skills.some(id => requiredIds.includes(id)) &&
+        resource.title.toLowerCase().includes(resourceSearch))
+    : [];
+  const resourceCount = matchingResourceIds.length + matchingPaidResources.length;
   const evidenceMatrix = skillEvidenceMatrix(state);
   const reviewNext = skills
     .flatMap(skill =>
@@ -1524,17 +1535,17 @@ export default function Home() {
                       "أدلة رسمية مختارة لمهاراتك. قد تكون المصادر الخارجية بالإنجليزية؛ المصادر متعددة اللغات موضحة. أسعار المزودين المدفوعة قابلة للتغيير."
                     )}
                   </p>
+                  <div className="resource-search-status">
+                    <p role="status">{t(`${resourceCount} guides match your filters`, `${resourceCount} دليل يطابق اختياراتك`)}</p>
+                    {search && <button className="secondary" onClick={() => setSearch("")}>{t("Clear search", "مسح البحث")}</button>}
+                  </div>
+                  {resourceCount === 0 && <section className="workspace-empty-state">
+                    <BookOpen size={28} aria-hidden="true" />
+                    <h3>{t("No matching guides", "لا توجد أدلة مطابقة")}</h3>
+                    <p>{t("Try a skill name such as SQL, or clear your search to see the guides for your path.", "جرّب اسم مهارة مثل SQL، أو امسح البحث لرؤية أدلة مسارك.")}</p>
+                  </section>}
                   <div className="resource-grid">
-                    {requiredIds
-                      .filter(id =>
-                        (
-                          skillById[id].title.en +
-                          skillById[id].title.ar +
-                          skillById[id].resource.title
-                        )
-                          .toLowerCase()
-                          .includes(search.toLowerCase())
-                      )
+                    {matchingResourceIds
                       .map(id => (
                         <a
                           className="card resource-card"
@@ -1565,16 +1576,7 @@ export default function Home() {
                           </span>
                         </a>
                       ))}
-                    {state.profile.resources === "mixed" &&
-                      paidResources
-                        .filter(
-                          r =>
-                            r.skills.some(id => requiredIds.includes(id)) &&
-                            (r.title
-                              .toLowerCase()
-                              .includes(search.toLowerCase()) ||
-                              !search)
-                        )
+                    {matchingPaidResources
                         .map(r => (
                           <a
                             className="card resource-card"
