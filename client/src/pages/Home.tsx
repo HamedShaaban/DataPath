@@ -2218,7 +2218,7 @@ export default function Home() {
                     <strong>{sector.project}</strong>
                     <p>
                       Use at least two relevant metrics:{" "}
-                      {sector.metrics.slice(0, 3).join(", ")}.
+                      {sector.metrics.slice(0, 3).join(", ")}. Choose metrics your data can support; some require additional fields beyond the starter CSV. Document missing inputs instead of inventing values.
                     </p>
                   </div>
                   <div className="chips">
@@ -2928,8 +2928,8 @@ export default function Home() {
                     ))}
                     <p className="muted">
                       {t(
-                        "18 representative career paths, not a market ranking. Curated September 2026. Role demand varies by region.",
-                        "١٨ مساراً مهنياً تمثيلياً وليست ترتيباً للسوق. نُسقت في سبتمبر ٢٠٢٦. يختلف الطلب حسب المنطقة."
+                        `${careers.length} representative career paths, not a market ranking. Curated September 2026. Role demand varies by region.`,
+                        `${careers.length} مساراً مهنياً تمثيلياً وليست ترتيباً للسوق. نُسقت في سبتمبر ٢٠٢٦. يختلف الطلب حسب المنطقة.`
                       )}
                     </p>
                   </section>

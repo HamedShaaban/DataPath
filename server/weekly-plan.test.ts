@@ -66,3 +66,13 @@ it("schedules the project only after lessons and avoids completed projects", () 
   s.completedProjects = ["project-skill-sql"];
   expect(weeklyStudyPlan(s, now).activities).toEqual([]);
 });
+it('does not spend the weekly budget on a review locked behind unfinished prerequisites', () => {
+  const s = learner();
+  s.profile.hoursPerWeek = 3;
+  s.reviewTopics = ['sql-5'];
+  const plan = weeklyStudyPlan(s, now);
+  expect(plan.activities.some(a=>a.kind==='review')).toBe(false);
+  expect(plan.activities[0].topicId).toBe('sql-1');
+  expect(plan.activities.reduce((sum,a)=>sum+a.minutes,0)).toBe(180);
+  expect(s.reviewTopics).toEqual(['sql-5']);
+});

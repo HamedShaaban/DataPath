@@ -1,3 +1,4 @@
+import { careers, businessSectors } from "@shared/catalog";
 import { useState } from "react";
 import {
   ArrowRight,
@@ -84,11 +85,11 @@ export function CareerLanding({ onStart }: { onStart: () => void }) {
       </section>
       <div className="landing-facts">
         <div>
-          <strong>18</strong>
+          <strong>{careers.length}</strong>
           <span>career directions</span>
         </div>
         <div>
-          <strong>9</strong>
+          <strong>{businessSectors.length}</strong>
           <span>industry contexts</span>
         </div>
         <div>

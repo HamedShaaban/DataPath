@@ -89,7 +89,7 @@ Topics below have no specific authored worked example; the UI currently supplies
 
 ## Priorities
 
-1. Add checked intermediate/advanced exercises without lab coverage; start with Python grouped summaries and SQL ranking.
+1. Continue checked intermediate/advanced coverage beyond the grouped-summary, ranking and top-three exercises; use the uncovered-topic counts above to prioritize.
 2. Expand specific worked examples for the topic gaps above; preserve stable topic IDs.
 3. Treat specialist tools as external, self-reviewed work until a real runtime or artifact evaluator exists.
 4. Review Arabic lesson parity independently; bilingual titles and quizzes do not establish bilingual worked-example coverage.

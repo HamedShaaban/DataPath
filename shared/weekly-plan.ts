@@ -43,7 +43,10 @@ export function weeklyStudyPlan(state: LearningState, now = new Date()) {
     );
     return { ...week, activities, unallocated: budget };
   }
-  const weak = plan.topics.find(topic => state.reviewTopics.includes(topic.id));
+  const weak = plan.topics.find(topic =>
+    state.reviewTopics.includes(topic.id) &&
+    topic.prerequisites.every(id => state.completed.includes(id))
+  );
   if (weak)
     add(
       {
