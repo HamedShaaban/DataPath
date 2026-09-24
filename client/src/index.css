@@ -5630,7 +5630,7 @@ textarea:focus-visible {
 .studio-workspace-empty p { max-width: 48ch; color: var(--muted); }
 .studio-workspace-empty > div { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 25px 0; }
 .studio-workspace-empty > div span { padding: 6px 12px; font-size: 11px; border: 1px solid var(--line); border-radius: 30px; }
-.studio-shell .practice-studio .studio-instructions { padding: 0; background: var(--surface-soft); border: 1px solid var(--line); border-radius: 14px; min-width: 0; }
+.studio-shell .practice-studio .studio-instructions { display: block; padding: 0; background: var(--surface-soft); border: 1px solid var(--line); border-radius: 14px; min-width: 0; }
 .studio-instructions > summary, .studio-sql-picker > summary { cursor: pointer; padding: 15px 18px; font-weight: 700; font-size: 13px; color: var(--text); }
 .studio-instructions > summary > svg { float: inline-end; }
 .studio-instructions[open] > summary { border-bottom: 1px solid var(--line); }
@@ -5861,3 +5861,17 @@ textarea:focus-visible {
 .project-blueprint details { min-width: 0; padding: 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
 .project-blueprint summary { cursor: pointer; font-weight: 600; }
 .project-blueprint button { white-space: normal; max-width: 100%; }
+
+/* Preserve readable evidence and native button semantics at narrow widths. */
+.evidence-cell-label { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (max-width: 850px) {
+  .studio-shell .evidence-table { border: 0; overflow: visible; display: grid; gap: 12px; }
+  .studio-shell .evidence-head { display: none; }
+  .studio-shell button.evidence-row { min-width: 0; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  .evidence-row > span { min-width: 0; overflow-wrap: anywhere; }
+  .evidence-row > span:first-child { grid-column: 1 / -1; }
+  .evidence-cell-label { position: static; display: block; width: auto; height: auto; overflow: visible; clip-path: none; white-space: normal; margin-bottom: 5px; font-size: 11px; font-weight: 600; }
+}
+
+/* This banner stays dark in both themes, so its label needs a light foreground. */
+.studio-shell .proof-hero .eyebrow { color: #bac9c0; }

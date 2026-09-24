@@ -273,3 +273,15 @@ Browser checks: created guest lesson progress at step 2, registered a disposable
 Fixed two concrete issues: new accounts now offer an immediate explicit guest-progress import when a valid onboarded guest save exists (the original stays untouched, and account Save progress remains explicit); logout errors now give feedback instead of an unhandled rejection, disable duplicate pending logout actions, and clear the error on success. Existing account imports from settings retain their confirmation behavior.
 
 All 279 tests across 39 files, TypeScript and production build pass. Existing real-Postgres integration checks passed for explicit guest saves across logout/login, hashed sessions, context lookup, expiry, revoke-all, account isolation, stale-revision conflicts, duplicate registration rollback and migration repeatability. Browser checks used the default viewport; no claim of a new exhaustive responsive or accessibility pass. No dependencies or database schema changes, deployment or PDF updates. Local branch quality-account-progress.
+
+## UI layout review — 2026-09-24
+
+Branch: `quality-full-ui-layouts`.
+
+- Checked all 11 main destinations (Overview, roadmap, Practice Lab, progress, resources, tools, interview, projects, career toolkit, AI coach, settings) for page-width overflow at 360, 768 and 1440px in light and dark themes, using an isolated local guest preview. Default page states fit each viewport.
+- Fixed a reproduced 372px page width at a 360px viewport when Practice Lab's instructions/dataset/hints disclosure opened. The disclosure now uses block layout instead of inheriting an intrinsic-width grid. Rechecked its expanded state at all three widths in light mode and at 360px in dark mode.
+- Replaced sideways-scrolling progress evidence rows with labeled cards below 850px; retained the desktop columns. Restored native button semantics and accessible metric labels. Visually checked dark mobile and light tablet cards; Enter opens the matching roadmap.
+- Fixed the low-contrast eyebrow on the permanently dark progress banner in light mode.
+- Additional targeted inspection: expanded roadmap lesson, exercise catalogue/editor, interview help, and onboarding career/focused-skill selection, expanded skill settings and pace step. Onboarding edits were discarded; the user's separate localhost:3010 draft and saved progress were not changed.
+- Scope limits: this is a responsive layout pass, not exhaustive screenshots of every content/state combination. Account dialogs, live AI responses, every career/industry combination and Arabic/RTL were not revalidated in this pass.
+- Validation: TypeScript check, all 279 tests (39 files), production build and whitespace check pass. No new dependencies or schema changes.

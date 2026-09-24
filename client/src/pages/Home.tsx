@@ -2170,8 +2170,8 @@ export default function Home() {
                         </details>
                       )}
                     </details>
-                    <div className="evidence-table" role="table">
-                      <div className="evidence-row evidence-head" role="row">
+                    <div className="evidence-table" role="group" aria-label={t("Skill evidence", "أدلة المهارات")}>
+                      <div className="evidence-row evidence-head" aria-hidden="true">
                         <span>{t("Skill", "Skill")}</span>
                         <span>{t("Lessons", "Lessons")}</span>
                         <span>Evidence</span>
@@ -2182,7 +2182,6 @@ export default function Home() {
                       {evidenceMatrix.map(row => (
                         <button
                           className="evidence-row"
-                          role="row"
                           key={row.skillId}
                           onClick={() => {
                             setSelectedSkill(row.skillId);
@@ -2196,20 +2195,25 @@ export default function Home() {
                             </small>
                           </span>
                           <span>
+                            <small className="evidence-cell-label">{t("Lessons", "الدروس")}</small>
                             {row.completed}/{row.topics}
                           </span>
                           <span>
+                            <small className="evidence-cell-label">{t("Evidence", "الأدلة")}</small>
                             {row.evidenced}/{row.topics}
                           </span>
                           <span>
+                            <small className="evidence-cell-label">{t("Checks", "الاختبارات")}</small>
                             {row.levelChecks}/{row.target}
                           </span>
                           <span>
+                            <small className="evidence-cell-label">{t("Skill exam", "اختبار المهارة")}</small>
                             {row.latestScore === null
                               ? "—"
                               : `${row.latestScore}%`}
                           </span>
                           <span>
+                            <small className="evidence-cell-label">{t("Status", "الحالة")}</small>
                             <i className={`status-dot ${row.status}`} />
                             {row.status === "proven"
                               ? t("Proven", "مثبت")
