@@ -3,17 +3,17 @@ import { engineeringLessons } from '../shared/engineering-lessons';
 import { skills, businessSectors } from '../shared/catalog';
 import { newState, lessonGuide } from '../shared/learning';
 import { practiceChallenges, evaluatePractice } from '../shared/practice';
-it('supplies a specific worked lesson and task for every ETL and dbt topic',()=>{
-  for (const skill of skills.filter(s=>['pipelines','dbt'].includes(s.id))) for (const topic of skill.topics) {
+it('supplies a specific worked lesson and task for every ETL, dbt, Airflow and Spark topic',()=>{
+  for (const skill of skills.filter(s=>['pipelines','dbt','airflow','spark'].includes(s.id))) for (const topic of skill.topics) {
     const lesson = engineeringLessons[topic.id];
     expect(lesson).toBeDefined();
     expect(lessonGuide(topic.id,'en').workedExample).toBe(lesson.example);
     expect(lessonGuide(topic.id,'en').practice).toBe(lesson.task);
   }
-  expect(new Set(Object.values(engineeringLessons).map(l=>l.example)).size).toBe(18);
+  expect(new Set(Object.values(engineeringLessons).map(l=>l.example)).size).toBe(36);
 });
 it('gates external practice by target depth and never awards an automatic pass',()=>{
-  for (const focusSkill of ['pipelines','dbt']) for (const targetLevel of [1,2,3]) for (const sector of businessSectors) {
+  for (const focusSkill of ['pipelines','dbt','airflow','spark']) for (const targetLevel of [1,2,3]) for (const sector of businessSectors) {
     const p = {...newState().profile,learningMode:'skill' as const,focusSkill,targetLevel,sector:sector.id};
     const cases = practiceChallenges(p).filter(c=>c.id.startsWith(`engineering-${focusSkill}-`));
     expect(cases).toHaveLength(targetLevel*3);

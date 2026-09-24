@@ -406,7 +406,7 @@ export function practiceChallenges(profile: Profile): PracticeChallenge[] {
     result.push({
       id: `engineering-${topicId}`, skillId, topicId, kind: "case",
       title: `${topic.title.en}: implementation review`,
-      task: `${lesson.task} ${sectorById[profile.sector].title} context: ${industryPractice[profile.sector].decision}. Use synthetic data; add documented keys, timestamps or versions when the starter data lacks them. External tool task; DataPath does not run dbt or an ETL platform.`,
+      task: `${lesson.task} ${sectorById[profile.sector].title} context: ${industryPractice[profile.sector].decision}. Use synthetic data; add documented keys, timestamps or versions when the starter data lacks them. External tool task; DataPath does not run dbt, Airflow, Spark or an ETL platform.`,
       starter: "", hints: [lesson.example, lesson.mistake],
       rubric: ["Reproducible artifact and setup included", "Expected and observed results recorded", "Failure case and recovery demonstrated", "Industry assumptions and limitations documented"],
       lesson: lesson.brief,
