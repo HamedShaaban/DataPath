@@ -1,7 +1,9 @@
+import { engineeringLessons } from "./engineering-lessons";
 export const authoredLessons: Record<
   string,
   { brief: string; example: string; mistake: string }
 > = {
+  ...engineeringLessons,
   "sql-10": {
     brief: "A recursive CTE starts with an anchor and repeatedly evaluates a recursive term. Termination is part of correctness: hierarchy data may contain cycles. Track visited keys or use an explicit bound; a depth bound alone does not prove the hierarchy is valid.",
     example: "WITH RECURSIVE walk(n, path) AS (\n  SELECT 1, ARRAY[1]\n  UNION ALL\n  SELECT n + 1, path || (n + 1) FROM walk\n  WHERE n < 4 AND NOT (n + 1 = ANY(path))\n) SELECT n, path FROM walk ORDER BY n;",

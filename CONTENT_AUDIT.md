@@ -8,24 +8,24 @@ Generated from the current catalog. Counts describe coverage, not teaching quali
 | BI Analyst | 36 | 11 | 8 | 6 | 23 |
 | Data Business Analyst | 33 | 7 | 6 | 7 | 23 |
 | Product Analyst | 46 | 11 | 12 | 8 | 33 |
-| Analytics Engineer | 46 | 7 | 7 | 7 | 34 |
-| Data Engineer | 65 | 10 | 11 | 12 | 47 |
-| Cloud Data Engineer | 51 | 8 | 8 | 9 | 37 |
-| Data Architect | 58 | 8 | 9 | 10 | 43 |
+| Analytics Engineer | 46 | 16 | 7 | 15 | 26 |
+| Data Engineer | 65 | 19 | 11 | 20 | 39 |
+| Cloud Data Engineer | 51 | 17 | 8 | 17 | 29 |
+| Data Architect | 58 | 14 | 9 | 15 | 38 |
 | Database Administrator | 43 | 7 | 7 | 8 | 31 |
 | Data Scientist | 52 | 14 | 13 | 8 | 37 |
 | Machine Learning Engineer | 55 | 5 | 5 | 9 | 44 |
 | AI Engineer | 55 | 5 | 5 | 10 | 43 |
 | Generative AI Engineer | 55 | 5 | 5 | 10 | 43 |
-| MLOps Engineer | 58 | 8 | 8 | 10 | 45 |
+| MLOps Engineer | 58 | 14 | 8 | 15 | 40 |
 | Data Governance Specialist | 39 | 3 | 4 | 6 | 30 |
 | Data Quality Analyst | 42 | 11 | 9 | 6 | 30 |
 | Data Steward | 36 | 7 | 5 | 6 | 26 |
 | Data / AI Product Manager | 57 | 3 | 5 | 10 | 46 |
 | Marketing Data Analyst | 49 | 14 | 11 | 9 | 34 |
 | Risk Data Analyst | 46 | 11 | 10 | 7 | 33 |
-| BI Developer | 46 | 8 | 8 | 7 | 33 |
-| Data Platform Engineer | 62 | 10 | 11 | 10 | 46 |
+| BI Developer | 46 | 14 | 8 | 12 | 28 |
+| Data Platform Engineer | 62 | 19 | 11 | 18 | 38 |
 | SQL (advanced focused) | 10 | 7 | 7 | 3 | 3 |
 | Python (advanced focused) | 10 | 3 | 4 | 3 | 5 |
 | Excel (advanced focused) | 9 | 4 | 1 | 1 | 7 |
@@ -37,11 +37,11 @@ Generated from the current catalog. Counts describe coverage, not teaching quali
 | Business analysis (advanced focused) | 9 | 0 | 1 | 2 | 6 |
 | Experimentation (advanced focused) | 15 | 2 | 2 | 2 | 13 |
 | Data modeling (advanced focused) | 9 | 0 | 0 | 1 | 8 |
-| ETL / ELT (advanced focused) | 15 | 4 | 4 | 4 | 10 |
-| dbt (advanced focused) | 18 | 6 | 6 | 4 | 10 |
-| Airflow (advanced focused) | 18 | 4 | 4 | 5 | 12 |
+| ETL / ELT (advanced focused) | 15 | 13 | 4 | 12 | 2 |
+| dbt (advanced focused) | 18 | 15 | 6 | 12 | 2 |
+| Airflow (advanced focused) | 18 | 7 | 4 | 7 | 10 |
 | Apache Spark (advanced focused) | 15 | 4 | 4 | 4 | 10 |
-| Streaming / Kafka (advanced focused) | 18 | 4 | 4 | 5 | 12 |
+| Streaming / Kafka (advanced focused) | 18 | 7 | 4 | 7 | 10 |
 | Cloud platforms (advanced focused) | 9 | 0 | 0 | 1 | 8 |
 | Git, Linux & Docker (advanced focused) | 9 | 0 | 0 | 1 | 8 |
 | Machine learning (advanced focused) | 21 | 4 | 3 | 4 | 16 |
@@ -69,8 +69,6 @@ Topics below have no specific authored worked example; the UI currently supplies
 - **Business analysis:** business-1 (Stakeholder discovery); business-2 (Requirements and scope); business-3 (KPIs and metric definitions); business-4 (Process mapping); business-5 (Acceptance criteria); business-6 (Prioritization and tradeoffs); business-7 (Benefits realization); business-8 (Operating models); business-9 (Strategy and measurement)
 - **Experimentation:** experimentation-1 (Hypotheses and metrics); experimentation-2 (Random assignment); experimentation-3 (Control groups); experimentation-4 (Power and sample size); experimentation-5 (Guardrail metrics); experimentation-6 (Experiment analysis); experimentation-7 (Sequential testing); experimentation-8 (Interference and bias); experimentation-9 (Causal designs)
 - **Data modeling:** modeling-1 (Entities and keys); modeling-2 (Normalization); modeling-3 (Grain and relationships); modeling-4 (Star schemas); modeling-5 (Slowly changing dimensions); modeling-6 (Semantic models); modeling-7 (Domain modeling); modeling-8 (Schema evolution); modeling-9 (Model performance)
-- **ETL / ELT:** pipelines-1 (Batch ingestion); pipelines-2 (Transform and load); pipelines-3 (Idempotency); pipelines-4 (Incremental loads); pipelines-5 (Backfills and retries); pipelines-6 (Data contracts); pipelines-7 (Change data capture); pipelines-8 (Lineage and observability); pipelines-9 (Recovery design)
-- **dbt:** dbt-1 (Sources and models); dbt-2 (References and DAGs); dbt-3 (Schema tests); dbt-4 (Incremental models); dbt-5 (Snapshots); dbt-6 (Documentation and lineage); dbt-7 (Macros and packages); dbt-8 (CI and deployment); dbt-9 (Model optimization)
 - **Airflow:** airflow-1 (DAGs and tasks); airflow-2 (Scheduling); airflow-3 (Task dependencies); airflow-4 (Retries and backfills); airflow-5 (Connections and secrets); airflow-6 (Testing DAGs); airflow-7 (Executor selection); airflow-8 (Monitoring and SLAs); airflow-9 (Scaling orchestration)
 - **Apache Spark:** spark-1 (DataFrames and schemas); spark-2 (Transformations and actions); spark-3 (Partitions); spark-4 (Joins and shuffles); spark-5 (Caching); spark-6 (Spark SQL); spark-7 (Skew optimization); spark-8 (Structured streaming); spark-9 (Cluster tuning)
 - **Streaming / Kafka:** kafka-1 (Topics and partitions); kafka-2 (Producers and consumers); kafka-3 (Offsets); kafka-4 (Consumer groups); kafka-5 (Delivery semantics); kafka-6 (Schema compatibility); kafka-7 (Stream processing); kafka-8 (Failure recovery); kafka-9 (Capacity planning)

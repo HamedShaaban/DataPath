@@ -1,3 +1,4 @@
+import { engineeringLessons } from "./engineering-lessons";
 import { industryMissions } from "./industry-challenge";
 import { skills, skillById, sectorById } from "./catalog";
 import { requirements, type Profile, type LearningState } from "./learning";
@@ -396,6 +397,19 @@ export function practiceChallenges(profile: Profile): PracticeChallenge[] {
       starter: "", hints: [sql ? "Track visited identifiers and stop when an identifier repeats." : "Consume each record once; do not materialize the whole input."],
       rubric: ["Reproducible example included", "Edge case tested", "Result reconciled", "Limitations explained"],
       lesson: "This submission is self-reviewed. Include code and observed results; completion is not independent verification.",
+    });
+  }
+  for (const [topicId, lesson] of Object.entries(engineeringLessons)) {
+    const skillId = topicId.split("-")[0];
+    const topic = skillById[skillId].topics.find(t => t.id === topicId)!;
+    if (!required[skillId] || topic.level > required[skillId]) continue;
+    result.push({
+      id: `engineering-${topicId}`, skillId, topicId, kind: "case",
+      title: `${topic.title.en}: implementation review`,
+      task: `${lesson.task} ${sectorById[profile.sector].title} context: ${industryPractice[profile.sector].decision}. Use synthetic data; add documented keys, timestamps or versions when the starter data lacks them. External tool task; DataPath does not run dbt or an ETL platform.`,
+      starter: "", hints: [lesson.example, lesson.mistake],
+      rubric: ["Reproducible artifact and setup included", "Expected and observed results recorded", "Failure case and recovery demonstrated", "Industry assumptions and limitations documented"],
+      lesson: lesson.brief,
     });
   }
   return result;

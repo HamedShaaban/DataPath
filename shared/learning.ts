@@ -1,3 +1,4 @@
+import { engineeringLessons } from "./engineering-lessons";
 import { authoredLessons } from "./authored-lessons";
 import { z } from "zod";
 import { interviewCases } from "./interview-cases";
@@ -523,7 +524,7 @@ export function lessonGuide(topicIdValue: string, language: Lang) {
     practice:
       language === "ar"
         ? `Practice: طبّق ${topic.title.en} على dataset صغيرة، اكسر الـsolution بحالة غير متوقعة، وبعدها عدّلها واكتب إيه اللي اتغير.`
-        : `Practice: apply ${topic.title.en} to a small dataset, break the solution with an unexpected case, then fix it and record what changed.`,
+        : engineeringLessons[topic.id]?.task || `Practice: apply ${topic.title.en} to a small dataset, break the solution with an unexpected case, then fix it and record what changed.`,
   };
 }
 export function learningPathTitle(profile: Profile) {
