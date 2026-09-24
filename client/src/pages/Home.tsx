@@ -216,6 +216,7 @@ export default function Home() {
   const [startedSetup, setStartedSetup] = useState(false);
   const [notice, setNotice] = useState("");
   const [revision, setRevision] = useState(0);
+  const [guestOffer, setGuestOffer] = useState<LearningState | null>(null);
   const [dirty, setDirty] = useState(false);
   const [ready, setReady] = useState(false);
   const [stateOwner, setStateOwner] = useState<number | "guest">("guest");
@@ -335,12 +336,21 @@ export default function Home() {
     if (!me.data) {
       workspaceEpoch.current++;
       loadedUser.current = null;
+      setGuestOffer(null);
       setState(readGuest());
       setStateOwner("guest");
       setReady(true);
     } else if (load.isSuccess && loadedUser.current !== me.data.id) {
       workspaceEpoch.current++;
       setState(load.data?.state || newState());
+      let candidate: LearningState | null = null;
+      if (!load.data) {
+        try {
+          const guest = readGuestForImport(localStorage);
+          if (guest.onboarded) candidate = guest;
+        } catch { /* An unreadable save is never imported or overwritten. */ }
+      }
+      setGuestOffer(candidate);
       setStateOwner(me.data.id);
       setRevision(load.data?.revision || 0);
       loadedUser.current = me.data.id;
@@ -703,6 +713,7 @@ export default function Home() {
                 <button
                   className="icon-button"
                   title={t("Sign out", "تسجيل الخروج")}
+                  disabled={logout.isPending}
                   onClick={async () => {
                     if (
                       dirty &&
@@ -714,10 +725,15 @@ export default function Home() {
                       )
                     )
                       return;
-                    await logout.mutateAsync();
-                    utils.datapath.load.reset();
-                    setReady(false);
-                    utils.auth.me.setData(undefined, null);
+                    try {
+                      await logout.mutateAsync();
+                      setNotice("");
+                      utils.datapath.load.reset();
+                      setReady(false);
+                      utils.auth.me.setData(undefined, null);
+                    } catch {
+                      setNotice(t("Could not sign out. You are still signed in; try again when the connection is available.", "تعذر تسجيل الخروج. ما زلت مسجلاً؛ حاول مجدداً عند توفر الاتصال."));
+                    }
                   }}
                 >
                   <LogOut size={17} />
@@ -758,6 +774,20 @@ export default function Home() {
                 ×
               </button>
             </div>
+          )}
+          {guestOffer && me.data && stateOwner === me.data.id && !dirty && revision === 0 && (
+            <section className="card" aria-label="Continue your guest progress">
+              <h2>{t("Continue where you left off", "تابع من حيث توقفت")}</h2>
+              <p>{t("This account has no saved workspace yet. Your guest learning path and progress are still in this browser. Bring them into this account, then choose Save progress to keep them across devices.", "لا توجد مساحة محفوظة لهذا الحساب بعد. ما زال مسارك وتقدمك كزائر في هذا المتصفح. استوردهما ثم اختر حفظ التقدم للاحتفاظ بهما عبر الأجهزة.")}</p>
+              <button className="primary" onClick={() => {
+                update(() => guestOffer);
+                setGuestOffer(null);
+                setStartedSetup(false);
+                setNotice(t("Guest progress imported. Save progress to keep it in your account.", "تم استيراد تقدم الزائر. احفظ التقدم للاحتفاظ به في حسابك."));
+              }}>{t("Continue with my guest progress", "المتابعة بتقدمي كزائر")}</button>
+              <button className="secondary" onClick={() => setGuestOffer(null)}>{t("Start a separate account path", "بدء مسار منفصل للحساب")}</button>
+              <p>{t("Your original guest save stays in this browser.", "تبقى نسخة تقدم الزائر الأصلية في هذا المتصفح.")}</p>
+            </section>
           )}
           {!state.onboarded && !startedSetup ? (
             <CareerLanding
