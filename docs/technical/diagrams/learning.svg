@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="510" height="270" preserveAspectRatio="xMinYMin meet" viewBox="0 0 510 270" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="510" height="270"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-270)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="190" width="230" height="70" rx="5" ry="5" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,97%); fill-rule: evenodd;"/>
+			<text x="67.21000000000001" y="243" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,486) scale(1,-1)">01 Choose direction</text>
+			<text x="70.23849999999999" y="227" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,454) scale(1,-1)">Career or focused skill</text>
+			<text x="64.969" y="215" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,430) scale(1,-1)">Industry and target depth</text>
+			<rect x="280" y="190" width="230" height="70" rx="5" ry="5" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,97%); fill-rule: evenodd;"/>
+			<text x="339.985" y="243" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,486) scale(1,-1)">02 Plan a starting point</text>
+			<text x="334.727" y="227" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,454) scale(1,-1)">Assessment and prerequisites</text>
+			<text x="363.986" y="215" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,430) scale(1,-1)">Estimated pace</text>
+			<rect x="280" y="100" width="230" height="70" rx="5" ry="5" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,97%); fill-rule: evenodd;"/>
+			<text x="345.55" y="153" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,306) scale(1,-1)">03 Build foundations</text>
+			<text x="341.108" y="137" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,274) scale(1,-1)">First lesson -&gt; guided work</text>
+			<text x="347.471" y="125" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,250) scale(1,-1)">Independent calculation</text>
+			<rect x="0" y="100" width="230" height="70" rx="5" ry="5" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,97%); fill-rule: evenodd;"/>
+			<text x="63.59" y="153" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,306) scale(1,-1)">04 Learn and practise</text>
+			<text x="60.2215" y="137" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,274) scale(1,-1)">Lesson, exercise and notes</text>
+			<text x="81.2365" y="125" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,250) scale(1,-1)">Record evidence</text>
+			<rect x="0" y="10" width="230" height="70" rx="5" ry="5" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,97%); fill-rule: evenodd;"/>
+			<text x="66.64500000000001" y="63" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,126) scale(1,-1)">05 Check and revisit</text>
+			<text x="61.7245" y="47" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,94) scale(1,-1)">Quiz and completion gates</text>
+			<text x="67.4845" y="35" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,70) scale(1,-1)">Weak topics and review</text>
+			<rect x="280" y="10" width="230" height="70" rx="5" ry="5" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,97%); fill-rule: evenodd;"/>
+			<text x="353.32" y="63" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,126) scale(1,-1)">06 Build a project</text>
+			<text x="341.9855" y="47" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,94) scale(1,-1)">Milestones and self-review</text>
+			<text x="360.485" y="35" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,70) scale(1,-1)">Explain the result</text>
+			<path d="M 230,225 L 280,225 Z" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="280 225, 274.4736 227.3365, 274.4736 222.6635" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; fill: rgb(50%,57%,63%); fill-rule: evenodd;"/>
+			<path d="M 395,190 L 395,170 Z" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="395 170, 397.3365 175.5264, 392.6635 175.5264" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; fill: rgb(50%,57%,63%); fill-rule: evenodd;"/>
+			<path d="M 280,135 L 230,135 Z" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="230 135, 235.5264 132.6635, 235.5264 137.3365" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; fill: rgb(50%,57%,63%); fill-rule: evenodd;"/>
+			<path d="M 115,100 L 115,80 Z" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="115 80, 117.3365 85.52637, 112.6635 85.52637" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; fill: rgb(50%,57%,63%); fill-rule: evenodd;"/>
+			<path d="M 230,45 L 280,45 Z" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="280 45, 274.4736 47.33651, 274.4736 42.66349" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; fill: rgb(50%,57%,63%); fill-rule: evenodd;"/>
+		</g>
+	</g>
+</svg>

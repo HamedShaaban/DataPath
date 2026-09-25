@@ -297,3 +297,12 @@ Branch: `quality-account-learning-journey`.
 - Progress checks: SQL completion shows 1/6 SQL lessons/evidence and 1/45 passed topic quizzes; logout/login restores those values while the guest remains on its original introductory step. A failed completion-rate attempt produced actionable feedback; the corrected result recorded one checked exercise and remained visible after save/reload. Introductory work does not automatically certify roadmap topics.
 - All 282 tests across 40 files, TypeScript, production build and whitespace checks pass. Real PostgreSQL checks pass for guest saves, logout/login, hashed sessions, expiry/revocation, isolation, optimistic revision conflicts and migration repeatability.
 - Limits: representative beginner English journey and account layouts, not every path/industry or real mobile keyboard. Live AI, Arabic/RTL and deployment remain outside this pass. No new packages, DB schema changes or PDF changes.
+
+## Technical reference — 2026-09-25
+
+Branch: `docs-technical-reference`; implementation baseline: `88c1d89`.
+
+- Created a 35-page searchable technical PDF, editable Markdown source and 14 SVG diagrams, including current and legacy ERDs and a column dictionary for all 10 tables. Covered catalog, learning behavior, storage, APIs, sessions, SQL/Python workers, AI prompts/accounting, security, configuration, migration operations and known gaps.
+- Checked source against schema and mounted routes; distinguished implemented functionality from configured services and prior verification. Current project environment has no DATABASE_URL, and localhost:3010 did not respond during this review. Neon production connectivity and live AI were not verified.
+- Reran all 282 tests across 40 files successfully. Inspected all rendered PDF pages and verified page/figure/table coverage. No application code, schema, dependencies or existing guides changed.
+- Outputs: `output/pdf/DataPath_Technical_Reference.pdf`, `output/pdf/DataPath_Technical_Source.zip`, and `docs/technical/`.

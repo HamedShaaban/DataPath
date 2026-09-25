@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="510" height="270" preserveAspectRatio="xMinYMin meet" viewBox="0 0 510 270" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="510" height="270"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-270)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="105" width="150" height="140" rx="5" ry="5" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,97%); fill-rule: evenodd;"/>
+			<text x="39.99" y="228" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,456) scale(1,-1)">Guest browser</text>
+			<text x="49.989000000000004" y="212" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,424) scale(1,-1)">localStorage</text>
+			<text x="39.225" y="200" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,400) scale(1,-1)">datapath.guest.v1</text>
+			<text x="31.485" y="188" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,376) scale(1,-1)">Automatic local saves</text>
+			<rect x="180" y="105" width="150" height="140" rx="5" ry="5" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,97%); fill-rule: evenodd;"/>
+			<text x="204.715" y="228" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,456) scale(1,-1)">Account PostgreSQL</text>
+			<text x="205.725" y="212" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,424) scale(1,-1)">learningStates.stateJson</text>
+			<text x="210.486" y="200" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,400) scale(1,-1)">Explicit Save progress</text>
+			<text x="207.237" y="188" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,376) scale(1,-1)">Revision conflict checks</text>
+			<rect x="360" y="105" width="150" height="140" rx="5" ry="5" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,97%); fill-rule: evenodd;"/>
+			<text x="386.095" y="228" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,456) scale(1,-1)">SQL worker memory</text>
+			<text x="403.2345" y="212" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,424) scale(1,-1)">Synthetic tables</text>
+			<text x="395.9805" y="200" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,400) scale(1,-1)">One disposable run</text>
+			<text x="389.2305" y="188" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,376) scale(1,-1)">No account credentials</text>
+			<path d="M 75,105 L 75,82 Z" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1;"/>
+			<path d="M 75,82 L 255,82 Z" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; stroke-dasharray: 4, 3;"/>
+			<path d="M 255,82 L 255,105 Z" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="255 105, 252.6635 99.47363, 257.3365 99.47363" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; fill: rgb(50%,57%,63%); fill-rule: evenodd;"/>
+			<text x="110.976" y="70" style="font-family: Helvetica; font-size: 8px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,140) scale(1,-1)">Explicit import through the app</text>
+			<text x="100.67249999999999" y="32" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,64) scale(1,-1)">Guest storage, account snapshots and exercise data have different lifecycles.</text>
+		</g>
+	</g>
+</svg>

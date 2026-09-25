@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="510" height="318" preserveAspectRatio="xMinYMin meet" viewBox="0 0 510 318" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="510" height="318"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-318)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="90" y="264" width="330" height="54" rx="5" ry="5" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,97%); fill-rule: evenodd;"/>
+			<text x="226.94" y="301" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,602) scale(1,-1)">Main thread</text>
+			<text x="150.195" y="285" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,570) scale(1,-1)">Post challengeId, query and sector; start 8s deadline</text>
+			<rect x="90" y="198" width="330" height="54" rx="5" ry="5" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,97%); fill-rule: evenodd;"/>
+			<text x="211.93" y="235" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,470) scale(1,-1)">Fresh SQL worker</text>
+			<text x="172.713" y="219" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,438) scale(1,-1)">Load local PGlite WASM and data assets</text>
+			<path d="M 255,264 L 255,252 Z" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="255 252, 257.3365 257.5264, 252.6635 257.5264" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; fill: rgb(50%,57%,63%); fill-rule: evenodd;"/>
+			<rect x="90" y="132" width="330" height="54" rx="5" ry="5" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,97%); fill-rule: evenodd;"/>
+			<text x="186.36" y="169" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,338) scale(1,-1)">Read-only exercise database</text>
+			<text x="137.6985" y="153" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,306) scale(1,-1)">Seed synthetic rows; lab_reader role; 2s statement timeout</text>
+			<path d="M 255,198 L 255,186 Z" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="255 186, 257.3365 191.5264, 252.6635 191.5264" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; fill: rgb(50%,57%,63%); fill-rule: evenodd;"/>
+			<rect x="90" y="66" width="330" height="54" rx="5" ry="5" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,97%); fill-rule: evenodd;"/>
+			<text x="214.985" y="103" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,206) scale(1,-1)">Evaluate fixtures</text>
+			<text x="145.695" y="87" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,174) scale(1,-1)">Execute query and compare authored expected results</text>
+			<path d="M 255,132 L 255,120 Z" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="255 120, 257.3365 125.5264, 252.6635 125.5264" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; fill: rgb(50%,57%,63%); fill-rule: evenodd;"/>
+			<rect x="90" y="0" width="330" height="54" rx="5" ry="5" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,97%); fill-rule: evenodd;"/>
+			<text x="204.715" y="37" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,74) scale(1,-1)">Return and terminate</text>
+			<text x="136.695" y="21" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,42) scale(1,-1)">Rows + checks + feedback; update learner evidence locally</text>
+			<path d="M 255,66 L 255,54 Z" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="255 54, 257.3365 59.52637, 252.6635 59.52637" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; fill: rgb(50%,57%,63%); fill-rule: evenodd;"/>
+		</g>
+	</g>
+</svg>

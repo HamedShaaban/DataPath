@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="510" height="340" preserveAspectRatio="xMinYMin meet" viewBox="0 0 510 340" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="510" height="340"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-340)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="240" width="150" height="90" rx="5" ry="5" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,97%); fill-rule: evenodd;"/>
+			<text x="40.825" y="313" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,626) scale(1,-1)">localAccounts</text>
+			<text x="55.2405" y="297" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,594) scale(1,-1)">PK userId</text>
+			<text x="56.2485" y="285" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,570) scale(1,-1)">UQ email</text>
+			<text x="45.2415" y="273" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,546) scale(1,-1)">passwordHash</text>
+			<rect x="180" y="240" width="150" height="90" rx="5" ry="5" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,97%); fill-rule: evenodd;"/>
+			<text x="241.66" y="313" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,626) scale(1,-1)">users</text>
+			<text x="244.245" y="297" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,594) scale(1,-1)">PK id</text>
+			<text x="233.238" y="285" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,570) scale(1,-1)">UQ openId</text>
+			<text x="219.3645" y="273" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,546) scale(1,-1)">role + timestamps</text>
+			<rect x="360" y="240" width="150" height="90" rx="5" ry="5" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,97%); fill-rule: evenodd;"/>
+			<text x="400.545" y="313" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,626) scale(1,-1)">learningStates</text>
+			<text x="415.2405" y="297" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,594) scale(1,-1)">PK userId</text>
+			<text x="402.987" y="285" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,570) scale(1,-1)">stateJson TEXT</text>
+			<text x="393.852" y="273" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,546) scale(1,-1)">revision + updatedAt</text>
+			<rect x="0" y="20" width="150" height="100" rx="5" ry="5" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,97%); fill-rule: evenodd;"/>
+			<text x="53.599999999999994" y="103" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,206) scale(1,-1)">sessions</text>
+			<text x="37.101" y="87" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,174) scale(1,-1)">PK id = token hash</text>
+			<text x="37.8615" y="75" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,150) scale(1,-1)">FK userId -&gt; users</text>
+			<text x="33.483" y="63" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,126) scale(1,-1)">expiresAt, revokedAt</text>
+			<rect x="180" y="20" width="150" height="100" rx="5" ry="5" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,97%); fill-rule: evenodd;"/>
+			<text x="228.325" y="103" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,206) scale(1,-1)">aiRequests</text>
+			<text x="244.245" y="87" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,174) scale(1,-1)">PK id</text>
+			<text x="217.8615" y="75" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,150) scale(1,-1)">FK userId -&gt; users</text>
+			<text x="207.97050000000002" y="63" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,126) scale(1,-1)">month + usage + status</text>
+			<rect x="360" y="20" width="150" height="100" rx="5" ry="5" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,97%); fill-rule: evenodd;"/>
+			<text x="410.83" y="103" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,206) scale(1,-1)">aiBudgets</text>
+			<text x="415.2405" y="87" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,174) scale(1,-1)">PK month</text>
+			<text x="410.745" y="75" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,150) scale(1,-1)">spentMicros</text>
+			<text x="393.2355" y="63" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,126) scale(1,-1)">UTC application total</text>
+			<path d="M 180,284 L 150,284 Z" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; stroke-dasharray: 4, 3;"/>
+			<polygon points="150 284, 155.5264 281.6635, 155.5264 286.3365" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; fill: rgb(50%,57%,63%); fill-rule: evenodd;"/>
+			<text x="158.328" y="291.0" style="font-family: Helvetica; font-size: 8px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,582) scale(1,-1)">0..1</text>
+			<path d="M 330,284 L 360,284 Z" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; stroke-dasharray: 4, 3;"/>
+			<polygon points="360 284, 354.4736 286.3365, 354.4736 281.6635" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; fill: rgb(50%,57%,63%); fill-rule: evenodd;"/>
+			<text x="338.328" y="291.0" style="font-family: Helvetica; font-size: 8px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,582) scale(1,-1)">0..1</text>
+			<path d="M 210,240 L 75,120 Z" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="75 120, 80.68275 121.9252, 77.57816 125.4178" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; fill: rgb(50%,57%,63%); fill-rule: evenodd;"/>
+			<text x="120.488" y="187.0" style="font-family: Helvetica; font-size: 8px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,374) scale(1,-1)">1 to 0..many</text>
+			<path d="M 255,240 L 255,120 Z" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="255 120, 257.3365 125.5264, 252.6635 125.5264" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; fill: rgb(50%,57%,63%); fill-rule: evenodd;"/>
+			<text x="232.988" y="187.0" style="font-family: Helvetica; font-size: 8px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,374) scale(1,-1)">1 to 0..many</text>
+			<path d="M 360,67 L 330,67 Z" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; stroke-dasharray: 4, 3;"/>
+			<polygon points="330 67, 335.5264 64.66349, 335.5264 69.33651" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; fill: rgb(50%,57%,63%); fill-rule: evenodd;"/>
+			<text x="330.772" y="74.0" style="font-family: Helvetica; font-size: 8px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,148) scale(1,-1)">0..many</text>
+			<text x="135.23925" y="5" style="font-family: Helvetica; font-size: 8.5px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,10) scale(1,-1)">Solid = enforced FK    Dashed = logical ownership or month link</text>
+		</g>
+	</g>
+</svg>
