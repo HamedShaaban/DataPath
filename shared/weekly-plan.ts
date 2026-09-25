@@ -1,3 +1,4 @@
+import { nextIntroStep } from "./intro-progress";
 import { practiceChallenges } from "./practice";
 import { sqlChallengeForTopic } from "./practice-navigation";
 import { makePlan, projectFor, type LearningState } from "./learning";
@@ -28,12 +29,13 @@ export function weeklyStudyPlan(state: LearningState, now = new Date()) {
     budget -= minutes;
     return minutes;
   };
-  if (state.profile.experience === "new" && !state.firstLesson?.completed) {
+  const intro = nextIntroStep(state);
+  if (intro) {
     add(
       {
         id: "basics",
         kind: "basics",
-        title: {
+        title: intro === "foundations" ? { en: "Reliable totals and averages", ar: "مجاميع ومتوسطات موثوقة" } : {
           en: "Your first look at data",
           ar: "خطوتك الأولى مع البيانات",
         },

@@ -8,6 +8,7 @@ function learner() {
   s.profile.focusSkill = "sql";
   s.profile.targetLevel = 3;
   s.firstLesson = { step: 4, completed: true };
+  s.foundationUnits = { [s.profile.sector]: { stage: 3, answers: { count: "3", total: "120", average: "40", explanation: "known-completed" } } };
   return s;
 }
 it("keeps activities within the remaining goal and never mutates progress", () => {

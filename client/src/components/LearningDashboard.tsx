@@ -1,3 +1,4 @@
+import { nextIntroStep } from "@shared/intro-progress";
 import { CatchUpPace } from "./CatchUpPace";
 import { progressEvidence } from "@shared/progress-evidence";
 import { WeeklyStudyPlan } from "./WeeklyStudyPlan";
@@ -50,8 +51,9 @@ export function LearningDashboard({
       !topic.done &&
       topic.prerequisites.every(id => state.completed.includes(id))
   );
-  const first =
-    state.profile.experience === "new" && !state.firstLesson?.completed;
+  const intro = nextIntroStep(state);
+  const first = intro !== null;
+  const foundations = intro === "foundations";
   const week = dashboardWeek(state);
   const skills = Object.keys(plan.required);
   const review = plan.topics.find(topic =>
@@ -94,7 +96,7 @@ export function LearningDashboard({
               </p>
               <h2 id="learning-next-title">
                 {first
-                  ? t("Your first look at data", "خطوتك الأولى مع البيانات")
+                  ? foundations ? t("Reliable totals and averages", "مجاميع ومتوسطات موثوقة") : t("Your first look at data", "خطوتك الأولى مع البيانات")
                   : next
                     ? title(next.title)
                     : t(
@@ -104,7 +106,7 @@ export function LearningDashboard({
               </h2>
               <p>
                 {first
-                  ? t(
+                  ? foundations ? t("Build on your first achievement with guided totals and averages—no code needed.", "تابع إنجازك الأول بتدريب على المجاميع والمتوسطات دون برمجة.") : t(
                       "Start with a small table and one question. We’ll guide you through it.",
                       "ابدأ بجدول صغير وسؤال واحد. سنرشدك خطوة بخطوة."
                     )
@@ -132,7 +134,7 @@ export function LearningDashboard({
               }
             >
               {first
-                ? t("Start my first lesson", "ابدأ درسي الأول")
+                ? foundations ? t("Continue the foundations", "تابع الأساسيات") : t(state.firstLesson?.step ? "Resume my first lesson" : "Start my first lesson", "تابع درسي الأول")
                 : next
                   ? t("Continue learning", "متابعة التعلم")
                   : t("Open my project", "افتح مشروعي")}

@@ -1,3 +1,5 @@
+import { progressEvidence } from "@shared/progress-evidence";
+import { nextIntroStep } from "@shared/intro-progress";
 import { ProjectBlueprint } from "../components/ProjectBlueprint";
 import { applyCatchUp } from "@shared/catch-up";
 import { suggestPace } from "@shared/pace";
@@ -420,6 +422,7 @@ export default function Home() {
     : [];
   const resourceCount = matchingResourceIds.length + matchingPaidResources.length;
   const evidenceMatrix = skillEvidenceMatrix(state);
+  const practiceEvidence = progressEvidence(state);
   const reviewNext = skills
     .flatMap(skill =>
       skill.topics.map(topic => ({ ...topic, skillId: skill.id }))
@@ -855,7 +858,7 @@ export default function Home() {
                 openPractice={(skillId, topicId) => { setLabSkillTarget(skillId); setLabTopicTarget(topicId); setIndependentPractice(true); setPage("lab"); }}
                 editPath={() => setEditing(true)}
                 navigate={target => { setExploreAll(true); setPage(target); }}
-                startBasics={() => { const element = document.getElementById("dashboard-basics"); element?.scrollIntoView({ block: "start" }); element?.focus(); }}
+                startBasics={() => { const element = document.getElementById(nextIntroStep(state) === "foundations" ? "dashboard-foundations" : "dashboard-basics"); element?.scrollIntoView({ block: "start" }); element?.focus(); }}
                 openLesson={(skillId, topicId = "") => { setSelectedSkill(skillId); setLessonTarget(topicId); setExploreAll(true); setPage("roadmap"); }}
               />}
               {(page === "dashboard" || (page === "lab" && !independentPractice)) &&
@@ -863,17 +866,24 @@ export default function Home() {
                   <section id="dashboard-basics" tabIndex={-1} aria-label={t("Your first lessons", "دروسك الأولى")}>
                     <FirstLesson
                       key={stateOwner}
+                      nextLabel={nextIntroStep(state) === "foundations" ? "Next: practise totals and averages" : undefined}
                       progress={state.firstLesson}
                       save={firstLesson =>
                         update(current => ({ ...current, firstLesson }))
                       }
                       next={() => {
+                        if (nextIntroStep(state) === "foundations") {
+                          const element = document.getElementById("dashboard-foundations");
+                          element?.scrollIntoView({ block: "start" });
+                          element?.focus();
+                          return;
+                        }
                         setExploreAll(true);
                         setPage("roadmap");
                       }}
                     />
                     {state.firstLesson?.completed && (
-                      <FoundationsUnit
+                      <div id="dashboard-foundations" tabIndex={-1}><FoundationsUnit
                         key={`${stateOwner}:${state.profile.sector}`}
                         state={state}
                         update={update}
@@ -883,7 +893,7 @@ export default function Home() {
                           setExploreAll(true);
                           setPage("roadmap");
                         }}
-                      />
+                      /></div>
                     )}
                     <p className="beginner-save-note">
                       {me.data
@@ -2048,28 +2058,14 @@ export default function Home() {
                     <h3>Practice across your path</h3>
                     <p>
                       {
-                        state.completedPracticeIds.filter(id =>
-                          id.startsWith(
-                            `${state.profile.role}:${state.profile.sector}:`
-                          )
-                        ).length
+                        practiceEvidence.checkedPassed
                       }{" "}
                       locally checked Python, formula or metric exercises passed
-                      for this career and industry.
+                      for this path and industry.
                     </p>
                     <p>
                       {
-                        new Set(
-                          state.practiceAttempts
-                            .filter(
-                              attempt =>
-                                attempt.reviewOnly &&
-                                attempt.key.startsWith(
-                                  `${state.profile.role}:${state.profile.sector}:`
-                                )
-                            )
-                            .map(attempt => attempt.key)
-                        ).size
+                        practiceEvidence.casesRecorded
                       }{" "}
                       applied cases have saved submissions. These are
                       self-reviewed, not expert-verified.
@@ -3009,6 +3005,7 @@ export default function Home() {
                 {t("Name", "الاسم")}
                 <Input
                   autoFocus
+                  autoComplete="name"
                   value={authForm.name}
                   onChange={e =>
                     setAuthForm({ ...authForm, name: e.target.value })
@@ -3024,6 +3021,7 @@ export default function Home() {
               <Input
                 autoFocus={authMode === "login"}
                 type="email"
+                autoComplete="email"
                 value={authForm.email}
                 onChange={e =>
                   setAuthForm({ ...authForm, email: e.target.value })
@@ -3035,6 +3033,7 @@ export default function Home() {
               {t("Password", "كلمة المرور")}
               <Input
                 type="password"
+                autoComplete={authMode === "register" ? "new-password" : "current-password"}
                 value={authForm.password}
                 onChange={e =>
                   setAuthForm({ ...authForm, password: e.target.value })

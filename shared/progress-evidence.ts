@@ -6,6 +6,9 @@ export function progressEvidence(state: LearningState) {
   const plan = makePlan(state);
   const topicIds = new Set(plan.topics.map(topic => topic.id));
   const challenges = practiceChallenges(state.profile).filter(c => topicIds.has(c.topicId));
+  const challengeKeys = new Set(challenges.map(c => practiceKey(state.profile, c.id)));
+  const checkedPassed = new Set(state.completedPracticeIds.filter(key => challengeKeys.has(key))).size;
+  const casesRecorded = new Set(state.practiceAttempts.filter(a => a.reviewOnly && challengeKeys.has(a.key)).map(a => a.key)).size;
   const attempted = new Set<string>();
   for (const challenge of challenges) {
     if (state.practiceAttempts.some(a => a.key === practiceKey(state.profile, challenge.id))) attempted.add(challenge.id);
@@ -17,6 +20,8 @@ export function progressEvidence(state: LearningState) {
   const project = projectFor(state.profile);
   return {
     practiced: attempted.size,
+    checkedPassed,
+    casesRecorded,
     quizzesPassed: [...latest.values()].filter(Boolean).length,
     topicCount: topicIds.size,
     projectRecorded: state.completedProjects.includes(project.id) && Boolean(state.projectNotes[project.id]?.trim()),
