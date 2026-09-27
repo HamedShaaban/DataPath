@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="800" height="470" preserveAspectRatio="xMinYMin meet" viewBox="0 0 800 470" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="800" height="470"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-470)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="180" y="340" width="440" height="112" rx="5" ry="0" style="stroke: rgb(38%,44%,52%); stroke-linecap: butt; stroke-width: 0.8; fill: rgb(94%,96%,98%); fill-rule: evenodd;"/>
+			<text x="192" y="429" style="font-family: Helvetica-Bold; font-size: 13px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,858) scale(1,-1)">Learner browser</text>
+			<text x="192" y="410" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,820) scale(1,-1)">React workspace and guest saves</text>
+			<text x="192" y="394" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,788) scale(1,-1)">Disposable PGlite SQL and Pyodide Python workers</text>
+			<text x="192" y="378" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,756) scale(1,-1)">Practice runs locally; account calls use same-origin HTTPS</text>
+			<rect x="180" y="180" width="440" height="105" rx="5" ry="0" style="stroke: rgb(38%,44%,52%); stroke-linecap: butt; stroke-width: 0.8; fill: rgb(94%,96%,98%); fill-rule: evenodd;"/>
+			<text x="192" y="262" style="font-family: Helvetica-Bold; font-size: 13px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,524) scale(1,-1)">DataPath application process</text>
+			<text x="192" y="243" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,486) scale(1,-1)">Express + tRPC; session lookup and validated snapshots</text>
+			<text x="192" y="227" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,454) scale(1,-1)">Drizzle + node-postgres; bounded optional AI requests</text>
+			<text x="192" y="211" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,422) scale(1,-1)">Static client and self-hosted execution assets</text>
+			<path d="M 400,340 L 400,285 Z" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1.1;"/>
+			<polygon points="400 285, 402.7259 291.4474, 397.2741 291.4474" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1; fill: rgb(15%,33%,78%); fill-rule: evenodd;"/>
+			<text x="358.231" y="319.5" style="font-family: Helvetica; font-size: 9px;fill: rgb(38%,44%,52%); stroke:none;" transform="translate(0,639) scale(1,-1)">requests / responses</text>
+			<rect x="0" y="10" width="240" height="95" rx="5" ry="0" style="stroke: rgb(38%,44%,52%); stroke-linecap: butt; stroke-width: 0.8; fill: rgb(94%,96%,98%); fill-rule: evenodd;"/>
+			<text x="12" y="82" style="font-family: Helvetica-Bold; font-size: 13px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,164) scale(1,-1)">PostgreSQL</text>
+			<text x="12" y="63" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,126) scale(1,-1)">Accounts, sessions, learning state</text>
+			<text x="12" y="47" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,94) scale(1,-1)">AI reservations and usage</text>
+			<text x="12" y="31" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,62) scale(1,-1)">Connection not configured in preview</text>
+			<rect x="280" y="10" width="240" height="95" rx="5" ry="0" style="stroke: rgb(38%,44%,52%); stroke-linecap: butt; stroke-width: 0.8; fill: rgb(94%,96%,98%); fill-rule: evenodd;"/>
+			<text x="292" y="82" style="font-family: Helvetica-Bold; font-size: 13px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,164) scale(1,-1)">Optional AI provider</text>
+			<text x="292" y="63" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,126) scale(1,-1)">Chat Completions compatible</text>
+			<text x="292" y="47" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,94) scale(1,-1)">Consented, bounded context</text>
+			<text x="292" y="31" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,62) scale(1,-1)">Unconfigured in captured preview</text>
+			<rect x="560" y="10" width="240" height="95" rx="5" ry="0" style="stroke: rgb(38%,44%,52%); stroke-linecap: butt; stroke-width: 0.8; fill: rgb(94%,96%,98%); fill-rule: evenodd;"/>
+			<text x="572" y="82" style="font-family: Helvetica-Bold; font-size: 13px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,164) scale(1,-1)">Optional diagnostics</text>
+			<text x="572" y="63" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,126) scale(1,-1)">Sentry client and server</text>
+			<text x="572" y="47" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,94) scale(1,-1)">Sanitized exception data</text>
+			<text x="572" y="31" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,62) scale(1,-1)">Separate opt-in configuration</text>
+			<path d="M 250,180 L 120,105 Z" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1.1;"/>
+			<polygon points="120 105, 126.9469 105.8608, 124.2225 110.5831" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1; fill: rgb(15%,33%,78%); fill-rule: evenodd;"/>
+			<path d="M 400,180 L 400,105 Z" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1.1;"/>
+			<polygon points="400 105, 402.7259 111.4474, 397.2741 111.4474" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1; fill: rgb(15%,33%,78%); fill-rule: evenodd;"/>
+			<path d="M 550,180 L 680,105 Z" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1.1;"/>
+			<polygon points="680 105, 675.7775 110.5831, 673.0531 105.8608" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1; fill: rgb(15%,33%,78%); fill-rule: evenodd;"/>
+		</g>
+	</g>
+</svg>

@@ -306,3 +306,14 @@ Branch: `docs-technical-reference`; implementation baseline: `88c1d89`.
 - Checked source against schema and mounted routes; distinguished implemented functionality from configured services and prior verification. Current project environment has no DATABASE_URL, and localhost:3010 did not respond during this review. Neon production connectivity and live AI were not verified.
 - Reran all 282 tests across 40 files successfully. Inspected all rendered PDF pages and verified page/figure/table coverage. No application code, schema, dependencies or existing guides changed.
 - Outputs: `output/pdf/DataPath_Technical_Reference.pdf`, `output/pdf/DataPath_Technical_Source.zip`, and `docs/technical/`.
+
+## Audience documentation package — 2026-09-27
+
+Branch: `docs-audience-deliverables`. Application baseline remains `88c1d89`; existing reference checkout `844dee8`.
+
+- Produced a 32-page updated technical PDF, 19-page learner PDF and 12-slide editable investor deck. Added four newly authored SVG diagrams from current schema/router/UI source, including all ten declared tables and clearly marked logical-only relationships and retained legacy structures.
+- Captured 12 current local UI screenshots in isolated guest contexts. Actual SQL execution produced Query passed; Python summarisation passed all four baseline datasets. Corrected the earlier reference's broad statement of five Python datasets: only two advanced challenge variants add a fifth.
+- Recomputed catalog totals from source: 22 careers, 28 skills, 254 topics and nine industry contexts. Verified every schema table and column is present in the technical reference. Preserved unconfigured database/provider status and distinguished prior DB integration evidence from current local practice checks.
+- All 282 tests across 40 files passed during this documentation task. Rendered and visually reviewed PDF pages and all 12 slides; PPTX package and geometry validation pass. Native Microsoft PowerPoint rendering was not checked.
+- No app code, DB schema, dependencies, user data, environment secrets or earlier PDF guides changed. Local preview was restarted for capture. Production deployment, Neon connectivity and live AI remain unverified. Team/funding slide intentionally contains owner placeholders.
+- Files: `output/deliverables/` and `output/DataPath_Documentation_Package.zip`. macOS has no `/mnt/user-data/outputs` mount; the downloadable package preserves a descriptive screenshots folder.
