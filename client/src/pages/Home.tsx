@@ -227,13 +227,15 @@ export default function Home() {
   const [labTarget, setLabTarget] = useState("");
   const [lessonTarget, setLessonTarget] = useState("");
   const [selectedSkill, setSelectedSkill] = useState("");
+  const [proofHandle, setProofHandle] = useState("");
+  const [proofPrompt, setProofPrompt] = useState("");
   useEffect(() => {
     if (page !== "roadmap" || !lessonTarget) return;
     const element = document.getElementById(
       `lesson-${lessonTarget}`
     ) as HTMLDetailsElement | null;
     if (element) {
-      element.open = true;
+      const levelGroup = element.closest<HTMLDetailsElement>(".roadmap-level"); if (levelGroup) levelGroup.open = true; element.open = true;
       element.scrollIntoView({
         block: "center",
         behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -291,7 +293,28 @@ export default function Home() {
   const register = trpc.auth.register.useMutation();
   const remove = trpc.datapath.remove.useMutation();
   const coach = trpc.datapath.coach.useMutation();
+  const proofSettings = trpc.proof.settings.useQuery({ accountId: me.data?.id ?? 0 }, {
+    enabled: Boolean(me.data),
+    retry: false,
+  });
+  const proofPreview = trpc.proof.preview.useQuery({ accountId: me.data?.id ?? 0 }, {
+    enabled: Boolean(me.data),
+    retry: false,
+  });
+  const enableProof = trpc.proof.enable.useMutation();
+  const disableProof = trpc.proof.disable.useMutation({ onError: () => setNotice("Could not change proof page visibility. Try again.") });
+  const targetVisibility = trpc.proof.setTargetVisibility.useMutation({ onError: () => setNotice("Could not change target visibility. Try again.") });
+  const credentialVisibility = trpc.proof.setCredentialVisibility.useMutation({ onError: () => setNotice("Could not change credential visibility. Try again.") });
   const utils = trpc.useUtils();
+  useEffect(() => {
+    setProofHandle(proofSettings.data?.handle ?? "");
+  }, [proofSettings.data?.handle]);
+  const refreshProof = async () => {
+    await Promise.all([
+      utils.proof.settings.invalidate(),
+      utils.proof.preview.invalidate(),
+    ]);
+  };
   const loadedUser = useRef<number | null>(null);
   const workspaceEpoch = useRef(0);
   const updateEpoch = workspaceEpoch.current;
@@ -308,6 +331,8 @@ export default function Home() {
     setSelectedSkill("");
     setIndependentPractice(false);
     setExportSkills([]);
+    setProofPrompt("");
+    setProofHandle("");
   }, [stateOwner]);
   const latestState = useRef(state);
   latestState.current = state;
@@ -470,6 +495,8 @@ export default function Home() {
         });
       setAuthOpen(false);
       setReady(false);
+      await utils.proof.settings.reset();
+      await utils.proof.preview.reset();
       await utils.auth.me.invalidate();
       await utils.datapath.load.invalidate();
     } catch (error: any) {
@@ -731,6 +758,10 @@ export default function Home() {
                     try {
                       await logout.mutateAsync();
                       setNotice("");
+                      await utils.proof.settings.cancel();
+                      await utils.proof.preview.cancel();
+                      utils.proof.settings.reset();
+                      utils.proof.preview.reset();
                       utils.datapath.load.reset();
                       setReady(false);
                       utils.auth.me.setData(undefined, null);
@@ -777,6 +808,18 @@ export default function Home() {
                 ×
               </button>
             </div>
+          )}
+          {proofPrompt && (
+            <section className="card proof-prompt" role="status">
+              <div>
+                <strong>{proofPrompt}</strong>
+                <p>Choose what appears publicly, preview it, then publish when you are ready.</p>
+              </div>
+              <button className="primary small" onClick={() => { setProofPrompt(""); setPage("settings"); }}>
+                Proof page settings
+              </button>
+              <button className="text-button" onClick={() => setProofPrompt("")}>Dismiss</button>
+            </section>
           )}
           {guestOffer && me.data && stateOwner === me.data.id && !dirty && revision === 0 && (
             <section className="card" aria-label="Continue your guest progress">
@@ -919,10 +962,13 @@ export default function Home() {
                         if (!next) { setPage("projects"); return; }
                         setSelectedSkill(next.skillId); setLessonTarget(next.id);
                         const element = document.getElementById(`lesson-${next.id}`) as HTMLDetailsElement | null;
-                        if (element) { element.open = true; element.scrollIntoView({ block: "center" }); element.querySelector("summary")?.focus(); }
+                        if (element) { const levelGroup = element.closest<HTMLDetailsElement>(".roadmap-level"); if (levelGroup) levelGroup.open = true; element.open = true; element.scrollIntoView({ block: "center" }); element.querySelector("summary")?.focus(); }
                       }}>{next ? t("Open next lesson", "افتح الدرس التالي") : t("Open project", "افتح المشروع")} <ArrowRight size={16} /></button>
                     </div>
                   </section>
+                  <details className="roadmap-plan-details">
+                    <summary>{t("Plan details & learning tips", "تفاصيل الخطة ونصائح التعلم")}<span>{t("Pace, foundations and industry context", "الوتيرة والأساسيات وسياق المجال")}</span><ChevronDown size={18} /></summary>
+                    <div className="roadmap-plan-content">
                   <details className="foundation-entry">
                     <summary>
                       Start with the foundations: reliable totals and averages
@@ -938,7 +984,7 @@ export default function Home() {
                           `lesson-${topicId}`
                         ) as HTMLDetailsElement | null;
                         if (element) {
-                          element.open = true;
+                          const levelGroup = element.closest<HTMLDetailsElement>(".roadmap-level"); if (levelGroup) levelGroup.open = true; element.open = true;
                           element.scrollIntoView({ block: "center" });
                           element.querySelector("summary")?.focus();
                         }
@@ -1031,6 +1077,14 @@ export default function Home() {
                       </small>
                     </div>
                   </div>
+                    </div>
+                  </details>
+                  <label className="roadmap-mobile-picker">
+                    {t("Choose a skill", "اختر مهارة")}
+                    <select value={requiredIds.includes(selectedSkill) ? selectedSkill : next?.skillId || requiredIds[0]} onChange={event => { setLessonTarget(""); setSelectedSkill(event.target.value); }}>
+                      {requiredIds.map(id => <option key={id} value={id}>{txt(skillById[id].title)}</option>)}
+                    </select>
+                  </label>
                   <div className="roadmap-layout">
                     <nav
                       className="skill-list roadmap-skill-picker"
@@ -1108,9 +1162,10 @@ export default function Home() {
                             </div>
                             <p className="roadmap-legend">{t("You can read any lesson. Complete its prerequisites and checks to record completion.", "يمكنك قراءة أي درس. أكمل المتطلبات والاختبارات لتسجيل إتمامه.")}</p>
                             {[1, 2, 3].map(level => (
-                              <div className="level-block" key={level}>
-                                <h3>
-                                  <span className="level-dot" />
+                              <details className="roadmap-level" name={`roadmap-level-${id}`} key={level} open={level === (skill.topics.find(topic => topic.id === lessonTarget)?.level ?? skill.topics.find(topic => topic.id === next?.id)?.level ?? 1)}>
+                                <summary className="roadmap-level-heading">
+                                  <span className="roadmap-level-number">{String(level).padStart(2, "0")}</span>
+                                  <span className="roadmap-level-title">
                                   {
                                     [
                                       t("Beginner", "مبتدئ"),
@@ -1123,7 +1178,11 @@ export default function Home() {
                                       {t("Optional extension", "توسع اختياري")}
                                     </small>
                                   )}
-                                </h3>
+                                  </span>
+                                  <span className="roadmap-level-progress">{skill.topics.filter(topic => topic.level === level && state.completed.includes(topic.id)).length}/{skill.topics.filter(topic => topic.level === level).length} {t("complete", "مكتمل")}</span>
+                                  <ChevronDown size={18} />
+                                </summary>
+                                <div className="roadmap-level-content">
                                 {skill.topics
                                   .filter(x => x.level === level)
                                   .map(topic => {
@@ -1176,7 +1235,7 @@ export default function Home() {
                                             return prerequisiteSkill && prerequisiteTopic ? <button className="secondary" key={prerequisite} onClick={() => {
                                               setSelectedSkill(prerequisiteSkill.id); setLessonTarget(prerequisite);
                                               const element = document.getElementById(`lesson-${prerequisite}`) as HTMLDetailsElement | null;
-                                              if (element) { element.open = true; element.scrollIntoView({ block: "center" }); element.querySelector("summary")?.focus(); }
+                                              if (element) { const levelGroup = element.closest<HTMLDetailsElement>(".roadmap-level"); if (levelGroup) levelGroup.open = true; element.open = true; element.scrollIntoView({ block: "center" }); element.querySelector("summary")?.focus(); }
                                             }}>{txt(prerequisiteTopic.title)} <ArrowRight size={14} /></button> : null;
                                           })}</div></div>}
 
@@ -1362,6 +1421,8 @@ export default function Home() {
                                             targetId={topic.id}
                                             state={state}
                                             update={update}
+                                            serverVerificationEnabled={Boolean(me.data)}
+                                            onVerified={() => { if (updateEpoch !== workspaceEpoch.current) return; setProofPrompt("Quiz result verified on the server."); void refreshProof(); }}
                                           />
                                           <LessonCompletion arabic={lang === "ar"} hasEvidence={Boolean((state.evidence[topic.id] || "").trim())} passed={latestPassed(state, "topic", topic.id)} prerequisitesReady={!locked} />
                                           <button
@@ -1414,6 +1475,8 @@ export default function Home() {
                                       </details>
                                     );
                                   })}
+                                <details className="roadmap-assessment">
+                                  <summary><BadgeCheck size={17} /><span>{t("Level assessment", "اختبار المستوى")}</span><small>{t("10 questions · pass 80%", "١٠ أسئلة · النجاح ٨٠٪")}</small><ChevronDown size={16} /></summary>
                                 <QuizCard
                                   title={`${txt(skill.title)} · ${[t("Beginner", "Beginner"), t("Intermediate", "Intermediate"), t("Advanced", "Advanced")][level - 1]} Assessment`}
                                   questions={levelQuiz(id, level)}
@@ -1421,6 +1484,8 @@ export default function Home() {
                                   targetId={`${id}-level-${level}`}
                                   state={state}
                                   update={update}
+                                  serverVerificationEnabled={Boolean(me.data)}
+                                  onVerified={() => { if (updateEpoch !== workspaceEpoch.current) return; setProofPrompt("Assessment verified on the server."); void refreshProof(); }}
                                   locked={skill.topics
                                     .filter(
                                       topic =>
@@ -1434,8 +1499,12 @@ export default function Home() {
                                         !state.completed.includes(topic.id)
                                     )}
                                 />
-                              </div>
+                                </details>
+                                </div>
+                              </details>
                             ))}
+                            <details className="roadmap-assessment roadmap-final-checks">
+                              <summary><BadgeCheck size={18} /><span>{t("Skill checks & final assessment", "فحص المهارة والاختبار النهائي")}</span><ChevronDown size={16} /></summary>
                             <DiagnosticCard
                               id={id}
                               state={state}
@@ -1451,22 +1520,29 @@ export default function Home() {
                               targetId={id}
                               state={state}
                               update={update}
+                              serverVerificationEnabled={Boolean(me.data)}
+                              onVerified={() => { if (updateEpoch !== workspaceEpoch.current) return; setProofPrompt("Skill certification verified on the server."); void refreshProof(); }}
                               locked={plan.topics.some(
                                 topic =>
                                   topic.skillId === id &&
                                   !state.completed.includes(topic.id)
                               )}
                             />
+                            </details>
                           </section>
                         );
                       })()}
                     </div>
                   </div>
+                  <details className="roadmap-review-section">
+                    <summary><span><span className="eyebrow">{t("SPACED REVIEW", "المراجعة المتباعدة")}</span><strong>{t("Keep what you learn", "ثبّت ما تعلمته")}</strong></span><span>{t("Review skills together", "راجع المهارات معاً")}</span><ChevronDown size={20} /></summary>
                   <ReviewCenter
                     state={state}
                     requiredIds={requiredIds}
                     requiredLevels={plan.required}
                     update={update}
+                    serverVerificationEnabled={Boolean(me.data)}
+                    onVerified={() => { if (updateEpoch !== workspaceEpoch.current) return; setProofPrompt("Review verified on the server."); void refreshProof(); }}
                     openLesson={topicId => {
                       const skill = skills.find(item =>
                         item.topics.some(topic => topic.id === topicId)
@@ -1478,7 +1554,7 @@ export default function Home() {
                         `lesson-${topicId}`
                       ) as HTMLDetailsElement | null;
                       if (element) {
-                        element.open = true;
+                        const levelGroup = element.closest<HTMLDetailsElement>(".roadmap-level"); if (levelGroup) levelGroup.open = true; element.open = true;
                         element.scrollIntoView({
                           block: "center",
                           behavior: window.matchMedia(
@@ -1491,6 +1567,7 @@ export default function Home() {
                       }
                     }}
                   />
+                  </details>
                 </div>
               )}
               {page === "lab" &&
@@ -1535,6 +1612,8 @@ export default function Home() {
                         onChoose={setLabTarget}
                         state={state}
                         update={update}
+                        serverVerificationEnabled={Boolean(me.data)}
+                        onVerified={() => { if (updateEpoch !== workspaceEpoch.current) return; setProofPrompt("SQL lab pass verified on the server."); void refreshProof(); }}
                         openRoadmap={topicId => {
                           setSelectedSkill("sql");
                           setLessonTarget(topicId);
@@ -2034,6 +2113,15 @@ export default function Home() {
                       <span>{t("skills proven", "Skills مثبتة")}</span>
                     </div>
                   </section>
+                  {me.data && (
+                    <section className="card proof-preview-card">
+                      <span className="eyebrow">PRIVATE PREVIEW</span>
+                      <h2>This is what your public proof page will show</h2>
+                      <p>This preview is private. Hidden credentials and private workspace data are excluded.</p>
+                      {proofPreview.data ? <ProofPreview proof={proofPreview.data} /> : <p>No server-verified credentials yet.</p>}
+                      <button className="secondary" onClick={() => setPage("settings")}>Manage public proof page</button>
+                    </section>
+                  )}
                   <section className="lab-proof-strip">
                     <SquareTerminal size={21} />
                     <div>
@@ -2314,16 +2402,17 @@ export default function Home() {
                       type="checkbox"
                       checked={state.completedProjects.includes(project.id)}
                       disabled={!(state.projectNotes[project.id] || "").trim()}
-                      onChange={e =>
+                      onChange={e => {
+                        const completed = e.target.checked;
                         update(s => ({
                           ...s,
-                          completedProjects: e.target.checked
+                          completedProjects: completed
                             ? [...new Set([...s.completedProjects, project.id])]
-                            : s.completedProjects.filter(
-                                id => id !== project.id
-                              ),
-                        }))
-                      }
+                            : s.completedProjects.filter(id => id !== project.id),
+                        }));
+                        if (completed)
+                          setProofPrompt("Project completion recorded. Configure your proof page while independent project verification is pending.");
+                      }}
                     />
                     {t(
                       "I have delivered and checked all three portfolio requirements.",
@@ -2754,6 +2843,45 @@ export default function Home() {
                       {t("Edit goals & assessment", "تعديل الأهداف والتقييم")}
                     </button>
                   </section>
+                  <section className="card proof-settings-card">
+                    <span className="square-icon"><BadgeCheck size={20} /></span>
+                    <h2>Public proof page</h2>
+                    {!me.data ? <p>Sign in to publish a server-verified proof page.</p> : (
+                      <>
+                        <p>Publishing shows your saved display name (or account name). Opt in only when you are ready. Your email, CV, applications, notes, and private progress never appear.</p>
+                        <form onSubmit={async event => {
+                          event.preventDefault();
+                          try {
+                            await enableProof.mutateAsync({ handle: proofHandle });
+                            await refreshProof();
+                            setNotice("Your proof page is public.");
+                          } catch (error: any) {
+                            setNotice(error?.message || "Could not publish that handle.");
+                          }
+                        }}>
+                          <label>Public handle<input value={proofHandle} onChange={event => setProofHandle(event.target.value.toLowerCase())} minLength={3} maxLength={48} pattern="[a-z0-9](?:[a-z0-9-]*[a-z0-9])?" placeholder="mina-data" required /></label>
+                          <button className="primary" disabled={enableProof.isPending}>{proofSettings.data?.enabled ? "Update public handle" : "Enable proof page"}</button>
+                        </form>
+                        {proofSettings.data?.enabled && proofSettings.data.handle && (
+                          <div className="button-row">
+                            <a className="secondary" href={`/p/${proofSettings.data.handle}`} target="_blank" rel="noopener noreferrer">View public page <ArrowUpRight size={15} /></a>
+                            <button className="danger" disabled={disableProof.isPending} onClick={() => disableProof.mutate(undefined, { onSuccess: () => { void refreshProof(); setNotice("Your proof page is private."); } })}>Disable public page</button>
+                          </div>
+                        )}
+                        <label className="checkline"><input type="checkbox" checked={Boolean(proofSettings.data?.showTargets)} disabled={targetVisibility.isPending || !proofSettings.data} onChange={event => targetVisibility.mutate({ visible: event.target.checked }, { onSuccess: () => { void refreshProof(); } })} />Show my target role and industry</label>
+                        <h3>Credential visibility</h3>
+                        {proofSettings.isError && <p role="alert">Could not load proof settings. Please retry when the account connection is available.</p>}
+                        {!proofSettings.data?.credentials.length && <p className="muted">Pass a server-graded skill assessment or SQL lab to add verified credentials.</p>}
+                        {proofSettings.data?.credentials.map(credential => (
+                          <label className="checkline" key={credential.id}>
+                            <input type="checkbox" checked={credential.visible} disabled={credentialVisibility.isPending} onChange={event => credentialVisibility.mutate({ credentialId: credential.id, visible: event.target.checked }, { onSuccess: () => { void refreshProof(); } })} />
+                            {credential.type === "skill_cert" ? skillById[credential.refId]?.title.en || credential.refId : sqlLabChallenges.find(item => item.id === credential.refId)?.title || credential.refId}
+                          </label>
+                        ))}
+                        <div className="proof-preview-card"><h3>Private preview</h3>{proofPreview.data && <ProofPreview proof={proofPreview.data} />}</div>
+                      </>
+                    )}
+                  </section>
                   <section className="card study-session-card">
                     <span className="square-icon">
                       <Clock3 size={20} />
@@ -3083,19 +3211,64 @@ export default function Home() {
   );
 }
 
+function ProofPreview({
+  proof,
+}: {
+  proof: {
+    displayName: string;
+    targetRole: string | null;
+    industry: string | null;
+    credentials: Array<{
+      id: string;
+      type: string;
+      title: string;
+      verifiedAt: Date | string;
+    }>;
+  };
+}) {
+  return (
+    <div className="proof-preview">
+      <div className="proof-preview-header">
+        <strong>{proof.displayName}</strong>
+        {(proof.targetRole || proof.industry) && (
+          <small>{[proof.targetRole, proof.industry].filter(Boolean).join(" · ")}</small>
+        )}
+      </div>
+      <p><BadgeCheck size={16} /> Submitted answers or SQL were checked by the server when earned. Practice solutions are available in the app; this is not proctored or independent certification.</p>
+      <div className="proof-preview-grid">
+        {proof.credentials.map(credential => (
+          <article key={credential.id}>
+            <small>{credential.type === "skill_cert" ? "VERIFIED SKILL" : credential.type === "lab_pass" ? "VERIFIED SQL LAB" : "VERIFIED PROJECT"}</small>
+            <strong>{credential.title}</strong>
+            <time dateTime={new Date(credential.verifiedAt).toISOString()}>
+              {new Date(credential.verifiedAt).toLocaleDateString()}
+            </time>
+          </article>
+        ))}
+        {!proof.credentials.length && <span className="muted">No visible credentials yet.</span>}
+      </div>
+    </div>
+  );
+}
+
 function SqlPracticeLab({
   initialChallengeId,
   onChoose,
   state,
   update,
+  serverVerificationEnabled,
+  onVerified,
   openRoadmap,
 }: {
   state: LearningState;
   update: (fn: (state: LearningState) => LearningState) => void;
+  serverVerificationEnabled: boolean;
+  onVerified: () => void;
   openRoadmap: (topicId: string) => void;
   initialChallengeId: string;
   onChoose: (id: string) => void;
 }) {
+  const verifySql = trpc.grading.sql.useMutation();
   const { challenges: allSqlChallenges, tables: sqlLabTables } = sqlContext(
     state.profile.sector,
   );
@@ -3165,6 +3338,7 @@ function SqlPracticeLab({
     setHintCount(0);
   };
   const run = async () => {
+    verifySql.reset();
     setRunning(true);
     const nextResult = await runSqlInWorker(
       challenge.id,
@@ -3178,6 +3352,16 @@ function SqlPracticeLab({
         ? recordLabAttempt(current, challenge.id, query, nextResult)
         : current,
     );
+    if (serverVerificationEnabled)
+      verifySql.mutate(
+        {
+          challengeId: challenge.id,
+          query,
+          sector: state.profile.sector,
+          clientPassed: nextResult.passed,
+        },
+        { onSuccess: grade => grade.passed && onVerified() },
+      );
     setRunning(false);
   };
   return (
@@ -3341,6 +3525,7 @@ function SqlPracticeLab({
               {running ? "Running…" : "Run query"}
             </button>
           </div>
+          {serverVerificationEnabled && <p role="status">{verifySql.isPending ? "Checking this submission on the server…" : verifySql.isError ? "Server verification was unavailable. Your local practice result is kept; run again to retry verification." : verifySql.data ? (verifySql.data.passed ? "Server verification passed." : "Server verification did not pass. No credential was issued for this submission.") : ""}</p>}
           <div className="query-result" aria-live="polite">
             {!result ? (
               <div className="result-empty">
@@ -3535,6 +3720,8 @@ function QuizCard({
   lockedMessage,
   locked = false,
   compact = false,
+  serverVerificationEnabled,
+  onVerified,
 }: {
   title: string;
   questions: QuizQuestion[];
@@ -3545,7 +3732,10 @@ function QuizCard({
   lockedMessage?: string;
   locked?: boolean;
   compact?: boolean;
+  serverVerificationEnabled: boolean;
+  onVerified: () => void;
 }) {
+  const verifyQuiz = trpc.grading.quiz.useMutation();
   const lang = platformLanguage(state.profile.language);
   const t = (en: string, ar: string) => (lang === "ar" ? ar : en);
   const [open, setOpen] = useState(false);
@@ -3556,6 +3746,13 @@ function QuizCard({
     .find(attempt => attempt.kind === kind && attempt.targetId === targetId);
   const passMark = kind === "topic" ? 80 : kind === "skill" ? 95 : 80;
   const submit = () => {
+    verifyQuiz.reset();
+    const score = Math.round(
+      (questions.filter(question => answers[question.id] === question.answer)
+        .length /
+        questions.length) *
+        100,
+    );
     update(current =>
       recordQuizResult(
         current,
@@ -3567,6 +3764,53 @@ function QuizCard({
         new Date().toISOString()
       )
     );
+    if (serverVerificationEnabled) {
+      const cumulativeSkills =
+        kind === "cumulative"
+          ? targetId.replace(/^review-/, "").split("+")
+          : undefined;
+      const requiredLevels = cumulativeSkills
+        ? Object.fromEntries(
+            cumulativeSkills.map(skillId => [
+              skillId,
+              Math.max(
+                1,
+                ...questions
+                  .filter(question => question.topicId.startsWith(`${skillId}-`))
+                  .map(question =>
+                    skillById[skillId].topics.find(
+                      topic => topic.id === question.topicId,
+                    )?.level ?? 1,
+                  ),
+              ),
+            ]),
+          )
+        : undefined;
+      const targetLevel =
+        kind === "skill"
+          ? Math.max(
+              1,
+              ...questions.map(
+                question =>
+                  skillById[targetId].topics.find(
+                    topic => topic.id === question.topicId,
+                  )?.level ?? 1,
+              ),
+            )
+          : undefined;
+      verifyQuiz.mutate(
+        {
+          kind,
+          targetId,
+          answers,
+          targetLevel,
+          cumulativeSkills,
+          requiredLevels,
+          clientPassed: score >= (kind === "skill" ? 95 : 80),
+        },
+        { onSuccess: grade => grade.passed && onVerified() },
+      );
+    }
     setReviewed(true);
   };
   return (
@@ -3679,6 +3923,7 @@ function QuizCard({
                   setOpen(false);
                   setReviewed(false);
                   setAnswers({});
+                  verifyQuiz.reset();
                 }}
               >
                 {t("Close review", "اقفل الـReview")}
@@ -3692,6 +3937,7 @@ function QuizCard({
           </div>
         </div>
       )}
+      {serverVerificationEnabled && <p role="status">{verifyQuiz.isPending ? "Checking your answers on the server…" : verifyQuiz.isError ? "Server verification was unavailable. Your local result is kept; reopen the quiz to retry." : verifyQuiz.data ? (verifyQuiz.data.passed ? "Server verification passed." : "Server verification did not pass. No credential was issued for this submission.") : ""}</p>}
       {latest && (
         <p className="quiz-result">
           {latest.passed
@@ -3715,12 +3961,16 @@ function ReviewCenter({
   requiredLevels,
   update,
   openLesson,
+  serverVerificationEnabled,
+  onVerified,
 }: {
   openLesson: (topicId: string) => void;
   state: LearningState;
   requiredIds: string[];
   requiredLevels: Record<string, number>;
   update: (fn: (s: LearningState) => LearningState) => void;
+  serverVerificationEnabled: boolean;
+  onVerified: () => void;
 }) {
   const [reviewFilter, setReviewFilter] = useState<
     "all" | "due" | "scheduled" | "locked"
@@ -3866,6 +4116,8 @@ function ReviewCenter({
                   targetId={targetId}
                   state={state}
                   update={update}
+                  serverVerificationEnabled={serverVerificationEnabled}
+                  onVerified={onVerified}
                   locked={locked}
                   lockedMessage={
                     t(

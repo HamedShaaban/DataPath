@@ -22,9 +22,56 @@ import { invokeLLM } from "./_core/llm";
 import { sdk } from "./_core/sdk";
 import { createLocalAccount, getLocalAccount } from "./db";
 import { requestSessionToken, revokeSession, revokeAllSessions } from "./sessions";
+import { gradeQuizSubmission, gradeSqlSubmission } from "./proof-grading";
+import {
+  disableProofPage,
+  enableProofPage,
+  getProofSettings,
+  getProofPreview,
+  getPublicProof,
+  saveVerifiedCredential,
+  setCredentialVisibility,
+  setTargetVisibility,
+} from "./proof-store";
 const scrypt = promisify(scryptCallback);
 const emailSchema = z.string().trim().toLowerCase().email().max(320);
+const handleSchema = z
+  .string()
+  .trim()
+  .toLowerCase()
+  .min(3)
+  .max(48)
+  .regex(/^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/, "Use lowercase letters, numbers and single hyphens.")
+  .refine(value => !value.includes("--"), "Use single hyphens only.")
+  .refine(value => !["api", "admin", "settings", "login"].includes(value), "That handle is reserved.");
 const authCalls = new Map<string, number[]>();
+const publicProofCalls = new Map<string, number[]>();
+const gradingCalls = new Map<number, number[]>();
+function limitGrading(userId: number) {
+  const now = Date.now();
+  for (const [id, calls] of gradingCalls)
+    if (calls[calls.length - 1] <= now - 60_000) gradingCalls.delete(id);
+  const recent = (gradingCalls.get(userId) ?? []).filter(time => now - time < 60_000);
+  if (recent.length >= 20 || (!gradingCalls.has(userId) && gradingCalls.size >= 10_000))
+    throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "Too many verification attempts. Try again in a minute." });
+  recent.push(now);
+  gradingCalls.set(userId, recent);
+}
+function limitPublicProof(ip: string) {
+  const now = Date.now();
+  for (const [id, calls] of publicProofCalls)
+    if (calls[calls.length - 1] <= now - 15 * 60_000) publicProofCalls.delete(id);
+  const recent = (publicProofCalls.get(ip) || []).filter(
+    time => now - time < 15 * 60_000
+  );
+  if (recent.length >= 60 || (!publicProofCalls.has(ip) && publicProofCalls.size >= 10_000))
+    throw new TRPCError({
+      code: "TOO_MANY_REQUESTS",
+      message: "Too many proof page requests. Try again later.",
+    });
+  recent.push(now);
+  publicProofCalls.set(ip, recent);
+}
 function limitAuth(ip: string) {
   const now = Date.now();
   const recent = (authCalls.get(ip) || []).filter(t => now - t < 3600000);
@@ -276,6 +323,77 @@ export const appRouter = router({
             message: "Coach is temporarily unavailable. Try again later.",
           });
         }
+      }),
+  }),
+  grading: router({
+    sql: protectedProcedure
+      .input(
+        z.object({
+          challengeId: z.string().min(1).max(180),
+          query: z.string().min(1).max(4000),
+          sector: z.enum([
+            "banking", "finance", "marketing", "healthcare", "retail",
+            "technology", "telecom", "government", "general",
+          ]),
+          clientPassed: z.boolean().optional(),
+        })
+      )
+      .mutation(async ({ ctx, input }) => {
+        limitGrading(ctx.user.id);
+        const grade = await gradeSqlSubmission(input);
+        if (grade.passed)
+          await saveVerifiedCredential(ctx.user.id, "lab_pass", input.challengeId, grade);
+        return grade;
+      }),
+    quiz: protectedProcedure
+      .input(
+        z.object({
+          kind: z.enum(["topic", "level", "skill", "cumulative"]),
+          targetId: z.string().min(1).max(180),
+          answers: z.record(z.string().max(180), z.number().int().min(0).max(20)),
+          targetLevel: z.number().int().min(1).max(3).optional(),
+          cumulativeSkills: z.array(z.string().max(80)).max(2).optional(),
+          requiredLevels: z.record(z.string().max(80), z.number().int().min(1).max(3)).optional(),
+          clientPassed: z.boolean().optional(),
+        })
+      )
+      .mutation(async ({ ctx, input }) => {
+        limitGrading(ctx.user.id);
+        const grade = (() => {
+          try {
+            return gradeQuizSubmission(input);
+          } catch (error) {
+            throw new TRPCError({
+              code: "BAD_REQUEST",
+              message: error instanceof Error ? error.message : "Invalid quiz submission",
+            });
+          }
+        })();
+        if (grade.passed && input.kind === "skill")
+          await saveVerifiedCredential(ctx.user.id, "skill_cert", input.targetId, { ...grade, targetLevel: input.targetLevel ?? 3 });
+        return grade;
+      }),
+  }),
+  proof: router({
+    enable: protectedProcedure
+      .input(z.object({ handle: handleSchema }))
+      .mutation(({ ctx, input }) => enableProofPage(ctx.user.id, input.handle)),
+    disable: protectedProcedure.mutation(({ ctx }) => disableProofPage(ctx.user.id)),
+    settings: protectedProcedure.input(z.object({ accountId: z.number().int() }).optional()).query(({ ctx }) => getProofSettings(ctx.user.id)),
+    preview: protectedProcedure.input(z.object({ accountId: z.number().int() }).optional()).query(({ ctx }) => getProofPreview(ctx.user.id)),
+    setTargetVisibility: protectedProcedure
+      .input(z.object({ visible: z.boolean() }))
+      .mutation(({ ctx, input }) => setTargetVisibility(ctx.user.id, input.visible)),
+    setCredentialVisibility: protectedProcedure
+      .input(z.object({ credentialId: z.string().uuid(), visible: z.boolean() }))
+      .mutation(({ ctx, input }) =>
+        setCredentialVisibility(ctx.user.id, input.credentialId, input.visible)
+      ),
+    getPublic: publicProcedure
+      .input(z.object({ handle: handleSchema }))
+      .query(({ ctx, input }) => {
+        limitPublicProof(ctx.req.ip || "unknown");
+        return getPublicProof(input.handle);
       }),
   }),
 });
