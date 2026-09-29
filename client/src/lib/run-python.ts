@@ -5,7 +5,7 @@ import {
 import {
   pythonFixtures,
   expectedPython,
-  pythonHarness,
+  pythonHarnessFor,
 } from "@shared/python-practice";
 import type { Sector } from "@shared/industry-practice";
 import type { PracticeResult } from "@shared/practice";
@@ -33,7 +33,7 @@ export function runPythonPractice(
           ),
         45000
       );
-      const fixtures = pythonFixtures(sector);
+      const fixtures = pythonFixtures(sector, id);
       worker.onmessage = ({ data }) => {
         if (data.stage === "ready") {
           clearTimeout(timer);
@@ -62,8 +62,9 @@ export function runPythonPractice(
                 "Practice dataset",
                 "Changed values and input order",
                 "Empty input",
-                "Zero, missing values and pending records",
-              ][index],
+                id === "python-stream-summary" ? "Zero, negatives, missing values and pending records" : "Zero, missing values and pending records",
+                "Category groups, ties and negative adjustments",
+              ][index] || `Dataset ${index + 1}`,
               passed:
                 typeof expected === "number"
                   ? typeof actual === "number" &&
@@ -77,11 +78,12 @@ export function runPythonPractice(
             checks,
             output: JSON.stringify(outputs[0]),
             message: passed
-              ? "Your Python function passed all four datasets."
+              ? `Your Python function passed all ${fixtures.length} datasets.`
               : pythonOutputFeedback(
                   outputs,
                   fixtures.map(rows => expectedPython(id, rows)),
-                  checks.map(check => check.passed)
+                  checks.map(check => check.passed),
+                  id
                 ),
           });
         } catch {
@@ -93,7 +95,7 @@ export function runPythonPractice(
       worker.postMessage({
         source,
         fixtures: JSON.stringify(fixtures),
-        harness: pythonHarness,
+        harness: pythonHarnessFor(id),
       });
     } catch {
       fail("This browser could not start Python practice.");

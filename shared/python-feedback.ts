@@ -1,4 +1,6 @@
 export function pythonErrorFeedback(error: string) {
+  if (/One-pass input/.test(error))
+    return "This source can only be traversed once. Calculate count, total and bounds in the same loop instead of calling separate passes.";
   if (/IndentationError|TabError/.test(error))
     return "Check indentation: use consistent spaces inside solve(rows), loops and conditions. Avoid mixing tabs and spaces.";
   if (/SyntaxError/.test(error))
@@ -18,7 +20,8 @@ export function pythonErrorFeedback(error: string) {
 export function pythonOutputFeedback(
   outputs: unknown[],
   expected: unknown[],
-  checks: boolean[]
+  checks: boolean[],
+  challengeId = ""
 ) {
   if (outputs.some(value => value === null))
     return "At least one call returned None. Use return inside solve(rows), not only print, and check that every relevant branch returns a result.";
@@ -35,6 +38,14 @@ export function pythonOutputFeedback(
     )
   )
     return "This exercise expects a list. Return a list of the requested values, including an empty list when the task requires it.";
+  if (checks[2] === false)
+    return "The empty-input check failed. Start with the exercise's specified empty result, then update it only when a row qualifies. Concept to review: accumulator initialization and safe division.";
+  if (checks[3] === false)
+    return "The boundary-data check failed. Treat None separately from zero, apply the completed-status filter, and keep eligible negative values. Concept to review: explicit eligibility conditions instead of truthiness.";
+  if (checks[4] === false && challengeId === "python-top-three")
+    return "The tie/adjustment check failed. Sort by value descending and ID ascending for equal values; retain at most three candidates after each row. Concept to review: composite sort keys and bounded selection.";
+  if (checks[4] === false && challengeId === "python-category-totals")
+    return "The category/adjustment check failed. Combine repeated categories, retain a group whose total becomes zero, and sort by category. Concept to review: grouping keys and cancellation versus missing data.";
   if (checks[0] && checks.some(passed => !passed))
     return "The displayed example passes, but another dataset does not. Check empty input, missing values and boundaries; calculate from rows instead of hard-coding an answer.";
   return "Your function ran, but the result differs. Check the eligibility rule, calculation and required output order against a small manual example.";

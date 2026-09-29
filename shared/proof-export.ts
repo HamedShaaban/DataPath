@@ -1,4 +1,5 @@
-import { careerById, sectorById, skillById } from "./catalog";
+import { learningPathTitle } from "./learning";
+import { sectorById, skillById } from "./catalog";
 import { skillEvidenceMatrix, type LearningState } from "./learning";
 /** Explicit allowlist: never serialize the learner state into a shareable report. */
 export function selectedProof(state: LearningState, selectedSkills: string[]) {
@@ -8,7 +9,7 @@ export function selectedProof(state: LearningState, selectedSkills: string[]) {
   if (!rows.length) return "";
   return [
     "# DataPath selected learning records",
-    `Role: ${careerById[state.profile.role].title.en}`,
+    `Role: ${learningPathTitle(state.profile).en}`,
     `Industry: ${sectorById[state.profile.sector].title}`,
     "Learner-controlled export. Local practice and assessment records are not independent certification. Evidence counts indicate saved notes, not expert review.",
     "",

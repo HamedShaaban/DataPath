@@ -1,7 +1,19 @@
+import { engineeringLessons } from "./engineering-lessons";
 export const authoredLessons: Record<
   string,
   { brief: string; example: string; mistake: string }
 > = {
+  ...engineeringLessons,
+  "sql-10": {
+    brief: "A recursive CTE starts with an anchor and repeatedly evaluates a recursive term. Termination is part of correctness: hierarchy data may contain cycles. Track visited keys or use an explicit bound; a depth bound alone does not prove the hierarchy is valid.",
+    example: "WITH RECURSIVE walk(n, path) AS (\n  SELECT 1, ARRAY[1]\n  UNION ALL\n  SELECT n + 1, path || (n + 1) FROM walk\n  WHERE n < 4 AND NOT (n + 1 = ANY(path))\n) SELECT n, path FROM walk ORDER BY n;",
+    mistake: "UNION only removes identical output rows. If a depth or path column changes on each visit, it does not automatically stop cycles. Test a repeated identifier and inspect termination.",
+  },
+  "python-10": {
+    brief: "Generators yield records lazily so a pipeline need not retain every input row. Memory remains bounded only when consumers avoid collecting all results. Generators are exhausted after traversal, so totals and validation should share a deliberate single pass or recreate the source.",
+    example: "def positive_values(rows):\n    for row in rows:\n        if row is not None and row > 0:\n            yield row\n\nvalues = positive_values([3, None, -1, 5])\nassert sum(values) == 8\nassert list(values) == []  # already consumed",
+    mistake: "Wrapping a generator in list() materializes its output. An empty second pass may mean exhaustion rather than an empty dataset; test both cases separately.",
+  },
   "sql-1": {
     brief:
       "SELECT chooses output fields; WHERE selects rows before aggregation. Combine conditions with AND when every condition is required, and include boundary values deliberately.",

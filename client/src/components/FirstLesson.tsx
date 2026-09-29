@@ -6,10 +6,12 @@ export function FirstLesson({
   progress,
   save,
   next,
+  nextLabel = "Next: explore your learning path",
 }: {
   progress?: FirstLessonProgress;
   save: (value: FirstLessonProgress) => void;
   next: () => void;
+  nextLabel?: string;
 }) {
   const step = progress?.step ?? 0;
   const milestones = [
@@ -106,7 +108,7 @@ export function FirstLesson({
             exercise, not proof of career readiness.
           </p>
           <button className="primary" onClick={next}>
-            Next: explore your learning path <ArrowRight size={16} />
+            {nextLabel} <ArrowRight size={16} />
           </button>
           <button
             className="text-button"
@@ -124,7 +126,7 @@ export function FirstLesson({
           <p className="soft-tag">
             Step {step + 1} of 4 ·{" "}
             {step > 0
-              ? "Your completed steps are saved. Continue below."
+              ? "Your completed steps are recorded here. Continue below."
               : "One small step at a time."}
           </p>
           <div className="lab-table-wrap">

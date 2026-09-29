@@ -217,7 +217,7 @@ export const businessSectors = [
 export const sectorById = Object.fromEntries(
   businessSectors.map(sector => [sector.id, sector])
 );
-export const catalogVersion = "2026.09.19";
+export const catalogVersion = "2026.09.23";
 const definitions: Array<
   [string, string, string, string, string, string, string, string]
 > = [
@@ -527,6 +527,16 @@ export const skills: Skill[] = definitions.map(
     ),
   })
 );
+// Append IDs so existing lesson progress and prerequisite links remain stable.
+for (const [skillId, en, ar] of [
+  ["sql", "Recursive queries and cycle safety", "الاستعلامات التكرارية ومنع الدورات"],
+  ["python", "Streaming data and lazy pipelines", "تدفق البيانات والمعالجة الكسولة"],
+]) {
+  skills.find(skill => skill.id === skillId)!.topics.push({
+    id: `${skillId}-10`, title: copy(en, ar), level: 3, hours: 8,
+    prerequisites: [`${skillId}-9`],
+  });
+}
 export const skillById = Object.fromEntries(skills.map(s => [s.id, s]));
 export const careers: Career[] = [
   {
@@ -848,6 +858,10 @@ export const careers: Career[] = [
       privacy: 2,
     },
   },
+  {"id": "marketing-data-analyst", "title": {"en": "Marketing Data Analyst", "ar": "محلل بيانات التسويق"}, "description": {"en": "Measure funnels, campaigns and retention with validated experiments.", "ar": "حلّل الحملات ومسارات التحويل والاحتفاظ باستخدام تجارب موثوقة."}, "family": "analytics", "requirements": {"sql": 3, "statistics": 2, "experimentation": 3, "excel": 2, "storytelling": 3, "powerbi": 2}},
+  {"id": "risk-data-analyst", "title": {"en": "Risk Data Analyst", "ar": "محلل بيانات المخاطر"}, "description": {"en": "Analyze risk indicators, validate assumptions and document controls.", "ar": "حلّل مؤشرات المخاطر وتحقق من الافتراضات ووثّق الضوابط."}, "family": "analytics", "requirements": {"sql": 3, "python": 2, "statistics": 3, "quality": 3, "governance": 2, "storytelling": 2}},
+  {"id": "bi-developer", "title": {"en": "BI Developer", "ar": "مطور ذكاء الأعمال"}, "description": {"en": "Build governed semantic models and reliable reporting products.", "ar": "ابنِ نماذج دلالية محكومة ومنتجات تقارير موثوقة."}, "family": "analytics", "requirements": {"sql": 3, "modeling": 3, "powerbi": 3, "dbt": 2, "quality": 2, "storytelling": 2}},
+  {"id": "data-platform-engineer", "title": {"en": "Data Platform Engineer", "ar": "مهندس منصات البيانات"}, "description": {"en": "Build reliable shared data infrastructure, orchestration and access controls.", "ar": "ابنِ بنية بيانات مشتركة موثوقة مع التنسيق وضوابط الوصول."}, "family": "engineering", "requirements": {"sql": 3, "python": 3, "pipelines": 3, "cloud": 3, "airflow": 3, "engineering": 3, "governance": 2}},
 ];
 export const careerById = Object.fromEntries(careers.map(r => [r.id, r]));
 // Minimum prerequisite skill levels; expanded transitively by the planner.

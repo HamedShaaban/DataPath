@@ -1,3 +1,4 @@
+import { engineeringLessons } from "./engineering-lessons";
 import { industryMissions } from "./industry-challenge";
 import { skills, skillById, sectorById } from "./catalog";
 import { requirements, type Profile, type LearningState } from "./learning";
@@ -247,6 +248,33 @@ export function practiceChallenges(profile: Profile): PracticeChallenge[] {
       result.push(c);
   };
   add({
+    id: "python-category-totals", skillId: "python", topicId: "python-5", kind: "python",
+    title: "Test a grouped industry summary",
+    task: "Write solve(rows) returning a list of [category, total] pairs, sorted by category. Sum known values from completed records only. Keep groups with a zero total; exclude groups with no eligible records. Return [] for empty input. Categories are strings. Test missing values, negative adjustments and changing category names.",
+    starter: "def solve(rows):\n    totals = {}\n    return []",
+    reference: "def solve(rows):\n    totals = {}\n    for row in rows:\n        if row['status'] == 'completed' and row['value'] is not None:\n            key = row['category']\n            totals[key] = totals.get(key, 0) + row['value']\n    return [[key, totals[key]] for key in sorted(totals)]",
+    hints: ["Filter status and None before creating a group.", "Accumulate values in a dictionary keyed by category.", "Sort category keys, not totals; preserve zero totals."],
+    rubric: [], lesson: "Test a transformation with more than one group and with values that cancel. Group membership and output order are part of the contract.",
+  });
+  add({
+    id: "python-top-three", skillId: "python", topicId: "python-7", kind: "python",
+    title: "Build a compact top-three review queue",
+    task: "Write solve(rows) returning up to three IDs for completed records with known values, ordered by value descending, then ID ascending for ties. IDs are unique integers. Include zero and negative values. Return [] when none qualify. Keep a candidate list of three records after each iteration instead of sorting the entire input. Checks verify output, not memory usage; explain the O(n) fixed-k scan in your notes.",
+    starter: "def solve(rows):\n    candidates = []\n    return []",
+    reference: "def solve(rows):\n    candidates = []\n    for row in rows:\n        if row['status'] != 'completed' or row['value'] is None:\n            continue\n        candidates.append(row)\n        candidates.sort(key=lambda r: (-r['value'], r['id']))\n        del candidates[3:]\n    return [r['id'] for r in candidates]",
+    hints: ["Discard pending records and None, not zero.", "A composite key (-value, id) gives descending values with ascending ID ties.", "After each insertion, remove candidates beyond position three; the candidate buffer is bounded by four during insertion."],
+    rubric: [], lesson: "For a fixed k, maintaining a small candidate buffer uses O(k) extra space and O(n) time. These checks validate answers; use profiling to substantiate memory claims.",
+  });
+  add({
+    id: "python-stream-summary", skillId: "python", topicId: "python-10", kind: "python",
+    title: "Summarise a one-pass data stream",
+    task: "Write solve(rows) for a one-pass iterable of dictionaries, not a list. Return [count, total, minimum, maximum] for completed records with a known value. Ignore pending records and None, but include zero and negative values. If none qualify return [0, 0, None, None]. Consume rows only once; use running accumulators instead of materializing the stream. Automated checks verify results and one-pass compatibility, not peak memory usage.",
+    starter: "def solve(rows):\n    # Track count, total and bounds in one pass.\n    return [0, 0, None, None]",
+    reference: "def solve(rows):\n    count, total, low, high = 0, 0, None, None\n    for row in rows:\n        value = row['value']\n        if row['status'] != 'completed' or value is None:\n            continue\n        count += 1\n        total += value\n        low = value if low is None else min(low, value)\n        high = value if high is None else max(high, value)\n    return [count, total, low, high]",
+    hints: ["Do not call len(rows), index rows, or traverse it again.", "Initialize bounds with None; zero is not a safe minimum for positive-only data.", "Update every accumulator within the same eligible-record branch."],
+    rubric: [], lesson: "A one-pass source cannot be rewound. Count, total and bounds can be calculated together without retaining all records.",
+  });
+  add({
     id: "python-total",
     skillId: "python",
     topicId: "python-2",
@@ -359,6 +387,31 @@ export function practiceChallenges(profile: Profile): PracticeChallenge[] {
       lesson:
         "Define numerator, denominator and exclusions before calculating a rate. A completion rate does not describe value, profitability or causal impact.",
     });
+  for (const skillId of ["sql", "python"]) {
+    if (required[skillId] !== 3) continue;
+    const sql = skillId === "sql";
+    result.push({
+      id: `advanced-${skillId}-10`, skillId, topicId: `${skillId}-10`, kind: "case",
+      title: sql ? "Audit a recursive hierarchy" : "Build a bounded-memory pipeline",
+      task: `${sectorById[profile.sector].title}: ${sql ? "Model a synthetic organizational hierarchy. Write a recursive query, include a cycle case, and demonstrate termination and correct depth." : "Process synthetic records with a generator. Validate totals, empty input, invalid rows and a second iteration. Explain which operations retain data in memory."} Use no private customer data.`,
+      starter: "", hints: [sql ? "Track visited identifiers and stop when an identifier repeats." : "Consume each record once; do not materialize the whole input."],
+      rubric: ["Reproducible example included", "Edge case tested", "Result reconciled", "Limitations explained"],
+      lesson: "This submission is self-reviewed. Include code and observed results; completion is not independent verification.",
+    });
+  }
+  for (const [topicId, lesson] of Object.entries(engineeringLessons)) {
+    const skillId = topicId.split("-")[0];
+    const topic = skillById[skillId].topics.find(t => t.id === topicId)!;
+    if (!required[skillId] || topic.level > required[skillId]) continue;
+    result.push({
+      id: `engineering-${topicId}`, skillId, topicId, kind: "case",
+      title: `${topic.title.en}: implementation review`,
+      task: `${lesson.task} ${sectorById[profile.sector].title} context: ${industryPractice[profile.sector].decision}. Use synthetic data; add documented keys, timestamps or versions when the starter data lacks them. External tool task; DataPath does not run dbt, Airflow, Spark or an ETL platform.`,
+      starter: "", hints: [lesson.example, lesson.mistake],
+      rubric: ["Reproducible artifact and setup included", "Expected and observed results recorded", "Failure case and recovery demonstrated", "Industry assumptions and limitations documented"],
+      lesson: lesson.brief,
+    });
+  }
   return result;
 }
 export type PracticeResult = {
@@ -432,7 +485,7 @@ export function evaluatePractice(
   };
 }
 export function practiceKey(profile: Profile, id: string) {
-  return `${profile.role}:${profile.sector}:${id}`;
+  return `${profile.learningMode === "skill" ? `skill-${profile.focusSkill}` : profile.role}:${profile.sector}:${id}`;
 }
 export function recordPractice(
   state: LearningState,

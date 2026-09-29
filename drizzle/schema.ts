@@ -1,7 +1,10 @@
 import {
   integer,
   bigint,
+  boolean,
+  check,
   index,
+  jsonb,
   pgEnum,
   pgTable,
   text,
@@ -9,26 +12,34 @@ import {
   varchar,
   uniqueIndex,
 } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
 
 export const userRole = pgEnum("user_role", ["user", "admin"]);
 
-export const users = pgTable("users", {
-  id: integer("id").generatedByDefaultAsIdentity().primaryKey(),
-  openId: varchar("openId", { length: 64 }).notNull().unique(),
-  name: text("name"),
-  email: varchar("email", { length: 320 }),
-  loginMethod: varchar("loginMethod", { length: 64 }),
-  role: userRole("role").default("user").notNull(),
-  createdAt: timestamp("createdAt", { withTimezone: true })
-    .defaultNow()
-    .notNull(),
-  updatedAt: timestamp("updatedAt", { withTimezone: true })
-    .defaultNow()
-    .notNull(),
-  lastSignedIn: timestamp("lastSignedIn", { withTimezone: true })
-    .defaultNow()
-    .notNull(),
-});
+export const users = pgTable(
+  "users",
+  {
+    id: integer("id").generatedByDefaultAsIdentity().primaryKey(),
+    openId: varchar("openId", { length: 64 }).notNull().unique(),
+    name: text("name"),
+    email: varchar("email", { length: 320 }),
+    loginMethod: varchar("loginMethod", { length: 64 }),
+    role: userRole("role").default("user").notNull(),
+    publicHandle: varchar("publicHandle", { length: 48 }),
+    proofPageEnabled: boolean("proofPageEnabled").notNull().default(false),
+    showProofTargets: boolean("showProofTargets").notNull().default(false),
+    createdAt: timestamp("createdAt", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp("updatedAt", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    lastSignedIn: timestamp("lastSignedIn", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  table => [uniqueIndex("users_public_handle_idx").on(table.publicHandle)]
+);
 
 export const workspaces = pgTable("workspaces", {
   id: integer("id").generatedByDefaultAsIdentity().primaryKey(),
@@ -114,6 +125,38 @@ export const learningStates = pgTable("learningStates", {
     .defaultNow()
     .notNull(),
 });
+
+export const verifiedCredentials = pgTable(
+  "verifiedCredentials",
+  {
+    id: varchar("id", { length: 36 }).primaryKey(),
+    userId: integer("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    type: varchar("type", { length: 20 }).notNull(),
+    refId: varchar("refId", { length: 180 }).notNull(),
+    verifiedAt: timestamp("verifiedAt", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    evidenceHash: varchar("evidenceHash", { length: 64 }).notNull(),
+    serverScore: jsonb("serverScore").notNull(),
+    visible: boolean("visible").default(true).notNull(),
+  },
+  table => [
+    index("verified_credentials_user_idx").on(table.userId),
+    uniqueIndex("verified_credentials_user_type_ref_idx").on(
+      table.userId,
+      table.type,
+      table.refId
+    ),
+    check(
+      "verified_credentials_type_check",
+      sql`${table.type} in ('skill_cert', 'lab_pass', 'project')`
+    ),
+  ]
+);
+
+export type VerifiedCredential = typeof verifiedCredentials.$inferSelect;
 
 export const localAccounts = pgTable("localAccounts", {
   userId: integer("userId").primaryKey(),

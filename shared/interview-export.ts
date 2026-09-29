@@ -1,4 +1,5 @@
-import { careerById, sectorById, type Lang } from "./catalog";
+import { learningPathTitle } from "./learning";
+import { sectorById, type Lang } from "./catalog";
 import { interviewBank, type LearningState } from "./learning";
 export function interviewJournal(state: LearningState, language: Lang = "en") {
   const answered = interviewBank(state.profile).filter(question =>
@@ -14,7 +15,7 @@ export function interviewJournal(state: LearningState, language: Lang = "en") {
     count: answered.length,
     text: [
       heading,
-      `${careerById[state.profile.role].title[language]} · ${sectorById[state.profile.sector].title}`,
+      `${learningPathTitle(state.profile)[language]} · ${sectorById[state.profile.sector].title}`,
       note,
       ...answered.map(
         (question, index) =>

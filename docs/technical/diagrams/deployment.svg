@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="510" height="330" preserveAspectRatio="xMinYMin meet" viewBox="0 0 510 330" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="510" height="330"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-330)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="0" y="240" width="150" height="70" rx="5" ry="5" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,97%); fill-rule: evenodd;"/>
+			<text x="31.105000000000004" y="293" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,586) scale(1,-1)">Build environment</text>
+			<text x="35.737500000000004" y="277" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,554) scale(1,-1)">Frozen pnpm install</text>
+			<text x="30.103499999999997" y="265" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,530) scale(1,-1)">Prepare assets + build</text>
+			<rect x="180" y="240" width="150" height="70" rx="5" ry="5" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,97%); fill-rule: evenodd;"/>
+			<text x="211.10500000000002" y="293" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,586) scale(1,-1)">Runtime container</text>
+			<text x="210.7245" y="277" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,554) scale(1,-1)">Node 24 as node user</text>
+			<text x="214.86" y="265" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,530) scale(1,-1)">Express + static dist</text>
+			<rect x="360" y="240" width="150" height="70" rx="5" ry="5" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,97%); fill-rule: evenodd;"/>
+			<text x="399.435" y="293" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,586) scale(1,-1)">HTTPS ingress</text>
+			<text x="399.234" y="277" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,554) scale(1,-1)">One trusted proxy</text>
+			<text x="393.98699999999997" y="265" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,530) scale(1,-1)">Public APP_ORIGIN</text>
+			<rect x="0" y="70" width="150" height="85" rx="5" ry="5" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,97%); fill-rule: evenodd;"/>
+			<text x="40.83" y="138" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,276) scale(1,-1)">Migration step</text>
+			<text x="39.747" y="122" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,244) scale(1,-1)">drizzle-kit migrate</text>
+			<text x="30.9765" y="110" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,220) scale(1,-1)">Separate release step</text>
+			<rect x="180" y="70" width="150" height="85" rx="5" ry="5" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,97%); fill-rule: evenodd;"/>
+			<text x="209.435" y="138" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,276) scale(1,-1)">PostgreSQL / Neon</text>
+			<text x="222.9915" y="122" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,244) scale(1,-1)">External service</text>
+			<text x="223.734" y="110" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,220) scale(1,-1)">TLS connection</text>
+			<text x="212.73149999999998" y="98" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,196) scale(1,-1)">Not inside app image</text>
+			<rect x="360" y="70" width="150" height="85" rx="5" ry="5" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,97%); fill-rule: evenodd;"/>
+			<text x="395.82" y="138" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,276) scale(1,-1)">Learner browser</text>
+			<text x="398.48699999999997" y="122" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,244) scale(1,-1)">Downloads assets</text>
+			<text x="385.23" y="110" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,220) scale(1,-1)">Runs SQL/Python locally</text>
+			<path d="M 150,275 L 180,275 Z" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="180 275, 174.4736 277.3365, 174.4736 272.6635" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; fill: rgb(50%,57%,63%); fill-rule: evenodd;"/>
+			<text x="154.108" y="282.0" style="font-family: Helvetica; font-size: 8px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,564) scale(1,-1)">image</text>
+			<path d="M 360,275 L 330,275 Z" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="330 275, 335.5264 272.6635, 335.5264 277.3365" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; fill: rgb(50%,57%,63%); fill-rule: evenodd;"/>
+			<text x="334.556" y="282.0" style="font-family: Helvetica; font-size: 8px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,564) scale(1,-1)">HTTP</text>
+			<path d="M 75,240 L 75,155 Z" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="75 155, 77.33651 160.5264, 72.66349 160.5264" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; fill: rgb(50%,57%,63%); fill-rule: evenodd;"/>
+			<text x="43.879999999999995" y="204.5" style="font-family: Helvetica; font-size: 8px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,409) scale(1,-1)">reviewed schema</text>
+			<path d="M 150,110 L 180,110 Z" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="180 110, 174.4736 112.3365, 174.4736 107.6635" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; fill: rgb(50%,57%,63%); fill-rule: evenodd;"/>
+			<text x="146.552" y="117.0" style="font-family: Helvetica; font-size: 8px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,234) scale(1,-1)">migrations</text>
+			<path d="M 255,240 L 255,155 Z" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="255 155, 257.3365 160.5264, 252.6635 160.5264" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; fill: rgb(50%,57%,63%); fill-rule: evenodd;"/>
+			<text x="247.44" y="204.5" style="font-family: Helvetica; font-size: 8px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,409) scale(1,-1)">pool</text>
+			<path d="M 435,155 L 435,240 Z" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1;"/>
+			<polygon points="435 240, 432.6635 234.4736, 437.3365 234.4736" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; fill: rgb(50%,57%,63%); fill-rule: evenodd;"/>
+			<text x="421.888" y="204.5" style="font-family: Helvetica; font-size: 8px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,409) scale(1,-1)">HTTPS</text>
+		</g>
+	</g>
+</svg>

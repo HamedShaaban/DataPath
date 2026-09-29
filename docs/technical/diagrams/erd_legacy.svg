@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="510" height="350" preserveAspectRatio="xMinYMin meet" viewBox="0 0 510 350" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="510" height="350"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-350)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="170" y="265" width="170" height="70" rx="5" ry="5" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,97%); fill-rule: evenodd;"/>
+			<text x="241.66" y="318" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,636) scale(1,-1)">users</text>
+			<text x="244.245" y="302" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,604) scale(1,-1)">PK id</text>
+			<text x="227.2395" y="290" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,580) scale(1,-1)">Logical owner</text>
+			<rect x="0" y="140" width="170" height="80" rx="5" ry="5" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,97%); fill-rule: evenodd;"/>
+			<text x="56.375" y="203" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,406) scale(1,-1)">workspaces</text>
+			<text x="51.2365" y="187" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,374) scale(1,-1)">PK id; UQ userId</text>
+			<text x="35.9815" y="175" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,350) scale(1,-1)">Legacy JSON fragments</text>
+			<rect x="340" y="140" width="170" height="80" rx="5" ry="5" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,97%); fill-rule: evenodd;"/>
+			<text x="378.875" y="203" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,406) scale(1,-1)">interviewQuestions</text>
+			<text x="399.2375" y="187" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,374) scale(1,-1)">PK id; userId</text>
+			<text x="374.852" y="175" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,350) scale(1,-1)">UQ owner + questionKey</text>
+			<rect x="0" y="10" width="170" height="80" rx="5" ry="5" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,97%); fill-rule: evenodd;"/>
+			<text x="49.71" y="73" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,146) scale(1,-1)">studySessions</text>
+			<text x="59.2375" y="57" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,114) scale(1,-1)">PK id; userId</text>
+			<text x="49.7335" y="45" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,90) scale(1,-1)">Date and minutes</text>
+			<rect x="340" y="10" width="170" height="80" rx="5" ry="5" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 0.7; fill: rgb(93%,95%,97%); fill-rule: evenodd;"/>
+			<text x="376.37" y="73" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,146) scale(1,-1)">skillProgressHistory</text>
+			<text x="399.2375" y="57" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,114) scale(1,-1)">PK id; userId</text>
+			<text x="384.2345" y="45" style="font-family: Helvetica; font-size: 9px;fill: rgb(0%,0%,0%); stroke:none;" transform="translate(0,90) scale(1,-1)">Integer legacy skillId</text>
+			<path d="M 255,265 L 255,50 Z" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; stroke-dasharray: 4, 3;"/>
+			<path d="M 255,180 L 170,180 Z" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; stroke-dasharray: 4, 3;"/>
+			<polygon points="170 180, 175.5264 177.6635, 175.5264 182.3365" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; fill: rgb(50%,57%,63%); fill-rule: evenodd;"/>
+			<text x="205.828" y="187.0" style="font-family: Helvetica; font-size: 8px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,374) scale(1,-1)">0..1</text>
+			<path d="M 255,180 L 340,180 Z" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; stroke-dasharray: 4, 3;"/>
+			<polygon points="340 180, 334.4736 182.3365, 334.4736 177.6635" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; fill: rgb(50%,57%,63%); fill-rule: evenodd;"/>
+			<text x="283.272" y="187.0" style="font-family: Helvetica; font-size: 8px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,374) scale(1,-1)">0..many</text>
+			<path d="M 255,50 L 170,50 Z" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; stroke-dasharray: 4, 3;"/>
+			<polygon points="170 50, 175.5264 47.66349, 175.5264 52.33651" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; fill: rgb(50%,57%,63%); fill-rule: evenodd;"/>
+			<text x="198.272" y="57.0" style="font-family: Helvetica; font-size: 8px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,114) scale(1,-1)">0..many</text>
+			<path d="M 255,50 L 340,50 Z" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; stroke-dasharray: 4, 3;"/>
+			<polygon points="340 50, 334.4736 52.33651, 334.4736 47.66349" style="stroke: rgb(50%,57%,63%); stroke-linecap: butt; stroke-width: 1; fill: rgb(50%,57%,63%); fill-rule: evenodd;"/>
+			<text x="283.272" y="57.0" style="font-family: Helvetica; font-size: 8px;fill: rgb(14%,23%,32%); stroke:none;" transform="translate(0,114) scale(1,-1)">0..many</text>
+		</g>
+	</g>
+</svg>

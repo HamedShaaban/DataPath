@@ -1,7 +1,7 @@
 import { practiceDataset, type Sector } from "./industry-practice";
-export function pythonFixtures(sector: Sector) {
+export function pythonFixtures(sector: Sector, challengeId?: string) {
   const rows = practiceDataset(sector);
-  return [
+  const fixtures = [
     rows,
     rows
       .map(row => ({
@@ -35,11 +35,34 @@ export function pythonFixtures(sector: Sector) {
       },
     ],
   ];
+  if (challengeId === "python-stream-summary") fixtures[3].push(
+    { id: 13, entity: "Edge", category: "Test", value: -7, status: "completed" },
+    { id: 14, entity: "Edge", category: "Test", value: 12, status: "completed" }
+  );
+  if (["python-category-totals", "python-top-three"].includes(challengeId || "")) fixtures.push([
+    { id: 24, entity: "A", category: "Z", value: 10, status: "completed" },
+    { id: 21, entity: "B", category: "A", value: 10, status: "completed" },
+    { id: 22, entity: "C", category: "Z", value: -10, status: "completed" },
+    { id: 23, entity: "D", category: "A", value: 0, status: "completed" },
+    { id: 25, entity: "E", category: "Absent", value: null, status: "completed" },
+    { id: 26, entity: "F", category: "Absent", value: 999, status: "pending" },
+    { id: 20, entity: "G", category: "A", value: 10, status: "completed" },
+  ]);
+  return fixtures;
 }
 export function expectedPython(
   id: string,
   rows: ReturnType<typeof practiceDataset>
 ) {
+  if (id === "python-category-totals") {
+    const totals = new Map<string, number>();
+    for (const row of rows) if (row.status === "completed" && row.value !== null)
+      totals.set(row.category, (totals.get(row.category) ?? 0) + row.value);
+    return [...totals].sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0);
+  }
+  if (id === "python-top-three") return rows
+    .filter(r => r.status === "completed" && r.value !== null)
+    .sort((a, b) => b.value! - a.value! || a.id - b.id).slice(0, 3).map(r => r.id);
   if (id === "python-clean")
     return rows
       .filter(r => r.value === null)
@@ -49,6 +72,7 @@ export function expectedPython(
     .filter(r => r.status === "completed" && r.value !== null)
     .map(r => r.value!);
   const total = values.reduce((a, b) => a + b, 0);
+  if (id === "python-stream-summary") return [values.length, total, values.length ? Math.min(...values) : null, values.length ? Math.max(...values) : null];
   return id === "python-debug"
     ? values.length
       ? total / values.length
@@ -72,3 +96,21 @@ if not callable(_namespace.get('solve')):
 _outputs = [_namespace['solve'](rows) for rows in _dp_json.loads(_dp_fixtures)]
 _dp_json.dumps(_outputs)
 `;
+
+// Only this exercise changes the input contract; existing exercises still receive lists.
+export function pythonHarnessFor(id: string) {
+  if (id !== "python-stream-summary") return pythonHarness;
+  return pythonHarness.replace(
+    "_outputs = [_namespace['solve'](rows) for rows in _dp_json.loads(_dp_fixtures)]",
+    `class _OnePassRows:
+    def __init__(self, rows):
+        self._rows = rows
+        self._used = False
+    def __iter__(self):
+        if self._used:
+            raise ValueError('One-pass input: rows cannot be traversed twice. Update all accumulators in a single loop.')
+        self._used = True
+        return iter(self._rows)
+_outputs = [_namespace['solve'](_OnePassRows(rows)) for rows in _dp_json.loads(_dp_fixtures)]`
+  );
+}

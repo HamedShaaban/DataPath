@@ -14,6 +14,12 @@ export function readGuestStorage(storage: GuestStorage): LearningState {
   }
   return newState();
 }
+/** Explicit account imports must never silently substitute a blank workspace. */
+export function readGuestForImport(storage: GuestStorage): LearningState {
+  const raw = storage.getItem(guestStorageKey);
+  if (!raw) throw new Error("No guest save available");
+  return learningStateSchema.parse(JSON.parse(raw));
+}
 export function writeGuestStorage(storage: GuestStorage, state: LearningState) {
   const raw = storage.getItem(guestStorageKey);
   let recovered = false;

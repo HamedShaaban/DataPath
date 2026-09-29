@@ -1,0 +1,1 @@
+ALTER TABLE "users" ADD COLUMN "showProofTargets" boolean DEFAULT false NOT NULL;

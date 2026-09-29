@@ -151,9 +151,27 @@ try {
   ctx.req.headers.cookie = `${COOKIE_NAME}=${cookies[0]}`;
   const { createContext } = await import("../server/_core/context");
   assert.equal((await createContext({ req: ctx.req, res: ctx.res, info: {} as any })).user?.id, signedIn.id);
+  // A guest workspace explicitly imported and saved survives logout and re-login.
+  const journey = newState();
+  journey.onboarded = true;
+  journey.profile.learningMode = "skill";
+  journey.profile.focusSkill = "sql";
+  journey.profile.targetLevel = 3;
+  journey.profile.skillTargets = { python: 3 };
+  journey.completedProjects = ["project-skill-sql"];
+  journey.completed = ["sql-1"];
+  journey.evidence["sql-1"] = "Checked filtered results";
+  await appRouter.createCaller(ctx).datapath.save({ state: journey, revision: 0 });
   await appRouter.createCaller(ctx).auth.logout();
   assert.equal(await sessionStore.lookupSession(cookies[0]), null);
   assert.ok(await sessionStore.lookupSession(cookies[1]));
+  await auth.login({ email: credentials.email, password: credentials.password });
+  const returningReq = { ...ctx.req, headers: { cookie: `${COOKIE_NAME}=${cookies.at(-1)}` } };
+  const returningContext = await createContext({ req: returningReq, res: ctx.res, info: {} as any });
+  const restored = await appRouter.createCaller(returningContext).datapath.load();
+  assert.deepEqual(restored?.state, journey);
+  assert.equal(restored?.revision, 1);
+  console.log("PASS: explicit guest workspace save survives logout and fresh login");
   ctx.req.headers.cookie = `${COOKIE_NAME}=${cookies[1]}`;
   await appRouter.createCaller(ctx).auth.revokeAllSessions();
   assert.equal((await createContext({ req: ctx.req, res: ctx.res, info: {} as any })).user, null);

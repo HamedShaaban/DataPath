@@ -11,6 +11,7 @@ import { sqlChallengeForTopic } from "../shared/practice-navigation";
 import { sqlLabChallenges } from "../shared/sql-lab";
 import {
   readGuestStorage,
+  readGuestForImport,
   writeGuestStorage,
   guestStorageKey,
 } from "../client/src/lib/guest-storage";
@@ -202,4 +203,30 @@ it("walks onboarding → real SQL practice → failed quiz → recovery → save
     reviewSchedule(restored.quizAttempts, "review-sql+excel", Date.parse(at))
       .due
   ).toBe(true);
+});
+
+
+describe("Guest-to-account transfer", () => {
+  it("rejects missing, corrupt and invalid saves without changing stored data", () => {
+    const storage = memory();
+    expect(() => readGuestForImport(storage)).toThrow();
+    for (const raw of ["broken", '{"profile":{"role":"unknown"}}']) {
+      storage.setItem(guestStorageKey, raw);
+      expect(() => readGuestForImport(storage)).toThrow();
+      expect(storage.getItem(guestStorageKey)).toBe(raw);
+    }
+    expect(() => readGuestForImport({ ...storage, getItem: () => { throw Error("blocked"); } })).toThrow("blocked");
+  });
+  it("preserves onboarding, completion, evidence and quiz results for an explicit import", () => {
+    const storage = memory();
+    const state = newState();
+    state.onboarded = true;
+    state.completed = ["sql-1"];
+    state.evidence["sql-1"] = "Validated the query result";
+    const questions = topicQuiz("sql-1");
+    const passed = recordQuizResult(state, "topic", "sql-1", questions, correct(questions), "import-check", at);
+    writeGuestStorage(storage, passed);
+    expect(readGuestForImport(storage)).toEqual(learningStateSchema.parse(passed));
+    expect(readGuestStorage(storage)).toEqual(readGuestForImport(storage));
+  });
 });

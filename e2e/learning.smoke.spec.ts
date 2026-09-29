@@ -19,7 +19,7 @@ test("signup → SQL exercise → Python exercise → saved progress", async ({
   await dialog.getByLabel("Name", { exact: true }).fill("Smoke Learner");
   await dialog.getByLabel("Email", { exact: true }).fill(email);
   await dialog
-    .getByLabel("Password", { exact: true })
+    .getByLabel(/^Password/)
     .fill("Disposable-smoke-password-123");
   await dialog
     .getByRole("button", { name: "Create account", exact: true })
@@ -27,8 +27,8 @@ test("signup → SQL exercise → Python exercise → saved progress", async ({
   await expect(dialog).toBeHidden();
   expect((await context.cookies()).some(cookie => cookie.httpOnly)).toBe(true);
   await page.getByRole("button", { name: "Find my path", exact: true }).click();
-  await page.getByText("Explore all career choices", { exact: true }).click();
   await page.getByRole("button", { name: /^Data Scientist/ }).click();
+  await page.getByRole("button", { name: "Use this path", exact: true }).click();
   await page.getByLabel("Target business sector").selectOption("banking");
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page.getByRole("button", { name: "Continue", exact: true }).click();
@@ -36,6 +36,8 @@ test("signup → SQL exercise → Python exercise → saved progress", async ({
     .getByRole("button", { name: "Build my learning path", exact: true })
     .click();
   await page.getByRole("button", { name: "Practice lab", exact: true }).click();
+  const independentPractice = page.getByRole("button", { name: "I’m ready to explore independent exercises" });
+  if (await independentPractice.isVisible()) await independentPractice.click();
   const picker = page.getByRole("button", { name: /Find your next challenge/ });
   if ((await picker.getAttribute("aria-expanded")) === "false")
     await picker.click();
@@ -47,6 +49,7 @@ test("signup → SQL exercise → Python exercise → saved progress", async ({
     );
   await page.getByRole("button", { name: "Run query", exact: true }).click();
   await expect(page.getByText("Query passed", { exact: true })).toBeVisible();
+  await expect(page.getByText("Server verification passed.", { exact: true })).toBeVisible();
   expect(runtimeRequests).toEqual([]); // Python assets must remain lazy until used.
   if ((await picker.getAttribute("aria-expanded")) === "false")
     await picker.click();
@@ -85,4 +88,37 @@ test("signup → SQL exercise → Python exercise → saved progress", async ({
   await expect(
     page.getByRole("button", { name: "Sign in", exact: true })
   ).toHaveCount(0);
+
+  await page.getByRole("button", { name: "Settings & profile", exact: true }).click();
+  const proofSettings = page.locator(".proof-settings-card");
+  const handle = `smoke-proof-${Date.now()}`;
+  await proofSettings.getByLabel("Public handle", { exact: true }).fill(handle);
+  await proofSettings.getByRole("button", { name: "Enable proof page", exact: true }).click();
+  await expect(proofSettings.getByRole("link", { name: /View public page/ })).toBeVisible();
+  const visitor = await context.browser()!.newContext();
+  const publicPage = await visitor.newPage();
+  try {
+    const response = await publicPage.goto(`http://127.0.0.1:3111/p/${handle}`);
+    expect(response?.status()).toBe(200);
+    expect(response?.headers()["cache-control"]).toBe("no-store");
+    await expect(publicPage.locator(".credential")).toHaveCount(1);
+    await expect(publicPage.locator(".credential")).toContainText("Verified SQL lab");
+    await expect(publicPage.locator("body")).not.toContainText(email);
+    const credential = proofSettings.locator(".checkline").filter({ hasNotText: "Show my target role and industry" }).getByRole("checkbox");
+    await expect(credential).toBeChecked();
+    await credential.click();
+    await expect(credential).not.toBeChecked();
+    await publicPage.reload();
+    await expect(publicPage.locator(".credential")).toHaveCount(0);
+    await credential.click();
+    await expect(credential).toBeChecked();
+    await publicPage.reload();
+    await expect(publicPage.locator(".credential")).toHaveCount(1);
+    await proofSettings.getByRole("button", { name: "Disable public page", exact: true }).click();
+    await expect(proofSettings.getByRole("button", { name: "Enable proof page", exact: true })).toBeVisible();
+    expect((await publicPage.reload())?.status()).toBe(404);
+    await expect(publicPage.getByRole("heading", { name: "Proof page not found" })).toBeVisible();
+  } finally {
+    await visitor.close();
+  }
 });

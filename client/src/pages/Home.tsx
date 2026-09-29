@@ -1,3 +1,14 @@
+import { progressEvidence } from "@shared/progress-evidence";
+import { nextIntroStep } from "@shared/intro-progress";
+import { ProjectBlueprint } from "../components/ProjectBlueprint";
+import { applyCatchUp } from "@shared/catch-up";
+import { suggestPace } from "@shared/pace";
+import { PlacementCheck } from "@/components/PlacementCheck";
+import { PathExplorer } from "@/components/PathExplorer";
+import { learningPathTitle } from "@shared/learning";
+import { LessonSteps, LessonCompletion } from "@/components/LessonSteps";
+import { Fragment } from "react";
+import { LearningDashboard } from "@/components/LearningDashboard";
 import { X } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -8,6 +19,7 @@ import { sqlChallengeForTopic } from "@shared/practice-navigation";
 import {
   guestStorageKey,
   readGuestStorage,
+  readGuestForImport,
   writeGuestStorage,
 } from "@/lib/guest-storage";
 import { selectedProof } from "@shared/proof-export";
@@ -206,6 +218,7 @@ export default function Home() {
   const [startedSetup, setStartedSetup] = useState(false);
   const [notice, setNotice] = useState("");
   const [revision, setRevision] = useState(0);
+  const [guestOffer, setGuestOffer] = useState<LearningState | null>(null);
   const [dirty, setDirty] = useState(false);
   const [ready, setReady] = useState(false);
   const [stateOwner, setStateOwner] = useState<number | "guest">("guest");
@@ -214,13 +227,15 @@ export default function Home() {
   const [labTarget, setLabTarget] = useState("");
   const [lessonTarget, setLessonTarget] = useState("");
   const [selectedSkill, setSelectedSkill] = useState("");
+  const [proofHandle, setProofHandle] = useState("");
+  const [proofPrompt, setProofPrompt] = useState("");
   useEffect(() => {
     if (page !== "roadmap" || !lessonTarget) return;
     const element = document.getElementById(
       `lesson-${lessonTarget}`
     ) as HTMLDetailsElement | null;
     if (element) {
-      element.open = true;
+      const levelGroup = element.closest<HTMLDetailsElement>(".roadmap-level"); if (levelGroup) levelGroup.open = true; element.open = true;
       element.scrollIntoView({
         block: "center",
         behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -278,7 +293,28 @@ export default function Home() {
   const register = trpc.auth.register.useMutation();
   const remove = trpc.datapath.remove.useMutation();
   const coach = trpc.datapath.coach.useMutation();
+  const proofSettings = trpc.proof.settings.useQuery({ accountId: me.data?.id ?? 0 }, {
+    enabled: Boolean(me.data),
+    retry: false,
+  });
+  const proofPreview = trpc.proof.preview.useQuery({ accountId: me.data?.id ?? 0 }, {
+    enabled: Boolean(me.data),
+    retry: false,
+  });
+  const enableProof = trpc.proof.enable.useMutation();
+  const disableProof = trpc.proof.disable.useMutation({ onError: () => setNotice("Could not change proof page visibility. Try again.") });
+  const targetVisibility = trpc.proof.setTargetVisibility.useMutation({ onError: () => setNotice("Could not change target visibility. Try again.") });
+  const credentialVisibility = trpc.proof.setCredentialVisibility.useMutation({ onError: () => setNotice("Could not change credential visibility. Try again.") });
   const utils = trpc.useUtils();
+  useEffect(() => {
+    setProofHandle(proofSettings.data?.handle ?? "");
+  }, [proofSettings.data?.handle]);
+  const refreshProof = async () => {
+    await Promise.all([
+      utils.proof.settings.invalidate(),
+      utils.proof.preview.invalidate(),
+    ]);
+  };
   const loadedUser = useRef<number | null>(null);
   const workspaceEpoch = useRef(0);
   const updateEpoch = workspaceEpoch.current;
@@ -295,6 +331,8 @@ export default function Home() {
     setSelectedSkill("");
     setIndependentPractice(false);
     setExportSkills([]);
+    setProofPrompt("");
+    setProofHandle("");
   }, [stateOwner]);
   const latestState = useRef(state);
   latestState.current = state;
@@ -325,12 +363,21 @@ export default function Home() {
     if (!me.data) {
       workspaceEpoch.current++;
       loadedUser.current = null;
+      setGuestOffer(null);
       setState(readGuest());
       setStateOwner("guest");
       setReady(true);
     } else if (load.isSuccess && loadedUser.current !== me.data.id) {
       workspaceEpoch.current++;
       setState(load.data?.state || newState());
+      let candidate: LearningState | null = null;
+      if (!load.data) {
+        try {
+          const guest = readGuestForImport(localStorage);
+          if (guest.onboarded) candidate = guest;
+        } catch { /* An unreadable save is never imported or overwritten. */ }
+      }
+      setGuestOffer(candidate);
       setStateOwner(me.data.id);
       setRevision(load.data?.revision || 0);
       loadedUser.current = me.data.id;
@@ -388,7 +435,19 @@ export default function Home() {
     t => !t.done && t.prerequisites.every(id => state.completed.includes(id))
   );
   const requiredIds = Object.keys(plan.required);
+  const resourceSearch = search.trim().toLowerCase();
+  const matchingResourceIds = requiredIds.filter(id =>
+    `${skillById[id].title.en} ${skillById[id].title.ar} ${skillById[id].resource.title}`
+      .toLowerCase().includes(resourceSearch)
+  );
+  const matchingPaidResources = state.profile.resources === "mixed"
+    ? paidResources.filter(resource =>
+        resource.skills.some(id => requiredIds.includes(id)) &&
+        resource.title.toLowerCase().includes(resourceSearch))
+    : [];
+  const resourceCount = matchingResourceIds.length + matchingPaidResources.length;
   const evidenceMatrix = skillEvidenceMatrix(state);
+  const practiceEvidence = progressEvidence(state);
   const reviewNext = skills
     .flatMap(skill =>
       skill.topics.map(topic => ({ ...topic, skillId: skill.id }))
@@ -436,6 +495,8 @@ export default function Home() {
         });
       setAuthOpen(false);
       setReady(false);
+      await utils.proof.settings.reset();
+      await utils.proof.preview.reset();
       await utils.auth.me.invalidate();
       await utils.datapath.load.invalidate();
     } catch (error: any) {
@@ -549,6 +610,8 @@ export default function Home() {
                 ["dashboard", "lab", "proof"].includes(id)
             )
             .map(([id, en, ar, Icon]) => (
+              <Fragment key={id}>
+              {["dashboard", "resources", "interviews"].includes(id) && <span className="navigation-section-label">{id === "dashboard" ? t("LEARN", "تعلّم") : id === "resources" ? t("RESOURCES", "مصادر") : t("YOUR CAREER", "مستقبلك المهني")}</span>}
               <button
                 key={id}
                 className={page === id ? "nav-item active" : "nav-item"}
@@ -570,6 +633,7 @@ export default function Home() {
                 </span>
                 {id === "coach" && <span className="tiny-pill">AI</span>}
               </button>
+              </Fragment>
             ))}
           {state.profile.experience === "new" && (
             <button
@@ -679,6 +743,7 @@ export default function Home() {
                 <button
                   className="icon-button"
                   title={t("Sign out", "تسجيل الخروج")}
+                  disabled={logout.isPending}
                   onClick={async () => {
                     if (
                       dirty &&
@@ -690,10 +755,19 @@ export default function Home() {
                       )
                     )
                       return;
-                    await logout.mutateAsync();
-                    utils.datapath.load.reset();
-                    setReady(false);
-                    utils.auth.me.setData(undefined, null);
+                    try {
+                      await logout.mutateAsync();
+                      setNotice("");
+                      await utils.proof.settings.cancel();
+                      await utils.proof.preview.cancel();
+                      utils.proof.settings.reset();
+                      utils.proof.preview.reset();
+                      utils.datapath.load.reset();
+                      setReady(false);
+                      utils.auth.me.setData(undefined, null);
+                    } catch {
+                      setNotice(t("Could not sign out. You are still signed in; try again when the connection is available.", "تعذر تسجيل الخروج. ما زلت مسجلاً؛ حاول مجدداً عند توفر الاتصال."));
+                    }
                   }}
                 >
                   <LogOut size={17} />
@@ -735,6 +809,32 @@ export default function Home() {
               </button>
             </div>
           )}
+          {proofPrompt && (
+            <section className="card proof-prompt" role="status">
+              <div>
+                <strong>{proofPrompt}</strong>
+                <p>Choose what appears publicly, preview it, then publish when you are ready.</p>
+              </div>
+              <button className="primary small" onClick={() => { setProofPrompt(""); setPage("settings"); }}>
+                Proof page settings
+              </button>
+              <button className="text-button" onClick={() => setProofPrompt("")}>Dismiss</button>
+            </section>
+          )}
+          {guestOffer && me.data && stateOwner === me.data.id && !dirty && revision === 0 && (
+            <section className="card" aria-label="Continue your guest progress">
+              <h2>{t("Continue where you left off", "تابع من حيث توقفت")}</h2>
+              <p>{t("This account has no saved workspace yet. Your guest learning path and progress are still in this browser. Bring them into this account, then choose Save progress to keep them across devices.", "لا توجد مساحة محفوظة لهذا الحساب بعد. ما زال مسارك وتقدمك كزائر في هذا المتصفح. استوردهما ثم اختر حفظ التقدم للاحتفاظ بهما عبر الأجهزة.")}</p>
+              <button className="primary" onClick={() => {
+                update(() => guestOffer);
+                setGuestOffer(null);
+                setStartedSetup(false);
+                setNotice(t("Guest progress imported. Save progress to keep it in your account.", "تم استيراد تقدم الزائر. احفظ التقدم للاحتفاظ به في حسابك."));
+              }}>{t("Continue with my guest progress", "المتابعة بتقدمي كزائر")}</button>
+              <button className="secondary" onClick={() => setGuestOffer(null)}>{t("Start a separate account path", "بدء مسار منفصل للحساب")}</button>
+              <p>{t("Your original guest save stays in this browser.", "تبقى نسخة تقدم الزائر الأصلية في هذا المتصفح.")}</p>
+            </section>
+          )}
           {!state.onboarded && !startedSetup ? (
             <CareerLanding
               onStart={() => {
@@ -771,7 +871,7 @@ export default function Home() {
                   </div>
                   <h1>
                     {page === "dashboard"
-                      ? t("Your next move.", "خطوتك القادمة.")
+                      ? t("Let’s make progress.", "لنتقدم خطوة جديدة.")
                       : navigation.find(n => n[0] === page)?.[
                           lang === "ar" ? 2 : 1
                         ] ||
@@ -783,7 +883,7 @@ export default function Home() {
                           "A clear direction. The right skills. A career built by you.",
                           "اتجاه واضح. مهارات مناسبة. ومستقبل مهني تبنيه بنفسك."
                         )
-                      : txt(role.title) +
+                      : txt(learningPathTitle(state.profile)) +
                         " · " +
                         t(
                           "Built around your goals, at your pace.",
@@ -796,22 +896,37 @@ export default function Home() {
                   {t("FREE TO LEARN", "التعلم مجاني")}
                 </span>
               </div>
-              {(page === "dashboard" || page === "lab") &&
+              {page === "dashboard" && <LearningDashboard state={state}
+                adjustPace={hours => update(current => applyCatchUp(current, hours))}
+                openPractice={(skillId, topicId) => { setLabSkillTarget(skillId); setLabTopicTarget(topicId); setIndependentPractice(true); setPage("lab"); }}
+                editPath={() => setEditing(true)}
+                navigate={target => { setExploreAll(true); setPage(target); }}
+                startBasics={() => { const element = document.getElementById(nextIntroStep(state) === "foundations" ? "dashboard-foundations" : "dashboard-basics"); element?.scrollIntoView({ block: "start" }); element?.focus(); }}
+                openLesson={(skillId, topicId = "") => { setSelectedSkill(skillId); setLessonTarget(topicId); setExploreAll(true); setPage("roadmap"); }}
+              />}
+              {(page === "dashboard" || (page === "lab" && !independentPractice)) &&
                 state.profile.experience === "new" && (
-                  <>
+                  <section id="dashboard-basics" tabIndex={-1} aria-label={t("Your first lessons", "دروسك الأولى")}>
                     <FirstLesson
                       key={stateOwner}
+                      nextLabel={nextIntroStep(state) === "foundations" ? "Next: practise totals and averages" : undefined}
                       progress={state.firstLesson}
                       save={firstLesson =>
                         update(current => ({ ...current, firstLesson }))
                       }
                       next={() => {
+                        if (nextIntroStep(state) === "foundations") {
+                          const element = document.getElementById("dashboard-foundations");
+                          element?.scrollIntoView({ block: "start" });
+                          element?.focus();
+                          return;
+                        }
                         setExploreAll(true);
                         setPage("roadmap");
                       }}
                     />
                     {state.firstLesson?.completed && (
-                      <FoundationsUnit
+                      <div id="dashboard-foundations" tabIndex={-1}><FoundationsUnit
                         key={`${stateOwner}:${state.profile.sector}`}
                         state={state}
                         update={update}
@@ -821,270 +936,39 @@ export default function Home() {
                           setExploreAll(true);
                           setPage("roadmap");
                         }}
-                      />
+                      /></div>
                     )}
                     <p className="beginner-save-note">
                       {me.data
                         ? "Use Save progress above to save these steps to your account."
                         : "Progress saves automatically in this browser. Switching browsers or clearing browser data can remove it. Use Settings to export a backup."}
                     </p>
-                  </>
-                )}
-              {page === "dashboard" &&
-                (state.profile.experience !== "new" ||
-                  state.firstLesson?.completed) && (
-                  <div className="mission-dashboard">
-                    <section className="mission-main">
-                      <div className="mission-title">
-                        <span className="eyebrow">
-                          {t("YOUR DIRECTION", "اتجاهك")}
-                        </span>
-                        <button
-                          className="text-button"
-                          onClick={() => setEditing(true)}
-                        >
-                          {t("Change path", "غيّر المسار")}{" "}
-                          <ArrowUpRight size={16} />
-                        </button>
-                      </div>
-                      <h2 className="destination-title">{txt(role.title)}</h2>
-                      <p className="destination-context">
-                        {sector.title} <span> / </span> {state.profile.weeks}{" "}
-                        {t("weeks", "أسابيع")} <span> / </span>{" "}
-                        {state.profile.hoursPerWeek}{" "}
-                        {t("hours a week", "ساعات أسبوعياً")}
-                      </p>
-                      <section className="focus-session">
-                        <div className="focus-number" aria-hidden="true">
-                          {String(next?.week || 1).padStart(2, "0")}
-                        </div>
-                        <div className="focus-content">
-                          <span className="eyebrow">
-                            {t("NEXT FOCUSED SESSION", "جلسة التعلم القادمة")}
-                          </span>
-                          <h3>
-                            {next
-                              ? txt(next.title)
-                              : t("Make your work speak.", "دع عملك يتحدث.")}
-                          </h3>
-                          <p>
-                            {next
-                              ? txt(skillById[next.skillId].title)
-                              : t(
-                                  "Bring your skills together in a portfolio project.",
-                                  "اجمع مهاراتك في مشروع عملي."
-                                )}
-                          </p>
-                          <button
-                            onClick={() => {
-                              if (next) setSelectedSkill(next.skillId);
-                              setPage(next ? "roadmap" : "projects");
-                            }}
-                          >
-                            {t("Let’s get into it", "لنبدأ")}{" "}
-                            <ArrowRight size={20} />
-                          </button>
-                          <small>
-                            {next
-                              ? `${next.hours} ${t("estimated hours", "ساعات تقديرية")}`
-                              : t(
-                                  "Your next chapter starts with a project",
-                                  "خطوتك القادمة تبدأ بمشروع"
-                                )}
-                          </small>
-                        </div>
-                      </section>
-                      <div className="studio-section-heading">
-                        <h3>{t("Your working spaces", "مساحات عملك")}</h3>
-                        <span>
-                          {t(
-                            "A skill becomes yours when you use it.",
-                            "تمتلك المهارة عندما تستخدمها."
-                          )}
-                        </span>
-                      </div>
-                      <div className="studio-destinations">
-                        <button onClick={() => setPage("lab")}>
-                          <SquareTerminal size={29} />
-                          <span>01 / {t("EXPERIMENT", "جرّب")}</span>
-                          <h3>{t("The Practice Lab", "معمل التطبيق")}</h3>
-                          <p>
-                            {t(
-                              "Open a dataset. Test an idea. Find the answer.",
-                              "افتح البيانات. اختبر فكرتك. اكتشف الإجابة."
-                            )}
-                          </p>
-                          <ArrowUpRight />
-                        </button>
-                        <button onClick={() => setPage("projects")}>
-                          <FolderKanban size={29} />
-                          <span>02 / {t("CREATE", "أنشئ")}</span>
-                          <h3>{t("Your project desk", "مكتب مشاريعك")}</h3>
-                          <p>{txt(project.title)}</p>
-                          <ArrowUpRight />
-                        </button>
-                        <button onClick={() => setPage("interviews")}>
-                          <MessageSquare size={29} />
-                          <span>03 / {t("PREPARE", "استعد")}</span>
-                          <h3>{t("The interview room", "غرفة المقابلات")}</h3>
-                          <p>
-                            {t(
-                              "Practise explaining the decisions behind your work.",
-                              "تدرّب على شرح القرارات وراء عملك."
-                            )}
-                          </p>
-                          <ArrowUpRight />
-                        </button>
-                      </div>
-                      <div className="studio-section-heading">
-                        <h3>{t("Skills on your route", "مهارات على طريقك")}</h3>
-                        <button
-                          className="text-button"
-                          onClick={() => setPage("roadmap")}
-                        >
-                          {t("Full roadmap", "المسار الكامل")}{" "}
-                          <ArrowRight size={16} />
-                        </button>
-                      </div>
-                      <div className="route-list">
-                        {requiredIds.slice(0, 6).map((id, index) => (
-                          <button
-                            key={id}
-                            onClick={() => {
-                              setSelectedSkill(id);
-                              setPage("roadmap");
-                            }}
-                          >
-                            <span>{String(index + 1).padStart(2, "0")}</span>
-                            <strong>{txt(skillById[id].title)}</strong>
-                            <small>
-                              {
-                                plan.topics.filter(
-                                  topic => topic.skillId === id && !topic.done
-                                ).length
-                              }{" "}
-                              {t("topics remaining", "موضوعات متبقية")}
-                            </small>
-                            <ArrowUpRight size={17} />
-                          </button>
-                        ))}
-                      </div>
-                    </section>
-                    <aside className="journey-journal">
-                      <span className="eyebrow">
-                        {t("THE BIG PICTURE", "الصورة الكاملة")}
-                      </span>
-                      <h3>
-                        {t("Every session counts.", "كل جلسة تصنع فارقاً.")}
-                      </h3>
-                      <div className="journal-progress">
-                        <svg viewBox="0 0 120 120" aria-hidden="true">
-                          <circle cx="60" cy="60" r="51" />
-                          <circle
-                            cx="60"
-                            cy="60"
-                            r="51"
-                            strokeDasharray={`${percent * 3.2044} 320.44`}
-                          />
-                        </svg>
-                        <strong>
-                          {percent}
-                          <small>%</small>
-                        </strong>
-                      </div>
-                      <p className="journal-caption">
-                        {completed} / {plan.topics.length}{" "}
-                        {t("topics completed", "موضوعات مكتملة")}
-                      </p>
-                      <div className="journal-metrics">
-                        <div>
-                          <strong>
-                            {Math.round(
-                              (state.sessions.reduce(
-                                (sum, session) => sum + session.minutes,
-                                0
-                              ) /
-                                60) *
-                                10
-                            ) / 10}
-                            <small>{t("hours logged", "ساعات مسجلة")}</small>
-                          </strong>
-                        </div>
-                        <div>
-                          <strong>
-                            {plan.remainingHours}
-                            <small>
-                              {t(
-                                "hours remaining · est.",
-                                "ساعات متبقية تقديرياً"
-                              )}
-                            </small>
-                          </strong>
-                        </div>
-                      </div>
-                      <h4>{t("Your journey", "رحلتك")}</h4>
-                      <ol className="journal-timeline">
-                        {(
-                          [
-                            [
-                              "roadmap",
-                              t("Learn the foundations", "تعلّم الأساسيات"),
-                            ],
-                            [
-                              "lab",
-                              t("Put it into practice", "طبّق ما تعلمته"),
-                            ],
-                            [
-                              "projects",
-                              t("Build your evidence", "ابنِ إثبات مهاراتك"),
-                            ],
-                            ["interviews", t("Tell your story", "احكِ قصتك")],
-                          ] as const
-                        ).map(([target, title], index) => (
-                          <li key={target}>
-                            <button onClick={() => setPage(target)}>
-                              <span>{index + 1}</span>
-                              {title}
-                              <ArrowUpRight size={14} />
-                            </button>
-                          </li>
-                        ))}
-                      </ol>
-                      <div className="journal-review">
-                        <RotateCcw size={20} />
-                        <h4>
-                          {reviewNext
-                            ? t(
-                                "Ready for a revisit?",
-                                "هل أنت مستعد للمراجعة؟"
-                              )
-                            : t("Keep your momentum.", "واصل تقدمك.")}
-                        </h4>
-                        <p>
-                          {reviewNext
-                            ? txt(reviewNext.title)
-                            : t(
-                                "Your next session is waiting. Small steps add up.",
-                                "جلستك القادمة بانتظارك. الخطوات الصغيرة تتراكم."
-                              )}
-                        </p>
-                        <button
-                          className="text-button"
-                          onClick={() => {
-                            if (reviewNext)
-                              setSelectedSkill(reviewNext.skillId);
-                            setPage("roadmap");
-                          }}
-                        >
-                          {t("Open roadmap", "افتح المسار")}{" "}
-                          <ArrowRight size={15} />
-                        </button>
-                      </div>
-                    </aside>
-                  </div>
+                  </section>
                 )}
               {page === "roadmap" && (
-                <>
+                <div className="roadmap-explorer">
+                  <section className="roadmap-overview" aria-labelledby="roadmap-overview-title">
+                    <div>
+                      <span className="eyebrow">{t("YOUR LEARNING ROUTE", "مسار تعلمك")}</span>
+                      <h2 id="roadmap-overview-title">{t("One skill at a time.", "مهارة واحدة في كل خطوة.")}</h2>
+                      <p>{t("Choose a skill, follow its lessons, and check what you can do. Your next step is ready below.", "اختر مهارة، تابع دروسها، واختبر ما تعلمته. خطوتك التالية بالأسفل.")}</p>
+                      <div className="roadmap-overview-stats"><span><strong>{requiredIds.length}</strong> {t("skill areas", "مجالات مهارية")}</span><span><strong>{completed}/{plan.topics.length}</strong> {t("topics completed", "موضوعات مكتملة")}</span><span><strong>{plan.remainingHours}</strong> {t("hours left · estimated", "ساعات متبقية · تقديرياً")}</span></div>
+                    </div>
+                    <div className="roadmap-next-step">
+                      <span className="eyebrow">{next ? t("RECOMMENDED NEXT", "الخطوة المقترحة") : t("PUT IT TOGETHER", "اجمع مهاراتك")}</span>
+                      <h3>{next ? txt(next.title) : t("Your portfolio project", "مشروع ملف أعمالك")}</h3>
+                      <p>{next ? txt(skillById[next.skillId].title) : t("Apply your learning to a real scenario.", "طبّق ما تعلمته على سيناريو عملي.")}</p>
+                      <button className="primary" onClick={() => {
+                        if (!next) { setPage("projects"); return; }
+                        setSelectedSkill(next.skillId); setLessonTarget(next.id);
+                        const element = document.getElementById(`lesson-${next.id}`) as HTMLDetailsElement | null;
+                        if (element) { const levelGroup = element.closest<HTMLDetailsElement>(".roadmap-level"); if (levelGroup) levelGroup.open = true; element.open = true; element.scrollIntoView({ block: "center" }); element.querySelector("summary")?.focus(); }
+                      }}>{next ? t("Open next lesson", "افتح الدرس التالي") : t("Open project", "افتح المشروع")} <ArrowRight size={16} /></button>
+                    </div>
+                  </section>
+                  <details className="roadmap-plan-details">
+                    <summary>{t("Plan details & learning tips", "تفاصيل الخطة ونصائح التعلم")}<span>{t("Pace, foundations and industry context", "الوتيرة والأساسيات وسياق المجال")}</span><ChevronDown size={18} /></summary>
+                    <div className="roadmap-plan-content">
                   <details className="foundation-entry">
                     <summary>
                       Start with the foundations: reliable totals and averages
@@ -1100,7 +984,7 @@ export default function Home() {
                           `lesson-${topicId}`
                         ) as HTMLDetailsElement | null;
                         if (element) {
-                          element.open = true;
+                          const levelGroup = element.closest<HTMLDetailsElement>(".roadmap-level"); if (levelGroup) levelGroup.open = true; element.open = true;
                           element.scrollIntoView({ block: "center" });
                           element.querySelector("summary")?.focus();
                         }
@@ -1130,6 +1014,8 @@ export default function Home() {
                       "تُستبعد المهارات التي قيّمت إتقانك لها ذاتياً من الفجوات، وهذا ليس اعتماداً. يشمل كل مسار مشروعاً للتحقق العملي."
                     )}
                   </p>
+                  <details className="roadmap-domain-disclosure">
+                    <summary>{t("How your learning connects to", "كيف يرتبط تعلمك بمجال")} {sector.title}</summary>
                   <section className="domain-brief">
                     <div className="domain-heading">
                       <span className="eyebrow">INDUSTRY LENS</span>
@@ -1158,6 +1044,7 @@ export default function Home() {
                       </p>
                     </div>
                   </section>
+                  </details>
                   <div
                     className="learning-cycle"
                     aria-label={t("Learning cycle", "دورة التعلم")}
@@ -1190,6 +1077,14 @@ export default function Home() {
                       </small>
                     </div>
                   </div>
+                    </div>
+                  </details>
+                  <label className="roadmap-mobile-picker">
+                    {t("Choose a skill", "اختر مهارة")}
+                    <select value={requiredIds.includes(selectedSkill) ? selectedSkill : next?.skillId || requiredIds[0]} onChange={event => { setLessonTarget(""); setSelectedSkill(event.target.value); }}>
+                      {requiredIds.map(id => <option key={id} value={id}>{txt(skillById[id].title)}</option>)}
+                    </select>
+                  </label>
                   <div className="roadmap-layout">
                     <nav
                       className="skill-list roadmap-skill-picker"
@@ -1212,13 +1107,13 @@ export default function Home() {
                           id ===
                           (requiredIds.includes(selectedSkill)
                             ? selectedSkill
-                            : requiredIds[0]);
+                            : next?.skillId || requiredIds[0]);
                         return (
                           <button
                             key={id}
                             className={active ? "selected" : ""}
                             aria-current={active ? "true" : undefined}
-                            onClick={() => setSelectedSkill(id)}
+                            onClick={() => { setLessonTarget(""); setSelectedSkill(id); }}
                           >
                             <span className="skill-picker-top">
                               <span className="skill-picker-number">
@@ -1228,6 +1123,7 @@ export default function Home() {
                               <ArrowRight size={16} />
                             </span>
                             <span className="skill-picker-meta">
+                              {next?.skillId === id && <span className="roadmap-skill-next">{t("Next lesson here", "درسك التالي هنا")}</span>}
                               {done} / {topics.length}{" "}
                               {t("topics completed", "موضوعات مكتملة")}
                             </span>
@@ -1254,20 +1150,22 @@ export default function Home() {
                               ? selectedSkill
                               : requiredIds.includes(selectedSkill)
                                 ? selectedSkill
-                                : requiredIds[0],
+                                : next?.skillId || requiredIds[0],
                           skill = skillById[id];
                         return (
-                          <section className="card" key={id}>
+                          <section className="card roadmap-lesson-panel" key={id}>
                             <div className="section-top">
                               <h2>{txt(skill.title)}</h2>
                               <span className="soft-tag">
                                 {t("Target", "الهدف")} {plan.required[id]}/3
                               </span>
                             </div>
+                            <p className="roadmap-legend">{t("You can read any lesson. Complete its prerequisites and checks to record completion.", "يمكنك قراءة أي درس. أكمل المتطلبات والاختبارات لتسجيل إتمامه.")}</p>
                             {[1, 2, 3].map(level => (
-                              <div className="level-block" key={level}>
-                                <h3>
-                                  <span className="level-dot" />
+                              <details className="roadmap-level" name={`roadmap-level-${id}`} key={level} open={level === (skill.topics.find(topic => topic.id === lessonTarget)?.level ?? skill.topics.find(topic => topic.id === next?.id)?.level ?? 1)}>
+                                <summary className="roadmap-level-heading">
+                                  <span className="roadmap-level-number">{String(level).padStart(2, "0")}</span>
+                                  <span className="roadmap-level-title">
                                   {
                                     [
                                       t("Beginner", "مبتدئ"),
@@ -1280,7 +1178,11 @@ export default function Home() {
                                       {t("Optional extension", "توسع اختياري")}
                                     </small>
                                   )}
-                                </h3>
+                                  </span>
+                                  <span className="roadmap-level-progress">{skill.topics.filter(topic => topic.level === level && state.completed.includes(topic.id)).length}/{skill.topics.filter(topic => topic.level === level).length} {t("complete", "مكتمل")}</span>
+                                  <ChevronDown size={18} />
+                                </summary>
+                                <div className="roadmap-level-content">
                                 {skill.topics
                                   .filter(x => x.level === level)
                                   .map(topic => {
@@ -1296,7 +1198,7 @@ export default function Home() {
                                     );
                                     return (
                                       <details
-                                        className="topic"
+                                        className={`topic roadmap-topic${next?.id === topic.id ? " roadmap-topic-next" : ""}${done ? " roadmap-topic-done" : ""}`}
                                         key={topic.id}
                                         id={`lesson-${topic.id}`}
                                       >
@@ -1314,7 +1216,7 @@ export default function Home() {
                                               topic.id.split("-").pop()
                                             )}
                                           </span>
-                                          <span>{txt(topic.title)}</span>
+                                          <span className="roadmap-topic-heading"><strong>{txt(topic.title)}</strong><span className={`roadmap-topic-state ${done ? "complete" : locked ? "prerequisite" : "ready"}`}>{done ? t("Completed", "مكتمل") : next?.id === topic.id ? t("Your next lesson", "درسك التالي") : locked ? t("Prerequisites needed", "متطلبات سابقة") : item ? t("Ready to learn", "جاهز للتعلم") : t("Explore this topic", "استكشف الموضوع")}</span></span>
                                           <small>
                                             {item
                                               ? `${topic.hours} ${t("hrs", "ساعات")} · ${t("Week", "أسبوع")} ${item.week || "✓"}`
@@ -1326,7 +1228,18 @@ export default function Home() {
                                           <ChevronDown size={15} />
                                         </summary>
                                         <div className="topic-body">
-                                          <div className="lesson-guide">
+                                          <LessonSteps topicId={topic.id} arabic={lang === "ar"} prerequisitesReady={!locked} />
+                                          {locked && <div className="roadmap-prerequisites"><strong>{t("Start with these lessons", "ابدأ بهذه الدروس")}</strong><p>{t("These build the knowledge needed for this topic.", "تؤسس هذه الدروس للمعرفة اللازمة لهذا الموضوع.")}</p><div>{item?.prerequisites.filter(prerequisite => !state.completed.includes(prerequisite)).map(prerequisite => {
+                                            const prerequisiteSkill = skills.find(value => value.topics.some(value => value.id === prerequisite));
+                                            const prerequisiteTopic = prerequisiteSkill?.topics.find(value => value.id === prerequisite);
+                                            return prerequisiteSkill && prerequisiteTopic ? <button className="secondary" key={prerequisite} onClick={() => {
+                                              setSelectedSkill(prerequisiteSkill.id); setLessonTarget(prerequisite);
+                                              const element = document.getElementById(`lesson-${prerequisite}`) as HTMLDetailsElement | null;
+                                              if (element) { const levelGroup = element.closest<HTMLDetailsElement>(".roadmap-level"); if (levelGroup) levelGroup.open = true; element.open = true; element.scrollIntoView({ block: "center" }); element.querySelector("summary")?.focus(); }
+                                            }}>{txt(prerequisiteTopic.title)} <ArrowRight size={14} /></button> : null;
+                                          })}</div></div>}
+
+                                          <div className="lesson-guide" id={`lesson-${topic.id}-learn`} tabIndex={-1}>
                                             <span className="eyebrow">
                                               {t(
                                                 "WHAT THIS LESSON COVERS",
@@ -1344,21 +1257,6 @@ export default function Home() {
                                               topicId={topic.id}
                                               title={txt(topic.title)}
                                             />
-                                            {guide.workedExample && (
-                                              <div className="worked-example">
-                                                <h4>Worked example</h4>
-                                                <pre>
-                                                  {id === "sql"
-                                                    ? sqlVocabulary(
-                                                        guide.workedExample,
-                                                        state.profile.sector
-                                                      )
-                                                    : guide.workedExample}
-                                                </pre>
-                                                <h4>Common mistake to test</h4>
-                                                <p>{guide.commonMistake}</p>
-                                              </div>
-                                            )}
                                             <h4>
                                               {t(
                                                 "By the end, you should be able to:",
@@ -1374,7 +1272,22 @@ export default function Home() {
                                                 )
                                               )}
                                             </ul>
-                                            <div className="practice-brief">
+                                            {guide.workedExample && (
+                                              <div className="worked-example">
+                                                <h4>Worked example</h4>
+                                                <pre>
+                                                  {id === "sql"
+                                                    ? sqlVocabulary(
+                                                        guide.workedExample,
+                                                        state.profile.sector
+                                                      )
+                                                    : guide.workedExample}
+                                                </pre>
+                                                <h4>Common mistake to test</h4>
+                                                <p>{guide.commonMistake}</p>
+                                              </div>
+                                            )}
+                                            <div className="practice-brief lesson-practice-step" id={`lesson-${topic.id}-practice`} tabIndex={-1}>
                                               <strong>
                                                 {t(
                                                   "Hands-on task",
@@ -1481,7 +1394,7 @@ export default function Home() {
                                                 }))
                                               }
                                               placeholder={t(
-                                                "What did you build or learn? Include a project link if available.",
+                                                "What did you try? What result did you get? Explain one check you used. Add a project link if useful.",
                                                 "ماذا بنيت أو تعلمت؟ أضف رابط المشروع إن وجد."
                                               )}
                                             />
@@ -1494,6 +1407,9 @@ export default function Home() {
                                               )}
                                             </p>
                                           )}
+                                          <section className="lesson-check-step" id={`lesson-${topic.id}-check`} tabIndex={-1} aria-label={t("Check your understanding", "اختبر فهمك")}>
+                                          <h4>{t("Check your understanding", "اختبر فهمك")}</h4>
+                                          <p>{t("Answer the questions, then read the explanation for each answer. You can retry after reviewing.", "أجب عن الأسئلة ثم اقرأ تفسير كل إجابة. يمكنك إعادة المحاولة بعد المراجعة.")}</p>
                                           <QuizCard
                                             compact
                                             title={t(
@@ -1505,7 +1421,10 @@ export default function Home() {
                                             targetId={topic.id}
                                             state={state}
                                             update={update}
+                                            serverVerificationEnabled={Boolean(me.data)}
+                                            onVerified={() => { if (updateEpoch !== workspaceEpoch.current) return; setProofPrompt("Quiz result verified on the server."); void refreshProof(); }}
                                           />
+                                          <LessonCompletion arabic={lang === "ar"} hasEvidence={Boolean((state.evidence[topic.id] || "").trim())} passed={latestPassed(state, "topic", topic.id)} prerequisitesReady={!locked} />
                                           <button
                                             className="primary small"
                                             disabled={
@@ -1551,10 +1470,13 @@ export default function Home() {
                                                   "تحديد كمكتمل"
                                                 )}
                                           </button>
+                                          </section>
                                         </div>
                                       </details>
                                     );
                                   })}
+                                <details className="roadmap-assessment">
+                                  <summary><BadgeCheck size={17} /><span>{t("Level assessment", "اختبار المستوى")}</span><small>{t("10 questions · pass 80%", "١٠ أسئلة · النجاح ٨٠٪")}</small><ChevronDown size={16} /></summary>
                                 <QuizCard
                                   title={`${txt(skill.title)} · ${[t("Beginner", "Beginner"), t("Intermediate", "Intermediate"), t("Advanced", "Advanced")][level - 1]} Assessment`}
                                   questions={levelQuiz(id, level)}
@@ -1562,6 +1484,8 @@ export default function Home() {
                                   targetId={`${id}-level-${level}`}
                                   state={state}
                                   update={update}
+                                  serverVerificationEnabled={Boolean(me.data)}
+                                  onVerified={() => { if (updateEpoch !== workspaceEpoch.current) return; setProofPrompt("Assessment verified on the server."); void refreshProof(); }}
                                   locked={skill.topics
                                     .filter(
                                       topic =>
@@ -1575,8 +1499,12 @@ export default function Home() {
                                         !state.completed.includes(topic.id)
                                     )}
                                 />
-                              </div>
+                                </details>
+                                </div>
+                              </details>
                             ))}
+                            <details className="roadmap-assessment roadmap-final-checks">
+                              <summary><BadgeCheck size={18} /><span>{t("Skill checks & final assessment", "فحص المهارة والاختبار النهائي")}</span><ChevronDown size={16} /></summary>
                             <DiagnosticCard
                               id={id}
                               state={state}
@@ -1592,22 +1520,29 @@ export default function Home() {
                               targetId={id}
                               state={state}
                               update={update}
+                              serverVerificationEnabled={Boolean(me.data)}
+                              onVerified={() => { if (updateEpoch !== workspaceEpoch.current) return; setProofPrompt("Skill certification verified on the server."); void refreshProof(); }}
                               locked={plan.topics.some(
                                 topic =>
                                   topic.skillId === id &&
                                   !state.completed.includes(topic.id)
                               )}
                             />
+                            </details>
                           </section>
                         );
                       })()}
                     </div>
                   </div>
+                  <details className="roadmap-review-section">
+                    <summary><span><span className="eyebrow">{t("SPACED REVIEW", "المراجعة المتباعدة")}</span><strong>{t("Keep what you learn", "ثبّت ما تعلمته")}</strong></span><span>{t("Review skills together", "راجع المهارات معاً")}</span><ChevronDown size={20} /></summary>
                   <ReviewCenter
                     state={state}
                     requiredIds={requiredIds}
                     requiredLevels={plan.required}
                     update={update}
+                    serverVerificationEnabled={Boolean(me.data)}
+                    onVerified={() => { if (updateEpoch !== workspaceEpoch.current) return; setProofPrompt("Review verified on the server."); void refreshProof(); }}
                     openLesson={topicId => {
                       const skill = skills.find(item =>
                         item.topics.some(topic => topic.id === topicId)
@@ -1619,7 +1554,7 @@ export default function Home() {
                         `lesson-${topicId}`
                       ) as HTMLDetailsElement | null;
                       if (element) {
-                        element.open = true;
+                        const levelGroup = element.closest<HTMLDetailsElement>(".roadmap-level"); if (levelGroup) levelGroup.open = true; element.open = true;
                         element.scrollIntoView({
                           block: "center",
                           behavior: window.matchMedia(
@@ -1632,7 +1567,8 @@ export default function Home() {
                       }
                     }}
                   />
-                </>
+                  </details>
+                </div>
               )}
               {page === "lab" &&
                 state.profile.experience === "new" &&
@@ -1651,7 +1587,7 @@ export default function Home() {
                   state.firstLesson?.completed ||
                   independentPractice) && (
                   <PracticeHub
-                    key={`${stateOwner}:${state.profile.role}:${state.profile.sector}`}
+                    key={`${stateOwner}:${state.profile.role}:${state.profile.sector}:${state.profile.learningMode}:${state.profile.focusSkill}:${state.profile.targetLevel}:${JSON.stringify(state.profile.skillTargets)}`}
                     state={state}
                     update={update}
                     initialSkill={labSkillTarget}
@@ -1676,6 +1612,8 @@ export default function Home() {
                         onChoose={setLabTarget}
                         state={state}
                         update={update}
+                        serverVerificationEnabled={Boolean(me.data)}
+                        onVerified={() => { if (updateEpoch !== workspaceEpoch.current) return; setProofPrompt("SQL lab pass verified on the server."); void refreshProof(); }}
                         openRoadmap={topicId => {
                           setSelectedSkill("sql");
                           setLessonTarget(topicId);
@@ -1725,17 +1663,17 @@ export default function Home() {
                       "أدلة رسمية مختارة لمهاراتك. قد تكون المصادر الخارجية بالإنجليزية؛ المصادر متعددة اللغات موضحة. أسعار المزودين المدفوعة قابلة للتغيير."
                     )}
                   </p>
+                  <div className="resource-search-status">
+                    <p role="status">{t(`${resourceCount} guides match your filters`, `${resourceCount} دليل يطابق اختياراتك`)}</p>
+                    {search && <button className="secondary" onClick={() => setSearch("")}>{t("Clear search", "مسح البحث")}</button>}
+                  </div>
+                  {resourceCount === 0 && <section className="workspace-empty-state">
+                    <BookOpen size={28} aria-hidden="true" />
+                    <h3>{t("No matching guides", "لا توجد أدلة مطابقة")}</h3>
+                    <p>{t("Try a skill name such as SQL, or clear your search to see the guides for your path.", "جرّب اسم مهارة مثل SQL، أو امسح البحث لرؤية أدلة مسارك.")}</p>
+                  </section>}
                   <div className="resource-grid">
-                    {requiredIds
-                      .filter(id =>
-                        (
-                          skillById[id].title.en +
-                          skillById[id].title.ar +
-                          skillById[id].resource.title
-                        )
-                          .toLowerCase()
-                          .includes(search.toLowerCase())
-                      )
+                    {matchingResourceIds
                       .map(id => (
                         <a
                           className="card resource-card"
@@ -1766,16 +1704,7 @@ export default function Home() {
                           </span>
                         </a>
                       ))}
-                    {state.profile.resources === "mixed" &&
-                      paidResources
-                        .filter(
-                          r =>
-                            r.skills.some(id => requiredIds.includes(id)) &&
-                            (r.title
-                              .toLowerCase()
-                              .includes(search.toLowerCase()) ||
-                              !search)
-                        )
+                    {matchingPaidResources
                         .map(r => (
                           <a
                             className="card resource-card"
@@ -2184,6 +2113,15 @@ export default function Home() {
                       <span>{t("skills proven", "Skills مثبتة")}</span>
                     </div>
                   </section>
+                  {me.data && (
+                    <section className="card proof-preview-card">
+                      <span className="eyebrow">PRIVATE PREVIEW</span>
+                      <h2>This is what your public proof page will show</h2>
+                      <p>This preview is private. Hidden credentials and private workspace data are excluded.</p>
+                      {proofPreview.data ? <ProofPreview proof={proofPreview.data} /> : <p>No server-verified credentials yet.</p>}
+                      <button className="secondary" onClick={() => setPage("settings")}>Manage public proof page</button>
+                    </section>
+                  )}
                   <section className="lab-proof-strip">
                     <SquareTerminal size={21} />
                     <div>
@@ -2208,28 +2146,14 @@ export default function Home() {
                     <h3>Practice across your path</h3>
                     <p>
                       {
-                        state.completedPracticeIds.filter(id =>
-                          id.startsWith(
-                            `${state.profile.role}:${state.profile.sector}:`
-                          )
-                        ).length
+                        practiceEvidence.checkedPassed
                       }{" "}
                       locally checked Python, formula or metric exercises passed
-                      for this career and industry.
+                      for this path and industry.
                     </p>
                     <p>
                       {
-                        new Set(
-                          state.practiceAttempts
-                            .filter(
-                              attempt =>
-                                attempt.reviewOnly &&
-                                attempt.key.startsWith(
-                                  `${state.profile.role}:${state.profile.sector}:`
-                                )
-                            )
-                            .map(attempt => attempt.key)
-                        ).size
+                        practiceEvidence.casesRecorded
                       }{" "}
                       applied cases have saved submissions. These are
                       self-reviewed, not expert-verified.
@@ -2330,8 +2254,8 @@ export default function Home() {
                         </details>
                       )}
                     </details>
-                    <div className="evidence-table" role="table">
-                      <div className="evidence-row evidence-head" role="row">
+                    <div className="evidence-table" role="group" aria-label={t("Skill evidence", "أدلة المهارات")}>
+                      <div className="evidence-row evidence-head" aria-hidden="true">
                         <span>{t("Skill", "Skill")}</span>
                         <span>{t("Lessons", "Lessons")}</span>
                         <span>Evidence</span>
@@ -2342,7 +2266,6 @@ export default function Home() {
                       {evidenceMatrix.map(row => (
                         <button
                           className="evidence-row"
-                          role="row"
                           key={row.skillId}
                           onClick={() => {
                             setSelectedSkill(row.skillId);
@@ -2356,20 +2279,25 @@ export default function Home() {
                             </small>
                           </span>
                           <span>
+                            <small className="evidence-cell-label">{t("Lessons", "الدروس")}</small>
                             {row.completed}/{row.topics}
                           </span>
                           <span>
+                            <small className="evidence-cell-label">{t("Evidence", "الأدلة")}</small>
                             {row.evidenced}/{row.topics}
                           </span>
                           <span>
+                            <small className="evidence-cell-label">{t("Checks", "الاختبارات")}</small>
                             {row.levelChecks}/{row.target}
                           </span>
                           <span>
+                            <small className="evidence-cell-label">{t("Skill exam", "اختبار المهارة")}</small>
                             {row.latestScore === null
                               ? "—"
                               : `${row.latestScore}%`}
                           </span>
                           <span>
+                            <small className="evidence-cell-label">{t("Status", "الحالة")}</small>
                             <i className={`status-dot ${row.status}`} />
                             {row.status === "proven"
                               ? t("Proven", "مثبت")
@@ -2395,8 +2323,8 @@ export default function Home() {
                 <section className="card project-card">
                   <span className="soft-tag">
                     {t(
-                      "PERSONAL PORTFOLIO · 12 ESTIMATED HOURS",
-                      "معرض أعمال شخصي · ١٢ ساعة تقديرية"
+                      `PERSONAL PORTFOLIO · ${project.hours} ESTIMATED HOURS`,
+                      `معرض أعمال شخصي · ${project.hours} ساعة تقديرية`
                     )}
                   </span>
                   <h2>{txt(project.title)}</h2>
@@ -2408,7 +2336,7 @@ export default function Home() {
                     <strong>{sector.project}</strong>
                     <p>
                       Use at least two relevant metrics:{" "}
-                      {sector.metrics.slice(0, 3).join(", ")}.
+                      {sector.metrics.slice(0, 3).join(", ")}. Choose metrics your data can support; some require additional fields beyond the starter CSV. Document missing inputs instead of inventing values.
                     </p>
                   </div>
                   <div className="chips">
@@ -2439,6 +2367,7 @@ export default function Home() {
                       )}
                     </li>
                   </ol>
+                  <ProjectBlueprint profile={state.profile} />
                   <ProjectChecklist
                     key={project.id}
                     title={txt(project.title)}
@@ -2473,16 +2402,17 @@ export default function Home() {
                       type="checkbox"
                       checked={state.completedProjects.includes(project.id)}
                       disabled={!(state.projectNotes[project.id] || "").trim()}
-                      onChange={e =>
+                      onChange={e => {
+                        const completed = e.target.checked;
                         update(s => ({
                           ...s,
-                          completedProjects: e.target.checked
+                          completedProjects: completed
                             ? [...new Set([...s.completedProjects, project.id])]
-                            : s.completedProjects.filter(
-                                id => id !== project.id
-                              ),
-                        }))
-                      }
+                            : s.completedProjects.filter(id => id !== project.id),
+                        }));
+                        if (completed)
+                          setProofPrompt("Project completion recorded. Configure your proof page while independent project verification is pending.");
+                      }}
                     />
                     {t(
                       "I have delivered and checked all three portfolio requirements.",
@@ -2558,7 +2488,7 @@ export default function Home() {
                       onClick={() =>
                         download(
                           "DataPath-CV.txt",
-                          `${state.cv.name}\n${txt(role.title)}\n\n${state.cv.summary}\n\n${state.cv.achievements}\n\n${state.cv.links}`
+                          `${state.cv.name}\n${txt(learningPathTitle(state.profile))}\n\n${state.cv.summary}\n\n${state.cv.achievements}\n\n${state.cv.links}`
                         )
                       }
                     >
@@ -2672,7 +2602,7 @@ export default function Home() {
                         <input
                           name="role"
                           maxLength={120}
-                          defaultValue={txt(role.title)}
+                          defaultValue={txt(learningPathTitle(state.profile))}
                         />
                       </label>
                       <label>
@@ -2903,7 +2833,7 @@ export default function Home() {
                       </div>
                     </div>
                     <p>
-                      {txt(role.title)} · {state.profile.weeks}{" "}
+                      {txt(learningPathTitle(state.profile))} · {state.profile.weeks}{" "}
                       {t("weeks", "أسبوعاً")}
                     </p>
                     <button
@@ -2912,6 +2842,45 @@ export default function Home() {
                     >
                       {t("Edit goals & assessment", "تعديل الأهداف والتقييم")}
                     </button>
+                  </section>
+                  <section className="card proof-settings-card">
+                    <span className="square-icon"><BadgeCheck size={20} /></span>
+                    <h2>Public proof page</h2>
+                    {!me.data ? <p>Sign in to publish a server-verified proof page.</p> : (
+                      <>
+                        <p>Publishing shows your saved display name (or account name). Opt in only when you are ready. Your email, CV, applications, notes, and private progress never appear.</p>
+                        <form onSubmit={async event => {
+                          event.preventDefault();
+                          try {
+                            await enableProof.mutateAsync({ handle: proofHandle });
+                            await refreshProof();
+                            setNotice("Your proof page is public.");
+                          } catch (error: any) {
+                            setNotice(error?.message || "Could not publish that handle.");
+                          }
+                        }}>
+                          <label>Public handle<input value={proofHandle} onChange={event => setProofHandle(event.target.value.toLowerCase())} minLength={3} maxLength={48} pattern="[a-z0-9](?:[a-z0-9-]*[a-z0-9])?" placeholder="mina-data" required /></label>
+                          <button className="primary" disabled={enableProof.isPending}>{proofSettings.data?.enabled ? "Update public handle" : "Enable proof page"}</button>
+                        </form>
+                        {proofSettings.data?.enabled && proofSettings.data.handle && (
+                          <div className="button-row">
+                            <a className="secondary" href={`/p/${proofSettings.data.handle}`} target="_blank" rel="noopener noreferrer">View public page <ArrowUpRight size={15} /></a>
+                            <button className="danger" disabled={disableProof.isPending} onClick={() => disableProof.mutate(undefined, { onSuccess: () => { void refreshProof(); setNotice("Your proof page is private."); } })}>Disable public page</button>
+                          </div>
+                        )}
+                        <label className="checkline"><input type="checkbox" checked={Boolean(proofSettings.data?.showTargets)} disabled={targetVisibility.isPending || !proofSettings.data} onChange={event => targetVisibility.mutate({ visible: event.target.checked }, { onSuccess: () => { void refreshProof(); } })} />Show my target role and industry</label>
+                        <h3>Credential visibility</h3>
+                        {proofSettings.isError && <p role="alert">Could not load proof settings. Please retry when the account connection is available.</p>}
+                        {!proofSettings.data?.credentials.length && <p className="muted">Pass a server-graded skill assessment or SQL lab to add verified credentials.</p>}
+                        {proofSettings.data?.credentials.map(credential => (
+                          <label className="checkline" key={credential.id}>
+                            <input type="checkbox" checked={credential.visible} disabled={credentialVisibility.isPending} onChange={event => credentialVisibility.mutate({ credentialId: credential.id, visible: event.target.checked }, { onSuccess: () => { void refreshProof(); } })} />
+                            {credential.type === "skill_cert" ? skillById[credential.refId]?.title.en || credential.refId : sqlLabChallenges.find(item => item.id === credential.refId)?.title || credential.refId}
+                          </label>
+                        ))}
+                        <div className="proof-preview-card"><h3>Private preview</h3>{proofPreview.data && <ProofPreview proof={proofPreview.data} />}</div>
+                      </>
+                    )}
                   </section>
                   <section className="card study-session-card">
                     <span className="square-icon">
@@ -3029,8 +2998,15 @@ export default function Home() {
                                 "استبدال مساحة الحساب بتقدم الزائر؟ احفظ بعد ذلك للتأكيد."
                               )
                             )
-                          )
-                            update(() => readGuest());
+                          ) {
+                            try {
+                              const guest = readGuestForImport(localStorage);
+                              update(() => guest);
+                              setNotice(t("Guest progress imported. Save progress to keep it in your account.", "تم استيراد تقدم الزائر. احفظ التقدم للاحتفاظ به في حسابك."));
+                            } catch {
+                              setNotice(t("No readable guest save was found. Your account workspace has not changed.", "لم يتم العثور على تقدم زائر قابل للقراءة. لم تتغير مساحة حسابك."));
+                            }
+                          }
                         }}
                       >
                         {t("Bring in guest progress", "استيراد تقدم الزائر")}
@@ -3110,8 +3086,8 @@ export default function Home() {
                     ))}
                     <p className="muted">
                       {t(
-                        "18 representative career paths, not a market ranking. Curated September 2026. Role demand varies by region.",
-                        "١٨ مساراً مهنياً تمثيلياً وليست ترتيباً للسوق. نُسقت في سبتمبر ٢٠٢٦. يختلف الطلب حسب المنطقة."
+                        `${careers.length} representative career paths, not a market ranking. Curated September 2026. Role demand varies by region.`,
+                        `${careers.length} مساراً مهنياً تمثيلياً وليست ترتيباً للسوق. نُسقت في سبتمبر ٢٠٢٦. يختلف الطلب حسب المنطقة.`
                       )}
                     </p>
                   </section>
@@ -3157,6 +3133,7 @@ export default function Home() {
                 {t("Name", "الاسم")}
                 <Input
                   autoFocus
+                  autoComplete="name"
                   value={authForm.name}
                   onChange={e =>
                     setAuthForm({ ...authForm, name: e.target.value })
@@ -3172,6 +3149,7 @@ export default function Home() {
               <Input
                 autoFocus={authMode === "login"}
                 type="email"
+                autoComplete="email"
                 value={authForm.email}
                 onChange={e =>
                   setAuthForm({ ...authForm, email: e.target.value })
@@ -3183,6 +3161,7 @@ export default function Home() {
               {t("Password", "كلمة المرور")}
               <Input
                 type="password"
+                autoComplete={authMode === "register" ? "new-password" : "current-password"}
                 value={authForm.password}
                 onChange={e =>
                   setAuthForm({ ...authForm, password: e.target.value })
@@ -3232,71 +3211,116 @@ export default function Home() {
   );
 }
 
+function ProofPreview({
+  proof,
+}: {
+  proof: {
+    displayName: string;
+    targetRole: string | null;
+    industry: string | null;
+    credentials: Array<{
+      id: string;
+      type: string;
+      title: string;
+      verifiedAt: Date | string;
+    }>;
+  };
+}) {
+  return (
+    <div className="proof-preview">
+      <div className="proof-preview-header">
+        <strong>{proof.displayName}</strong>
+        {(proof.targetRole || proof.industry) && (
+          <small>{[proof.targetRole, proof.industry].filter(Boolean).join(" · ")}</small>
+        )}
+      </div>
+      <p><BadgeCheck size={16} /> Submitted answers or SQL were checked by the server when earned. Practice solutions are available in the app; this is not proctored or independent certification.</p>
+      <div className="proof-preview-grid">
+        {proof.credentials.map(credential => (
+          <article key={credential.id}>
+            <small>{credential.type === "skill_cert" ? "VERIFIED SKILL" : credential.type === "lab_pass" ? "VERIFIED SQL LAB" : "VERIFIED PROJECT"}</small>
+            <strong>{credential.title}</strong>
+            <time dateTime={new Date(credential.verifiedAt).toISOString()}>
+              {new Date(credential.verifiedAt).toLocaleDateString()}
+            </time>
+          </article>
+        ))}
+        {!proof.credentials.length && <span className="muted">No visible credentials yet.</span>}
+      </div>
+    </div>
+  );
+}
+
 function SqlPracticeLab({
   initialChallengeId,
   onChoose,
   state,
   update,
+  serverVerificationEnabled,
+  onVerified,
   openRoadmap,
 }: {
   state: LearningState;
   update: (fn: (state: LearningState) => LearningState) => void;
+  serverVerificationEnabled: boolean;
+  onVerified: () => void;
   openRoadmap: (topicId: string) => void;
   initialChallengeId: string;
   onChoose: (id: string) => void;
 }) {
+  const verifySql = trpc.grading.sql.useMutation();
   const { challenges: allSqlChallenges, tables: sqlLabTables } = sqlContext(
-    state.profile.sector
+    state.profile.sector,
   );
   const sqlLabChallenges = allSqlChallenges.filter(
-    challenge =>
-      skillById.sql.topics.find(topic => topic.id === challenge.topicId)!
-        .level <= (requirements(state.profile).sql || 1)
+    (challenge) =>
+      skillById.sql.topics.find((topic) => topic.id === challenge.topicId)!
+        .level <= (requirements(state.profile).sql || 1),
   );
   const [hintCount, setHintCount] = useState(0);
   const [challengeId, setChallengeId] = useState(
-    sqlLabChallenges.some(item => item.id === initialChallengeId)
+    sqlLabChallenges.some((item) => item.id === initialChallengeId)
       ? initialChallengeId
-      : sqlLabChallenges[0].id
+      : sqlLabChallenges[0].id,
   );
-  const challenge = sqlLabChallenges.find(item => item.id === challengeId)!;
+  const challenge = sqlLabChallenges.find((item) => item.id === challengeId)!;
   const [query, setQuery] = useState(
     [...state.labAttempts]
       .reverse()
       .find(
-        attempt =>
+        (attempt) =>
           attempt.challengeId === challengeId &&
-          (attempt.sector || "banking") === state.profile.sector
-      )?.query ?? challenge.starterSql
+          (attempt.sector || "banking") === state.profile.sector,
+      )?.query ?? challenge.starterSql,
   );
   const [result, setResult] = useState<Awaited<
     ReturnType<typeof runSqlInWorker>
   > | null>(null);
   const [running, setRunning] = useState(false);
   const passedIds = new Set(
-    [...passedLabIds(state)].filter(id =>
-      sqlLabChallenges.some(item => item.id === id)
-    )
+    [...passedLabIds(state)].filter((id) =>
+      sqlLabChallenges.some((item) => item.id === id),
+    ),
   );
   const drafts = useRef<Record<string, string>>({});
   const challengeAttempts = state.labAttempts.filter(
-    attempt =>
+    (attempt) =>
       attempt.challengeId === challengeId &&
-      (attempt.sector || "banking") === state.profile.sector
+      (attempt.sector || "banking") === state.profile.sector,
   );
   const scoredAttempts = challengeAttempts.filter(
-    attempt => attempt.checksTotal
+    (attempt) => attempt.checksTotal,
   );
   const firstScore = scoredAttempts[0];
   const latestScore = scoredAttempts[scoredAttempts.length - 1];
   const score = (attempt: typeof firstScore) =>
     Math.round(
-      (100 * (attempt.checksPassed || 0)) / (attempt.checksTotal || 1)
+      (100 * (attempt.checksPassed || 0)) / (attempt.checksTotal || 1),
     );
   const choose = (id: string) => {
     if (running) return;
     drafts.current[challengeId] = query;
-    const nextChallenge = sqlLabChallenges.find(item => item.id === id)!;
+    const nextChallenge = sqlLabChallenges.find((item) => item.id === id)!;
     setChallengeId(id);
     onChoose(id);
     setQuery(
@@ -3304,29 +3328,40 @@ function SqlPracticeLab({
         [...state.labAttempts]
           .reverse()
           .find(
-            attempt =>
+            (attempt) =>
               attempt.challengeId === id &&
-              (attempt.sector || "banking") === state.profile.sector
+              (attempt.sector || "banking") === state.profile.sector,
           )?.query ??
-        nextChallenge.starterSql
+        nextChallenge.starterSql,
     );
     setResult(null);
     setHintCount(0);
   };
   const run = async () => {
+    verifySql.reset();
     setRunning(true);
     const nextResult = await runSqlInWorker(
       challenge.id,
       query,
-      state.profile.sector
+      state.profile.sector,
     );
     setResult(nextResult);
-    update(current =>
+    update((current) =>
       current.profile.role === state.profile.role &&
       current.profile.sector === state.profile.sector
         ? recordLabAttempt(current, challenge.id, query, nextResult)
-        : current
+        : current,
     );
+    if (serverVerificationEnabled)
+      verifySql.mutate(
+        {
+          challengeId: challenge.id,
+          query,
+          sector: state.profile.sector,
+          clientPassed: nextResult.passed,
+        },
+        { onSuccess: grade => grade.passed && onVerified() },
+      );
     setRunning(false);
   };
   return (
@@ -3357,95 +3392,110 @@ function SqlPracticeLab({
         </div>
       </div>
 
-      <div className="lab-tabs" aria-label="SQL challenges">
-        {sqlLabChallenges.map((item, index) => (
-          <button
-            key={item.id}
-            disabled={running}
-            aria-pressed={item.id === challengeId}
-            className={item.id === challengeId ? "active" : ""}
-            onClick={() => choose(item.id)}
-          >
-            <span>{String(index + 1).padStart(2, "0")}</span>
-            <b>{item.title}</b>
-            {passedIds.has(item.id) && <Check size={15} />}
-          </button>
-        ))}
-      </div>
-
+      <details className="studio-sql-picker">
+        <summary>
+          SQL exercises · {sqlLabChallenges.length} in your path
+        </summary>
+        <div className="lab-tabs" aria-label="SQL challenges">
+          {sqlLabChallenges.map((item, index) => (
+            <button
+              key={item.id}
+              disabled={running}
+              aria-pressed={item.id === challengeId}
+              className={item.id === challengeId ? "active" : ""}
+              onClick={() => choose(item.id)}
+            >
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <b>{item.title}</b>
+              {passedIds.has(item.id) && <Check size={15} />}
+            </button>
+          ))}
+        </div>
+      </details>
       <div className="lab-workspace">
-        <article className="lab-brief card">
-          <LessonGlossary language={state.profile.language} />
-          <div className="lab-meta">
-            <span>
-              {challenge.level} · {challenge.mode || "Build"}
-            </span>
-            <button
-              className="text-button"
-              onClick={() => openRoadmap(challenge.topicId)}
-            >
-              Open lesson
-            </button>
-          </div>
-          <h3>{challenge.title}</h3>
-          <small>
-            About {practiceMeta(challenge.topicId, "sql").minutes} minutes
-          </small>
-          <p>{challenge.brief}</p>
-          <strong>Your task</strong>
-          <p>{challenge.task}</p>
-          <section className="progressive-hints">
-            <h4>Hints</h4>
-            <ol>
-              {challenge.hints.slice(0, hintCount).map(hint => (
-                <li key={hint}>{hint}</li>
-              ))}
-            </ol>
-            <button
-              className="text-button"
-              disabled={hintCount >= challenge.hints.length}
-              onClick={() => setHintCount(count => count + 1)}
-            >
-              {hintCount >= challenge.hints.length
-                ? "All hints revealed"
-                : `Reveal hint ${hintCount + 1}`}
-            </button>
-          </section>
-          <div className="dataset-preview">
-            <strong>Dataset</strong>
-            {Object.entries(sqlLabTables).map(([name, rows]) => (
-              <details key={name} open={name === "transactions"}>
-                <summary>
-                  {name} · {rows.length} rows
-                </summary>
-                <div className="lab-table-wrap">
-                  <table>
-                    <thead>
-                      <tr>
-                        {Object.keys(rows[0]).map(column => (
-                          <th key={column}>{column}</th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {rows.map((row, rowIndex) => (
-                        <tr key={rowIndex}>
-                          {Object.values(row).map((value, cellIndex) => (
-                            <td key={cellIndex}>
-                              {value === null ? "NULL" : value}
-                            </td>
+        <details
+          className="lab-brief card studio-instructions"
+          key={challenge.id}
+        >
+          <summary>Instructions, dataset & hints</summary>
+          <div className="studio-instructions-body">
+            <LessonGlossary language={state.profile.language} />
+            <div className="lab-meta">
+              <span>
+                {challenge.level} · {challenge.mode || "Build"}
+              </span>
+              <button
+                className="text-button"
+                onClick={() => openRoadmap(challenge.topicId)}
+              >
+                Open lesson
+              </button>
+            </div>
+            <h3>{challenge.title}</h3>
+            <small>
+              About {practiceMeta(challenge.topicId, "sql").minutes} minutes
+            </small>
+            <p>{challenge.brief}</p>
+            <strong>Your task</strong>
+            <p>{challenge.task}</p>
+            <section className="progressive-hints">
+              <h4>Hints</h4>
+              <ol>
+                {challenge.hints.slice(0, hintCount).map((hint) => (
+                  <li key={hint}>{hint}</li>
+                ))}
+              </ol>
+              <button
+                className="text-button"
+                disabled={hintCount >= challenge.hints.length}
+                onClick={() => setHintCount((count) => count + 1)}
+              >
+                {hintCount >= challenge.hints.length
+                  ? "All hints revealed"
+                  : `Reveal hint ${hintCount + 1}`}
+              </button>
+            </section>
+            <div className="dataset-preview">
+              <strong>Dataset</strong>
+              {Object.entries(sqlLabTables).map(([name, rows]) => (
+                <details key={name} open={name === "transactions"}>
+                  <summary>
+                    {name} · {rows.length} rows
+                  </summary>
+                  <div className="lab-table-wrap">
+                    <table>
+                      <thead>
+                        <tr>
+                          {Object.keys(rows[0]).map((column) => (
+                            <th key={column}>{column}</th>
                           ))}
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </details>
-            ))}
+                      </thead>
+                      <tbody>
+                        {rows.map((row, rowIndex) => (
+                          <tr key={rowIndex}>
+                            {Object.values(row).map((value, cellIndex) => (
+                              <td key={cellIndex}>
+                                {value === null ? "NULL" : value}
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </details>
+              ))}
+            </div>
           </div>
-        </article>
+        </details>
 
         <article className="query-console">
+          <div className="studio-sql-task">
+            <span className="eyebrow">{challenge.level} · YOUR TASK</span>
+            <h3>{challenge.title}</h3>
+            <p>{challenge.task}</p>
+          </div>
           <div className="console-bar">
             <span>
               <i /> query.sql
@@ -3466,7 +3516,7 @@ function SqlPracticeLab({
             aria-label="SQL query editor"
             spellCheck={false}
             value={query}
-            onChange={event => setQuery(event.target.value)}
+            onChange={(event) => setQuery(event.target.value)}
           />
           <div className="console-actions">
             <small>Isolated in-browser database · SELECT queries only</small>
@@ -3475,6 +3525,7 @@ function SqlPracticeLab({
               {running ? "Running…" : "Run query"}
             </button>
           </div>
+          {serverVerificationEnabled && <p role="status">{verifySql.isPending ? "Checking this submission on the server…" : verifySql.isError ? "Server verification was unavailable. Your local practice result is kept; run again to retry verification." : verifySql.data ? (verifySql.data.passed ? "Server verification passed." : "Server verification did not pass. No credential was issued for this submission.") : ""}</p>}
           <div className="query-result" aria-live="polite">
             {!result ? (
               <div className="result-empty">
@@ -3495,7 +3546,7 @@ function SqlPracticeLab({
                   <span>{result.message}</span>
                 </div>
                 <div className="query-checks">
-                  {result.checks.map(check => (
+                  {result.checks.map((check) => (
                     <span
                       className={check.passed ? "passed" : "failed"}
                       key={check.label}
@@ -3535,7 +3586,7 @@ function SqlPracticeLab({
                   >
                     <h3>What to check next</h3>
                     <ul>
-                      {result.resultFeedback.map(item => (
+                      {result.resultFeedback.map((item) => (
                         <li key={item}>{item}</li>
                       ))}
                     </ul>
@@ -3563,7 +3614,7 @@ function SqlPracticeLab({
                     <table>
                       <thead>
                         <tr>
-                          {result.columns.map(column => (
+                          {result.columns.map((column) => (
                             <th key={column}>{column}</th>
                           ))}
                         </tr>
@@ -3571,7 +3622,7 @@ function SqlPracticeLab({
                       <tbody>
                         {result.rows.map((row, rowIndex) => (
                           <tr key={rowIndex}>
-                            {result.columns.map(column => (
+                            {result.columns.map((column) => (
                               <td key={column}>
                                 {row[column] == null ? "NULL" : row[column]}
                               </td>
@@ -3591,7 +3642,7 @@ function SqlPracticeLab({
         <h3>Your progress on this challenge</h3>
         <p>
           {challengeAttempts.length} saved attempts ·{" "}
-          {challengeAttempts.filter(attempt => attempt.passed).length}{" "}
+          {challengeAttempts.filter((attempt) => attempt.passed).length}{" "}
           successful
           {firstScore && latestScore && (
             <>
@@ -3669,6 +3720,8 @@ function QuizCard({
   lockedMessage,
   locked = false,
   compact = false,
+  serverVerificationEnabled,
+  onVerified,
 }: {
   title: string;
   questions: QuizQuestion[];
@@ -3679,7 +3732,10 @@ function QuizCard({
   lockedMessage?: string;
   locked?: boolean;
   compact?: boolean;
+  serverVerificationEnabled: boolean;
+  onVerified: () => void;
 }) {
+  const verifyQuiz = trpc.grading.quiz.useMutation();
   const lang = platformLanguage(state.profile.language);
   const t = (en: string, ar: string) => (lang === "ar" ? ar : en);
   const [open, setOpen] = useState(false);
@@ -3690,6 +3746,13 @@ function QuizCard({
     .find(attempt => attempt.kind === kind && attempt.targetId === targetId);
   const passMark = kind === "topic" ? 80 : kind === "skill" ? 95 : 80;
   const submit = () => {
+    verifyQuiz.reset();
+    const score = Math.round(
+      (questions.filter(question => answers[question.id] === question.answer)
+        .length /
+        questions.length) *
+        100,
+    );
     update(current =>
       recordQuizResult(
         current,
@@ -3701,6 +3764,53 @@ function QuizCard({
         new Date().toISOString()
       )
     );
+    if (serverVerificationEnabled) {
+      const cumulativeSkills =
+        kind === "cumulative"
+          ? targetId.replace(/^review-/, "").split("+")
+          : undefined;
+      const requiredLevels = cumulativeSkills
+        ? Object.fromEntries(
+            cumulativeSkills.map(skillId => [
+              skillId,
+              Math.max(
+                1,
+                ...questions
+                  .filter(question => question.topicId.startsWith(`${skillId}-`))
+                  .map(question =>
+                    skillById[skillId].topics.find(
+                      topic => topic.id === question.topicId,
+                    )?.level ?? 1,
+                  ),
+              ),
+            ]),
+          )
+        : undefined;
+      const targetLevel =
+        kind === "skill"
+          ? Math.max(
+              1,
+              ...questions.map(
+                question =>
+                  skillById[targetId].topics.find(
+                    topic => topic.id === question.topicId,
+                  )?.level ?? 1,
+              ),
+            )
+          : undefined;
+      verifyQuiz.mutate(
+        {
+          kind,
+          targetId,
+          answers,
+          targetLevel,
+          cumulativeSkills,
+          requiredLevels,
+          clientPassed: score >= (kind === "skill" ? 95 : 80),
+        },
+        { onSuccess: grade => grade.passed && onVerified() },
+      );
+    }
     setReviewed(true);
   };
   return (
@@ -3755,6 +3865,7 @@ function QuizCard({
               `درجة النجاح: ${passMark}٪. الإجابات الخاطئة تعيد موضوعاتها للمراجعة.`
             )}
           </p>
+          <div className="quiz-answer-progress" role="status">{t(`${Object.keys(answers).length} of ${questions.length} answered`, `تمت الإجابة عن ${Object.keys(answers).length} من ${questions.length}`)}</div>
           {questions.map((question, questionIndex) => (
             <fieldset key={question.id}>
               <legend>
@@ -3790,6 +3901,7 @@ function QuizCard({
                       ? t("Correct", "صح")
                       : t("Not quite", "مش صح")}
                   </strong>
+                  {answers[question.id] !== question.answer && <p><strong>{t("Correct answer:", "الإجابة الصحيحة:")}</strong> {question.options[question.answer][lang]}</p>}
                   <p>{question.explanation[lang]}</p>
                 </div>
               )}
@@ -3811,6 +3923,7 @@ function QuizCard({
                   setOpen(false);
                   setReviewed(false);
                   setAnswers({});
+                  verifyQuiz.reset();
                 }}
               >
                 {t("Close review", "اقفل الـReview")}
@@ -3824,6 +3937,7 @@ function QuizCard({
           </div>
         </div>
       )}
+      {serverVerificationEnabled && <p role="status">{verifyQuiz.isPending ? "Checking your answers on the server…" : verifyQuiz.isError ? "Server verification was unavailable. Your local result is kept; reopen the quiz to retry." : verifyQuiz.data ? (verifyQuiz.data.passed ? "Server verification passed." : "Server verification did not pass. No credential was issued for this submission.") : ""}</p>}
       {latest && (
         <p className="quiz-result">
           {latest.passed
@@ -3847,12 +3961,16 @@ function ReviewCenter({
   requiredLevels,
   update,
   openLesson,
+  serverVerificationEnabled,
+  onVerified,
 }: {
   openLesson: (topicId: string) => void;
   state: LearningState;
   requiredIds: string[];
   requiredLevels: Record<string, number>;
   update: (fn: (s: LearningState) => LearningState) => void;
+  serverVerificationEnabled: boolean;
+  onVerified: () => void;
 }) {
   const [reviewFilter, setReviewFilter] = useState<
     "all" | "due" | "scheduled" | "locked"
@@ -3998,6 +4116,8 @@ function ReviewCenter({
                   targetId={targetId}
                   state={state}
                   update={update}
+                  serverVerificationEnabled={serverVerificationEnabled}
+                  onVerified={onVerified}
                   locked={locked}
                   lockedMessage={
                     t(
@@ -4124,6 +4244,15 @@ function Onboarding({
   const patch = (v: Partial<Profile>) =>
     update(s => ({ ...s, profile: { ...s.profile, ...v } }));
   const req = requirements(p);
+  const [autoPace, setAutoPace] = useState(!state.onboarded);
+  const suggestedPace = suggestPace(state);
+  useEffect(() => {
+    if (step !== 2 || !autoPace) return;
+    update(current => current.profile.weeks === suggestedPace.weeks && current.profile.hoursPerWeek === suggestedPace.hoursPerWeek
+      ? current
+      : { ...current, profile: { ...current.profile, weeks: suggestedPace.weeks, hoursPerWeek: suggestedPace.hoursPerWeek } });
+  }, [step, autoPace, suggestedPace.weeks, suggestedPace.hoursPerWeek]);
+
   return (
     <div className="onboarding">
       <div className="onboarding-intro">
@@ -4172,10 +4301,33 @@ function Onboarding({
             </div>
             <p>
               {t(
-                "Choose a role to explore. You can change direction whenever you need.",
-                "اختر دوراً لاستكشافه. يمكنك تغيير اتجاهك متى احتجت."
+                "Choose a career or a focused skill path. You can change direction whenever you need.",
+                "اختر مساراً مهنياً أو مهارة محددة. يمكنك تغيير اتجاهك متى احتجت."
               )}
             </p>
+            <fieldset className="learning-mode-picker">
+              <legend>{t("What would you like to learn?", "ماذا تريد أن تتعلم؟")}</legend>
+              <div className="button-row">
+                {(["career", "skill"] as const).map(mode => <button type="button" key={mode} className={p.learningMode === mode ? "primary" : "secondary"} aria-pressed={p.learningMode === mode} onClick={() => { setBeginnerSetup(false); patch({ learningMode: mode }); }}>
+                  {mode === "career" ? t("Full career path", "مسار مهني كامل") : t("One tool, skill or language", "أداة أو مهارة أو لغة")}
+                </button>)}
+              </div>
+            </fieldset>
+            {p.learningMode === "skill" ? <div className="focused-path-setup">
+              <label>{t("Choose your focus", "اختر مجال التركيز")}
+                <select value={p.focusSkill} onChange={e => patch({ focusSkill: e.target.value })}>
+                  {skills.map(skill => <option key={skill.id} value={skill.id}>{skill.title[lang]}</option>)}
+                </select>
+              </label>
+              <label>{t("Target depth", "المستوى المستهدف")}
+                <select value={p.targetLevel} onChange={e => patch({ targetLevel: Number(e.target.value) })}>
+                  <option value={1}>{t("Beginner — foundations", "مبتدئ — الأساسيات")}</option>
+                  <option value={2}>{t("Intermediate — practical application", "متوسط — التطبيق العملي")}</option>
+                  <option value={3}>{t("Advanced — deeper techniques", "متقدم — تقنيات متعمقة")}</option>
+                </select>
+              </label>
+              <p>{t("Your plan includes the selected depth and required foundation skills. Industry choices still customize your practice context.", "تشمل خطتك المستوى المحدد والمهارات الأساسية اللازمة. يخصص اختيار المجال سياق التدريب.")}</p>
+            </div> : <>
             <button
               type="button"
               className={
@@ -4255,7 +4407,7 @@ function Onboarding({
                       type="button"
                       className="chip"
                       key={role.id}
-                      onClick={() => patch({ role: role.id })}
+                      onClick={() => patch({ role: role.id, skillTargets: {} })}
                     >
                       {role.title[lang]}
                       <ArrowRight size={13} />
@@ -4271,6 +4423,8 @@ function Onboarding({
                 setBeginnerSetup(true);
                 patch({
                   experience: "new",
+                  learningMode: "career",
+                  skillTargets: {},
                   role: "data-analyst",
                   sector: "general",
                   tools: [],
@@ -4289,27 +4443,8 @@ function Onboarding({
               question. Data Analyst is a starting suggestion; you can explore
               careers and industries later.
             </p>
-            <details>
-              <summary>Explore all career choices</summary>
-              <div className="role-grid">
-                {careers.map(r => (
-                  <button
-                    type="button"
-                    className={
-                      p.role === r.id ? "role-card selected" : "role-card"
-                    }
-                    key={r.id}
-                    onClick={() => patch({ role: r.id })}
-                  >
-                    <span className="role-radio">
-                      {p.role === r.id && <Check size={12} />}
-                    </span>
-                    <strong>{r.title[lang]}</strong>
-                    <small>{r.description[lang]}</small>
-                  </button>
-                ))}
-              </div>
-            </details>
+            <PathExplorer state={state} lang={lang} onChoose={role => patch({ role, skillTargets: {} })} />
+            </>}
             <label>
               Target business sector
               <select
@@ -4423,10 +4558,15 @@ function Onboarding({
                 />
               </label>
             </div>
+            <details className="placement-disclosure">
+              <summary>{t("Not sure of your level? Try an optional placement check", "غير متأكد من مستواك؟ جرّب فحصًا اختياريًا")}</summary>
+              <PlacementCheck key={Object.keys(req).join(":")} state={state} lang={lang} skillIds={Object.keys(req)} onApply={(id, level) => patch({ assessment: { ...p.assessment, [id]: level } })} />
+            </details>
             <details>
               <summary>
-                I already have some experience — choose tools and assess skills
+                {t("Customize tools, target levels and your starting point", "خصص الأدوات والمستويات ونقطة البداية")}
               </summary>
+              {p.learningMode === "career" && <>
               <h3>
                 {t(
                   "Tools and skills you are interested in (optional)",
@@ -4453,6 +4593,17 @@ function Onboarding({
                   </button>
                 ))}
               </div>
+              </>}
+              {p.learningMode === "career" && <section className="skill-targets">
+                <h3>{t("Customize target levels", "تخصيص المستويات المستهدفة")}</h3>
+                <p>{t("These are learning goals, not your current ability. Required foundations can raise a lower target.", "هذه أهداف تعلم وليست تقييمًا لقدراتك الحالية. قد ترفع المتطلبات الأساسية المستوى الأدنى.")}</p>
+                <div className="assessment-grid">{Object.keys(req).map(id => <label key={id}>{skillById[id].title[lang]}
+                  <select value={p.skillTargets[id] || req[id]} onChange={e => patch({ skillTargets: { ...p.skillTargets, [id]: Number(e.target.value) } })}>
+                    {[1, 2, 3].map(level => <option key={level} value={level}>{level === 1 ? t("Beginner", "مبتدئ") : level === 2 ? t("Intermediate", "متوسط") : t("Advanced", "متقدم")}</option>)}
+                  </select>
+                </label>)}</div>
+                <button type="button" className="secondary" onClick={() => patch({ skillTargets: {} })}>{t("Restore role recommendations", "استعادة توصيات الدور")}</button>
+              </section>}
               <h3>{t("Self-assessment", "التقييم الذاتي")}</h3>
               <p>
                 {t(
@@ -4513,8 +4664,18 @@ function Onboarding({
                 estimate, not a job-readiness deadline.
               </div>
             )}
+            <section className="pace-suggestion" aria-label={t("Suggested learning pace", "الوتيرة المقترحة")}>
+              <span className="eyebrow">{autoPace ? t("SUGGESTED PACE APPLIED", "تم تطبيق الوتيرة المقترحة") : t("YOUR CUSTOM PACE", "وتيرتك المخصصة")}</span>
+              <h3>{t(`${suggestedPace.hoursPerWeek} hours a week · ${suggestedPace.weeks} weeks`, `${suggestedPace.hoursPerWeek} ساعات أسبوعياً · ${suggestedPace.weeks} أسبوعاً`)}</h3>
+              <p>{t(`Based on ${suggestedPace.remainingHours} remaining learning hours, including your project, with approximately 15% extra time for review and interruptions. Your selected skills, target levels, starting point and saved progress shape the estimate.`, `بناءً على ${suggestedPace.remainingHours} ساعة تعلم متبقية تشمل المشروع، مع نحو 15٪ وقت إضافي للمراجعة والانقطاعات. تعتمد المدة على المهارات والمستويات ونقطة البداية والتقدم المحفوظ.`)}</p>
+              <p>{t("This is a suggested schedule, not a deadline. Change either field below to use your own pace.", "هذا جدول مقترح وليس موعداً إلزامياً. غيّر أي حقل أدناه لاستخدام وتيرتك الخاصة.")}</p>
+              <div className="button-row">
+                <button type="button" className={autoPace ? "primary" : "secondary"} aria-pressed={autoPace} onClick={() => { setAutoPace(true); patch({ hoursPerWeek: suggestedPace.hoursPerWeek, weeks: suggestedPace.weeks }); }}>{t("Use suggested pace", "استخدام الوتيرة المقترحة")}</button>
+                <button type="button" className={!autoPace ? "primary" : "secondary"} aria-pressed={!autoPace} onClick={() => setAutoPace(false)}>{t("Set my own pace", "تحديد وتيرتي")}</button>
+              </div>
+            </section>
             <div className="form-grid">
-              <label hidden={beginnerSetup}>
+              <label>
                 {t(
                   "Desired completion period (weeks)",
                   "مدة الإكمال المرغوبة (أسابيع)"
@@ -4525,11 +4686,10 @@ function Onboarding({
                   max={104}
                   required
                   value={p.weeks}
-                  onChange={e =>
-                    patch({
-                      weeks: Math.max(1, Math.min(104, Number(e.target.value))),
-                    })
-                  }
+                  onChange={e => {
+                    setAutoPace(false);
+                    patch({ weeks: Math.max(1, Math.min(104, Math.round(Number(e.target.value)))) });
+                  }}
                 />
               </label>
               <label>
@@ -4540,14 +4700,10 @@ function Onboarding({
                   max={60}
                   required
                   value={p.hoursPerWeek}
-                  onChange={e =>
-                    patch({
-                      hoursPerWeek: Math.max(
-                        1,
-                        Math.min(60, Number(e.target.value))
-                      ),
-                    })
-                  }
+                  onChange={e => {
+                    setAutoPace(false);
+                    patch({ hoursPerWeek: Math.max(1, Math.min(60, Math.round(Number(e.target.value)))) });
+                  }}
                 />
               </label>
               <label>
@@ -4568,7 +4724,7 @@ function Onboarding({
             <div className="plan-preview">
               <Target size={26} />
               <div>
-                <h3>{careerById[p.role].title[lang]}</h3>
+                <h3>{learningPathTitle(p)[lang]}</h3>
                 <p>
                   {Object.keys(req).length} {t("skill areas", "مجالات مهارية")}{" "}
                   · {makePlan(state).remainingHours}{" "}
