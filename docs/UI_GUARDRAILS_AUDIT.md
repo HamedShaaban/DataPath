@@ -1,0 +1,38 @@
+# Production UI guardrails review
+
+Reviewed 30 September 2026 on `ui/production-guardrails`, using the user-provided `production-web-ui-guardrails` skill.
+
+## Changes
+
+- Centralized graphite neutral surfaces, a teal action accent, semantic feedback colours, radius, font, transition and content-width tokens.
+- Replaced the competing legacy literal palettes in the shared stylesheet. Light and dark modes use paired tokens.
+- Removed decorative gradients, static shadows, hover lifts, sparkle icons, decorative icon boxes and unused orbit artwork.
+- Raised small meaningful text to at least 12px; normalized the type and 4px spacing scales. Monospace remains for code/data where appropriate.
+- Limited landing headlines to 48px desktop / 32px mobile. Removed the redundant promotional eyebrow, repeated free badge and decorative project bars.
+- Simplified dashboard shortcuts, preserved visible keyboard focus, removed forced equal heights from settings cards and restored accent-coloured progress fills.
+- Restyled shared UI primitives so static inputs/buttons do not have shadows and overlays use a single subtle shadow token.
+- Rewrote UI em dashes, unavailable-assessment copy and theme labels. SQL keywords, programming identifiers and proper career/tool names retain their technical spelling.
+- No database schema changes, new dependencies, account changes or deployment actions belong to this UI task.
+
+## Inspection coverage
+
+Rendered guest-mode review covered overview/first lesson, roadmap, practice entry, progress matrix, resources, tools, interviews, projects, career toolkit, AI coach unavailable state and settings. All 11 destinations were inspected in light/dark at 1440px and 390px. Additional checks covered onboarding direction/levels/pace, expanded roadmap lesson and SQL workbench. Landing and path explorer were inspected in the fresh learner session at 390px.
+
+DOM sampling found no page-wide horizontal overflow at the recorded widths and no meaningful sampled text below 12px. Contrast sampling compared direct text colour with its nearest opaque ancestor background, excluding disabled controls. This is a useful regression check, not a complete WCAG audit: it does not model every alpha-composited surface, assistive technology combination or user-generated content state.
+
+Screenshots and inspection data are stored locally in `output/ui-guardrails/`. The generated contact sheet is an overview; use individual screenshots for inspection. Existing learner progress was not reset. The separate fresh learner session was not submitted as a new learning plan.
+
+## Validation
+
+- Vitest: 308 tests passed across 47 files, none removed or skipped. Existing palette contrast tests now reference the renamed `--accent` token.
+- TypeScript check: passed.
+- Production + Vercel output build: passed.
+- Keyboard activation of navigation and disclosures: manually exercised in browser.
+- Added four Playwright regressions for all workspace destinations at desktop/mobile widths in both themes, including text size, contrast, page overflow and focus visibility.
+- Browser regression: all 5 Playwright tests passed, including signup → SQL → Python → saved progress and all 11 workspace destinations at 390px / 1440px in light and dark themes. The earlier approval-limit blocker was resolved.
+- Real PostgreSQL integration passed: saved guest progress survives logout/login, session expiry and revocation, account isolation, revision races, repeat migrations and rollback checks. Only disposable local databases were used.
+- Public proof styling was also simplified and its empty state inspected using an explicitly fictional local fixture, removed after inspection. Account-only loaded states, live AI responses and live published proof records remain outside the completed guest UI inspection. Their live acceptance is not claimed.
+
+## Delivery status
+
+The updated local preview is available at `http://localhost:3010/`. This branch is not a production deployment and the audit does not claim every possible state is fully compliant. The pending browser regression run is now complete. Production connectivity and live optional integrations still require separate deployment acceptance.

@@ -75,7 +75,7 @@ describe("Dark-mode onboarding contrast regression", () => {
 describe("Shared workspace palette", () => {
   for (const theme of [":root", '[data-theme="dark"]']) {
     it(`keeps body, muted and accent text readable on both ${theme} surfaces`, () => {
-      for (const foreground of ["--text", "--muted", "--green"]) {
+      for (const foreground of ["--text", "--muted", "--accent"]) {
         for (const background of ["--surface", "--surface-soft", "--page"]) {
           expect(
             contrast(property(theme, foreground), property(theme, background))

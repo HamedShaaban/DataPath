@@ -51,7 +51,7 @@ import {
   Map,
   MessageSquare,
   Settings,
-  Sparkles,
+  MessageSquareText,
   Target,
   BriefcaseBusiness,
   FolderKanban,
@@ -206,7 +206,7 @@ const navigation: Array<[Page, string, string, typeof Map]> = [
   ["interviews", "Interview studio", "استوديو المقابلات", MessageSquare],
   ["projects", "My projects", "مشاريعي", FolderKanban],
   ["career", "Career toolkit", "أدوات التوظيف", BriefcaseBusiness],
-  ["coach", "AI coach", "المدرب الذكي", Sparkles],
+  ["coach", "AI coach", "المدرب الذكي", MessageSquareText],
 ];
 export default function Home() {
   const [state, setState] = useState<LearningState>(readGuest);
@@ -718,11 +718,11 @@ export default function Home() {
               }
               title={t(
                 theme === "light" ? "Dark mode" : "Light mode",
-                theme === "light" ? "Dark Mode" : "Light Mode"
+                theme === "light" ? "Dark mode" : "Light mode"
               )}
               aria-label={t(
                 theme === "light" ? "Enable dark mode" : "Enable light mode",
-                theme === "light" ? "تشغيل Dark Mode" : "تشغيل Light Mode"
+                theme === "light" ? "تشغيل Dark mode" : "تشغيل Light mode"
               )}
             >
               {theme === "light" ? <Moon size={17} /> : <Sun size={17} />}
@@ -866,21 +866,18 @@ export default function Home() {
             <>
               <div className="page-heading">
                 <div>
-                  <div className="eyebrow">
-                    {t("BUILD YOUR NEXT CHAPTER", "خطوة صغيرة كل يوم")}
-                  </div>
                   <h1>
                     {page === "dashboard"
                       ? t("Let’s make progress.", "لنتقدم خطوة جديدة.")
                       : navigation.find(n => n[0] === page)?.[
                           lang === "ar" ? 2 : 1
                         ] ||
-                        t("Make this journey yours.", "اجعل هذه الرحلة رحلتك.")}
+                        t("Settings & profile", "الإعدادات والملف الشخصي")}
                   </h1>
                   <p>
                     {page === "dashboard"
                       ? t(
-                          "A clear direction. The right skills. A career built by you.",
+                          "Continue your lessons, practise skills and review your progress.",
                           "اتجاه واضح. مهارات مناسبة. ومستقبل مهني تبنيه بنفسك."
                         )
                       : txt(learningPathTitle(state.profile)) +
@@ -891,10 +888,6 @@ export default function Home() {
                         )}
                   </p>
                 </div>
-                <span className="outline-pill">
-                  <span className="live-dot" />
-                  {t("FREE TO LEARN", "التعلم مجاني")}
-                </span>
               </div>
               {page === "dashboard" && <LearningDashboard state={state}
                 adjustPace={hours => update(current => applyCatchUp(current, hours))}
@@ -2045,7 +2038,7 @@ export default function Home() {
                           )
                         }
                       >
-                        <Sparkles size={16} />
+                        <MessageSquareText size={16} />
                         {coach.isPending
                           ? t("Reviewing…", "جارٍ المراجعة…")
                           : t("Get AI feedback", "احصل على ملاحظات ذكية")}
@@ -2185,7 +2178,7 @@ export default function Home() {
                       </summary>
                       <p>
                         {t(
-                          "Select skills to include. This download contains summary counts and assessment results only—not your name, private notes, artifact links or interview answers. Nothing is published automatically.",
+                          "Select skills to include. This download contains summary counts and assessment results only: not your name, private notes, artifact links or interview answers. Nothing is published automatically.",
                           "اختر المهارات. يتضمن التنزيل ملخص الأعداد ونتائج التقييم فقط، دون اسمك أو ملاحظاتك أو روابط أعمالك أو إجابات المقابلات. لا يُنشر شيء تلقائياً."
                         )}
                       </p>
@@ -2293,7 +2286,7 @@ export default function Home() {
                           <span>
                             <small className="evidence-cell-label">{t("Skill exam", "اختبار المهارة")}</small>
                             {row.latestScore === null
-                              ? "—"
+                              ? ": "
                               : `${row.latestScore}%`}
                           </span>
                           <span>
@@ -2659,7 +2652,7 @@ export default function Home() {
               {page === "coach" && (
                 <section className="card coach-card">
                   <span className="square-icon">
-                    <Sparkles />
+                    <MessageSquareText />
                   </span>
                   <h2>
                     {t(
@@ -2718,7 +2711,7 @@ export default function Home() {
                     }
                     onClick={() => askCoach("coach", coachInput)}
                   >
-                    <Sparkles size={16} />
+                    <MessageSquareText size={16} />
                     {coach.isPending
                       ? t("Thinking…", "جارٍ التفكير…")
                       : t("Ask my coach", "اسأل مدربي")}
@@ -2731,7 +2724,7 @@ export default function Home() {
                 </section>
               )}
               {page === "settings" && (
-                <div className="two-column">
+                <div className="two-column settings-grid">
                   <section className="card">
                     <h2>{t("Your learning profile", "ملف تعلمك")}</h2>
                     {me.data && <div className="setting-row">
@@ -2770,7 +2763,7 @@ export default function Home() {
                         ) : (
                           <Sun size={16} />
                         )}
-                        {theme === "light" ? "Dark Mode" : "Light Mode"}
+                        {theme === "light" ? "Dark mode" : "Light mode"}
                       </button>
                     </div>
                     <div className="profile-editor">
@@ -3840,7 +3833,7 @@ function QuizCard({
         <p>
           {lockedMessage ||
             t(
-              "Complete the required topic lessons and mini-quizzes to unlock this assessment.",
+              "Complete the required topic lessons and mini-quizzes before taking this assessment.",
               "أكمل دروس الموضوعات المطلوبة واختباراتها القصيرة لفتح هذا التقييم."
             )}
         </p>
@@ -4008,7 +4001,7 @@ function ReviewCenter({
       </h2>
       <p>
         {t(
-          "Each review unlocks when you pass its listed skill assessments. A final single skill has its own review. Weak topics return to your roadmap.",
+          "Each review becomes available when you pass its listed skill assessments. A final single skill has its own review. Weak topics return to your roadmap.",
           "يفتح اختبار تراكمي بعد كل اختبارين شاملين للمهارات. تعود الموضوعات الضعيفة تلقائياً إلى المسار."
         )}
       </p>
@@ -4257,7 +4250,7 @@ function Onboarding({
     <div className="onboarding">
       <div className="onboarding-intro">
         <span className="eyebrow">
-          {t("WELCOME TO YOUR NEXT CHAPTER", "مرحباً بفصلك القادم")}
+          {t("Choose your learning goal", "مرحباً بفصلك القادم")}
         </span>
         <h1>{t("A path that starts with you.", "مسار يبدأ بك.")}</h1>
         <p>
@@ -4321,9 +4314,9 @@ function Onboarding({
               </label>
               <label>{t("Target depth", "المستوى المستهدف")}
                 <select value={p.targetLevel} onChange={e => patch({ targetLevel: Number(e.target.value) })}>
-                  <option value={1}>{t("Beginner — foundations", "مبتدئ — الأساسيات")}</option>
-                  <option value={2}>{t("Intermediate — practical application", "متوسط — التطبيق العملي")}</option>
-                  <option value={3}>{t("Advanced — deeper techniques", "متقدم — تقنيات متعمقة")}</option>
+                  <option value={1}>{t("Beginner: foundations", "مبتدئ: الأساسيات")}</option>
+                  <option value={2}>{t("Intermediate: practical application", "متوسط: التطبيق العملي")}</option>
+                  <option value={3}>{t("Advanced: deeper techniques", "متقدم: تقنيات متعمقة")}</option>
                 </select>
               </label>
               <p>{t("Your plan includes the selected depth and required foundation skills. Industry choices still customize your practice context.", "تشمل خطتك المستوى المحدد والمهارات الأساسية اللازمة. يخصص اختيار المجال سياق التدريب.")}</p>
@@ -4335,7 +4328,7 @@ function Onboarding({
               }
               onClick={() => setUnsure(!unsure)}
             >
-              <Sparkles size={19} />
+              <MessageSquareText size={19} />
               <span>
                 <strong>
                   {t(
@@ -4435,7 +4428,7 @@ function Onboarding({
                 setStep(2);
               }}
             >
-              I’m completely new — start with the basics{" "}
+              I’m completely new. Start with the basics{" "}
               <ArrowRight size={17} />
             </button>
             <p>

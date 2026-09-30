@@ -71,7 +71,7 @@ export default function DashboardLayout({
           <Button
             onClick={() => startLogin()}
             size="lg"
-            className="w-full shadow-lg hover:shadow-xl transition-all"
+            className="w-full shadow-none hover:shadow-none transition-all"
           >
             Sign in
           </Button>

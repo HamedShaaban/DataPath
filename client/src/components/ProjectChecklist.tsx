@@ -22,7 +22,7 @@ export function ProjectChecklist({
     ],
     [
       "Evidence that the result is correct",
-      "Show a reconciled total, small manual check, or test case—not only the final chart.",
+      "Show a reconciled total, small manual check, or test case: not only the final chart.",
     ],
     [
       "An understandable conclusion",

@@ -106,7 +106,7 @@ export function LearningDashboard({
               </h2>
               <p>
                 {first
-                  ? foundations ? t("Build on your first achievement with guided totals and averages—no code needed.", "تابع إنجازك الأول بتدريب على المجاميع والمتوسطات دون برمجة.") : t(
+                  ? foundations ? t("Build on your first achievement with guided totals and averages: no code needed.", "تابع إنجازك الأول بتدريب على المجاميع والمتوسطات دون برمجة.") : t(
                       "Start with a small table and one question. We’ll guide you through it.",
                       "ابدأ بجدول صغير وسؤال واحد. سنرشدك خطوة بخطوة."
                     )
@@ -248,7 +248,7 @@ export function LearningDashboard({
       </div>
       <section className="evidence-progress" aria-label={t("What your progress means", "ماذا يعني تقدمك")}>
         <h2>{t("Your progress, clearly", "تقدمك بوضوح")}</h2>
-        <p>{t("These are different kinds of evidence—not interchangeable completion scores. Practice counts use retained attempts for your current path and industry.", "هذه أنواع مختلفة من الأدلة وليست درجات إكمال متبادلة. يعتمد التدريب على المحاولات المحفوظة لمسارك ومجالك الحاليين.")}</p>
+        <p>{t("These are different kinds of evidence: not interchangeable completion scores. Practice counts use retained attempts for your current path and industry.", "هذه أنواع مختلفة من الأدلة وليست درجات إكمال متبادلة. يعتمد التدريب على المحاولات المحفوظة لمسارك ومجالك الحاليين.")}</p>
         <div className="evidence-progress-grid">
           <button onClick={() => navigate("lab")}><strong>{evidence.practiced}</strong><span>{t("Exercises practised", "تمارين تمت ممارستها")}</span><small>{t("Attempted, whether passed or still improving", "محاولات ناجحة أو لا تزال تحتاج تحسيناً")}</small></button>
           <button onClick={() => navigate("roadmap")}><strong>{evidence.quizzesPassed}/{evidence.topicCount}</strong><span>{t("Topic quizzes passed", "اختبارات موضوعات مجتازة")}</span><small>{t("Based on each topic's latest quiz result", "حسب أحدث نتيجة لاختبار كل موضوع")}</small></button>

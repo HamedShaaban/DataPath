@@ -65,9 +65,16 @@ export function renderPublicProofPage(
 <meta name="twitter:card" content="summary"><meta name="twitter:title" content="${safeName} · Verified DataPath proof">
 <meta name="twitter:description" content="${escapeHtml(description)}">
 <style>
-:root{color-scheme:light;background:#f4f7f5;color:#16251e;font-family:Inter,ui-sans-serif,system-ui,sans-serif}*{box-sizing:border-box}body{margin:0}main{max-width:960px;margin:auto;padding:64px 24px 96px}.brand{font-weight:800;letter-spacing:.08em;color:#176b4d}.hero{padding:48px;border-radius:28px;background:#123c2f;color:white;box-shadow:0 22px 60px #123c2f22}.hero h1{font-size:clamp(2.2rem,7vw,4.8rem);line-height:1;margin:14px 0}.handle{color:#b9dbce}.targets,.grid{display:flex;gap:12px;flex-wrap:wrap}.tag{padding:8px 12px;border-radius:999px;background:#ffffff1c}.trust{margin:28px 0;padding:18px 22px;border-left:4px solid #31a879;background:white;border-radius:12px;line-height:1.6}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin-top:24px}.credential{background:white;border:1px solid #dce8e1;border-radius:18px;padding:24px}.credential span{color:#176b4d;font-size:.76rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em}.credential h2{margin:10px 0 22px}.credential p{color:#62736b;margin:0}.empty{padding:48px;text-align:center;background:white;border-radius:18px;color:#62736b}footer{margin-top:42px;color:#62736b}@media(max-width:600px){main{padding:28px 16px}.hero{padding:30px 24px}}
+:root{color-scheme:light;--page:#f5f6f6;--surface:#ffffff;--text:#202725;--muted:#555e5c;--line:#c8cecc;--accent:#236657;--radius:8px;background:var(--page);color:var(--text);font:16px/1.6 Inter,ui-sans-serif,system-ui,sans-serif}
+*{box-sizing:border-box}body{margin:0}main{max-width:1120px;margin:auto;padding:64px 24px 96px;overflow-wrap:anywhere}
+.brand{font-weight:600;color:var(--accent);margin-bottom:24px}.hero{padding:24px 0;border-bottom:1px solid var(--line)}.hero h1{font-size:48px;line-height:1.2;margin:16px 0}.handle{color:var(--muted)}
+.targets{display:flex;gap:16px;flex-wrap:wrap}.tag{color:var(--muted)}.trust{max-width:68ch;margin:32px 0;line-height:1.6}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:16px;margin-top:24px;align-items:start}
+.credential{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:24px}.credential span{color:var(--accent);font-size:14px;font-weight:600}.credential h2{font-size:20px;margin:12px 0 24px}.credential p{color:var(--muted);margin:0}
+.empty{padding:24px 0;color:var(--muted)}footer{margin-top:40px;color:var(--muted);font-size:14px}
+@media(max-width:600px){main{padding:40px 16px}.hero h1{font-size:32px}}
 </style></head><body><main>
-<div class="brand">DATAPATH · PROOF</div>
+<div class="brand">DataPath · Public proof</div>
 <section class="hero"><p class="handle">@${safeHandle}</p><h1>${safeName}</h1>${targets ? `<div class="targets">${targets}</div>` : ""}</section>
 <p class="trust"><strong>Server-verified evidence.</strong> Submitted answers or SQL were checked by the server when earned. Practice questions and solutions are available in the app; these results are not proctored or independent certification.</p>
 ${credentials ? `<section class="grid" aria-label="Verified credentials">${credentials}</section>` : '<p class="empty">No public credentials yet.</p>'}

@@ -57,7 +57,7 @@ test("signup → SQL exercise → Python exercise → saved progress", async ({
     .getByRole("button", { name: /Summarise completed work in Python/ })
     .click();
   await page
-    .getByLabel("Python code — define solve(rows)")
+    .getByLabel("Python code: define solve(rows)")
     .fill(
       "def solve(rows):\n    return sum(r['value'] for r in rows if r['status'] == 'completed' and r['value'] is not None)"
     );

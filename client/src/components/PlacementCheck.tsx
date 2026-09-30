@@ -169,8 +169,8 @@ export function PlacementCheck({
       )}
       <button type="button" className="secondary" onClick={() => apply(0)}>
         {t(
-          "Start from basics — keep all lessons",
-          "ابدأ بالأساسيات — احتفظ بكل الدروس"
+          "Start from basics: keep all lessons",
+          "ابدأ بالأساسيات: احتفظ بكل الدروس"
         )}
       </button>
       {applied && (

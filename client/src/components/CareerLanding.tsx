@@ -13,18 +13,17 @@ export function CareerLanding({ onStart }: { onStart: () => void }) {
   const [answer, setAnswer] = useState<number | null>(null);
   return (
     <div className="career-landing">
-      <div className="landing-nav">
+      <nav className="landing-nav" aria-label="Getting started">
         <a className="brand" href="#">
           <Layers3 /> DataPath<span>.</span>
         </a>
-        <span>AMBITION → ABILITY</span>
+        <span>Learn through practice</span>
         <button className="secondary" onClick={onStart}>
           Build my path <ArrowUpRight size={16} />
         </button>
-      </div>
+      </nav>
       <section className="landing-hero">
         <div className="landing-copy">
-          <div className="eyebrow">YOUR CAREER. BUILT THROUGH PRACTICE.</div>
           <h1>
             Your next data role starts with <em>what you can do.</em>
           </h1>
@@ -47,11 +46,11 @@ export function CareerLanding({ onStart }: { onStart: () => void }) {
           aria-label="Example journey from learning to a portfolio"
         >
           <div className="map-top">
-            <span>YOUR NEXT CHAPTER</span>
+            <span>Your learning journey</span>
             <Compass size={22} />
           </div>
           <div className="map-destination">
-            <small>CHOOSE A DIRECTION</small>
+            <small>Choose a direction</small>
             <h2>
               From curious
               <br />
@@ -99,7 +98,7 @@ export function CareerLanding({ onStart }: { onStart: () => void }) {
       </div>
       <section className="landing-challenge" id="first-challenge">
         <div>
-          <div className="eyebrow">GET A FEEL FOR IT · 30 SECONDS</div>
+          <div className="eyebrow">Try a short exercise</div>
           <h2>
             Small challenge.
             <br />
@@ -183,31 +182,23 @@ export function CareerLanding({ onStart }: { onStart: () => void }) {
       )}
       <section className="landing-evidence">
         <div>
-          <div className="eyebrow">BUILD SOMETHING YOU CAN TALK ABOUT</div>
+          <div className="eyebrow">Apply your learning</div>
           <h2>Make your learning visible.</h2>
           <p>
             Your chosen career and industry shape the work ahead. Practise a
             skill, build a project, then prepare to explain your decisions.
           </p>
           <button className="primary" onClick={onStart}>
-            Make my next move <ArrowRight size={18} />
+            Choose a path <ArrowRight size={18} />
           </button>
         </div>
         <article className="portfolio-preview">
-          <span>EXAMPLE PROJECT DIRECTION</span>
+          <span>Example project</span>
           <h3>
             Retail performance
             <br />
             investigation
           </h3>
-          <div className="preview-bars" aria-hidden="true">
-            <i />
-            <i />
-            <i />
-            <i />
-            <i />
-            <i />
-          </div>
           <p>
             Clean the data. Find the pattern. Explain what the business should
             do next.
@@ -221,7 +212,7 @@ export function CareerLanding({ onStart }: { onStart: () => void }) {
       </section>
       <footer className="landing-footer">
         <strong>DataPath.</strong>
-        <span>Your ambition deserves a direction.</span>
+        <span>Learn, practise and build evidence.</span>
         <button onClick={onStart}>
           Start your journey <ArrowUpRight size={16} />
         </button>

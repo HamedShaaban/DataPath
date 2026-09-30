@@ -405,7 +405,7 @@ export function PracticeHub({
         {!mode && (
           <section className="studio-workspace-empty">
             <span>
-              <SquareTerminal size={36} />
+              <SquareTerminal size={24} />
             </span>
             <p className="eyebrow">A SPACE TO TRY, TEST AND LEARN</p>
             <h2>Choose your next challenge</h2>
@@ -602,7 +602,7 @@ export function PracticeHub({
                   {challenge.kind === "case"
                     ? "Artifact links, method, validation and reflection"
                     : challenge.kind === "python"
-                      ? "Python code — define solve(rows)"
+                      ? "Python code: define solve(rows)"
                       : "Your answer"}
                   <textarea
                     disabled={running}

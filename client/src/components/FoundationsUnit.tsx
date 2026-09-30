@@ -85,7 +85,7 @@ export function FoundationsUnit({
       </p>
       <p>
         <strong>The rule:</strong> Exclude pending records. Exclude missing
-        values from both the sum and the average's count. Keep zero—it is a
+        values from both the sum and the average's count. Keep zero: it is a
         known value. This is an explicit rule for this exercise, not a rule for
         every metric.
       </p>
@@ -147,8 +147,8 @@ export function FoundationsUnit({
         <>
           <h3>
             {stage === 1
-              ? "Your turn—with support"
-              : "A new dataset—try independently"}
+              ? "Your turn: with support"
+              : "A new dataset: try independently"}
           </h3>
           <p>
             {stage === 1
@@ -244,7 +244,7 @@ export function FoundationsUnit({
                   <strong>
                     {check.passed ? "✓" : "Try again:"} {check.label}
                   </strong>
-                  {!check.passed && ` — ${check.hint}`}
+                  {!check.passed && `. ${check.hint}`}
                 </p>
               ))}
               {feedback.passed && (
