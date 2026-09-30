@@ -4,6 +4,8 @@ See [PRODUCT_GAPS_AND_BUILD_PLAN.md](./PRODUCT_GAPS_AND_BUILD_PLAN.md) for the p
 
 A free, bilingual English/Arabic learning platform for data and AI careers. This is a rebuild of banking-fintech-roadmap on its existing React + Express + tRPC + PostgreSQL stack. The old generic 12-week plan and AI curriculum generators have been removed.
 
+For Vercel + Neon deployment, follow [the deployment guide](docs/VERCEL_DEPLOYMENT.md).
+
 ## Run locally
 
 Requires Node 22.12+ (tested with Node 24) and pnpm 10.

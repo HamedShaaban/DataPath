@@ -43,6 +43,13 @@
       "when": 1790587741695,
       "tag": "0005_calm_callisto",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1790709056125,
+      "tag": "0006_aspiring_liz_osborn",
+      "breakpoints": true
     }
   ]
 }

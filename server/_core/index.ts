@@ -1,17 +1,11 @@
+import { createApp } from "./app";
 import { Sentry } from "./instrument.js";
 import { config } from "./env";
 import { closeDb } from "../db";
 import "dotenv/config";
-import express from "express";
 import { createServer } from "http";
 import net from "net";
-import { createExpressMiddleware } from "@trpc/server/adapters/express";
-import { registerOAuthRoutes } from "./oauth";
-import { securityMiddleware, validateProduction } from "../security";
-import { appRouter } from "../routers";
-import { createContext } from "./context";
 import { serveStatic } from "./vite";
-import { registerProofPage } from "../proof-page";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -49,33 +43,8 @@ async function findAvailablePort(startPort: number = 3000): Promise<number> {
 }
 
 async function startServer() {
-  validateProduction();
-  const app = express();
-  app.disable("x-powered-by");
-  if (process.env.TRUST_PROXY === "1") app.set("trust proxy", 1);
-  app.use(securityMiddleware);
-  app.get("/api/health", (_req, res) =>
-    res.json({ status: "ok", app: "DataPath" })
-  );
+  const app = createApp();
   const server = createServer(app);
-  // Configure body parser with larger size limit for file uploads
-  app.use(express.json({ limit: "128kb" }));
-  app.use(express.urlencoded({ limit: "128kb", extended: true }));
-
-  registerOAuthRoutes(app);
-  registerProofPage(app);
-  // tRPC API
-  app.use(
-    "/api/trpc",
-    createExpressMiddleware({
-      router: appRouter,
-      createContext,
-      onError({ error }) {
-        if (error.code === "INTERNAL_SERVER_ERROR")
-          Sentry.captureException(error.cause ?? error);
-      },
-    })
-  );
   // development mode uses Vite, production mode uses static files
   if (process.env.NODE_ENV === "development") {
     const { setupVite } = await import("./dev-server");

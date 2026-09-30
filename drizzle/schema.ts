@@ -203,3 +203,10 @@ export const aiRequests = pgTable("aiRequests", {
   completionTokens: integer("completionTokens"),
   createdAt: timestamp("createdAt", { withTimezone: true }).notNull().defaultNow(),
 }, table => [index("ai_requests_user_time_idx").on(table.userId, table.createdAt)]);
+
+// Shared, expiring counters for multi-instance/serverless deployments.
+export const rateLimitBuckets = pgTable("rateLimitBuckets", {
+  key: varchar("key", { length: 64 }).primaryKey(),
+  count: integer("count").notNull(),
+  expiresAt: timestamp("expiresAt", { withTimezone: true }).notNull(),
+}, table => [index("rate_limit_expiry_idx").on(table.expiresAt)]);

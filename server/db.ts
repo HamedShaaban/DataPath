@@ -1,4 +1,5 @@
 import { Pool } from "pg";
+import { attachDatabasePool } from "@vercel/functions";
 import { and, desc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-postgres";
 import {
@@ -20,10 +21,12 @@ export async function getDb() {
     try {
       pool = new Pool({
         connectionString: process.env.DATABASE_URL,
-        max: 10,
+        max: process.env.VERCEL === "1" ? 3 : 10,
         connectionTimeoutMillis: 10000,
-        idleTimeoutMillis: 30000,
+        idleTimeoutMillis: process.env.VERCEL === "1" ? 5000 : 30000,
+        allowExitOnIdle: process.env.VERCEL === "1",
       });
+      if (process.env.VERCEL === "1") attachDatabasePool(pool);
       pool.on("error", () => console.warn("[Database] Idle connection failed"));
       _db = drizzle(pool);
     } catch (error) {

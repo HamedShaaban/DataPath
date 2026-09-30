@@ -1,3 +1,4 @@
+import { sharedRateLimit } from "./shared-rate-limit";
 import { requirements } from "../shared/learning";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
@@ -47,7 +48,8 @@ const handleSchema = z
 const authCalls = new Map<string, number[]>();
 const publicProofCalls = new Map<string, number[]>();
 const gradingCalls = new Map<number, number[]>();
-function limitGrading(userId: number) {
+async function limitGrading(userId: number) {
+  if (process.env.VERCEL === "1") return sharedRateLimit("grading", String(userId), 20, 60);
   const now = Date.now();
   for (const [id, calls] of gradingCalls)
     if (calls[calls.length - 1] <= now - 60_000) gradingCalls.delete(id);
@@ -57,7 +59,8 @@ function limitGrading(userId: number) {
   recent.push(now);
   gradingCalls.set(userId, recent);
 }
-function limitPublicProof(ip: string) {
+async function limitPublicProof(ip: string) {
+  if (process.env.VERCEL === "1") return sharedRateLimit("public-proof", ip, 60, 900);
   const now = Date.now();
   for (const [id, calls] of publicProofCalls)
     if (calls[calls.length - 1] <= now - 15 * 60_000) publicProofCalls.delete(id);
@@ -72,7 +75,8 @@ function limitPublicProof(ip: string) {
   recent.push(now);
   publicProofCalls.set(ip, recent);
 }
-function limitAuth(ip: string) {
+async function limitAuth(ip: string) {
+  if (process.env.VERCEL === "1") return sharedRateLimit("auth", ip, 20, 3600);
   const now = Date.now();
   const recent = (authCalls.get(ip) || []).filter(t => now - t < 3600000);
   if (recent.length >= 20)
@@ -139,7 +143,7 @@ export const appRouter = router({
         z.object({ email: emailSchema, password: z.string().min(10).max(128) })
       )
       .mutation(async ({ ctx, input }) => {
-        limitAuth(ctx.req.ip || "unknown");
+        await limitAuth(ctx.req.ip || "unknown");
         const account = await getLocalAccount(input.email);
         if (
           !account ||
@@ -160,7 +164,7 @@ export const appRouter = router({
         })
       )
       .mutation(async ({ ctx, input }) => {
-        limitAuth(ctx.req.ip || "unknown");
+        await limitAuth(ctx.req.ip || "unknown");
         const openId = `local-${createHash("sha256").update(input.email).digest("hex").slice(0, 58)}`;
         try {
           const account = await createLocalAccount({
@@ -339,7 +343,7 @@ export const appRouter = router({
         })
       )
       .mutation(async ({ ctx, input }) => {
-        limitGrading(ctx.user.id);
+        await limitGrading(ctx.user.id);
         const grade = await gradeSqlSubmission(input);
         if (grade.passed)
           await saveVerifiedCredential(ctx.user.id, "lab_pass", input.challengeId, grade);
@@ -358,7 +362,7 @@ export const appRouter = router({
         })
       )
       .mutation(async ({ ctx, input }) => {
-        limitGrading(ctx.user.id);
+        await limitGrading(ctx.user.id);
         const grade = (() => {
           try {
             return gradeQuizSubmission(input);
@@ -391,8 +395,8 @@ export const appRouter = router({
       ),
     getPublic: publicProcedure
       .input(z.object({ handle: handleSchema }))
-      .query(({ ctx, input }) => {
-        limitPublicProof(ctx.req.ip || "unknown");
+      .query(async ({ ctx, input }) => {
+        await limitPublicProof(ctx.req.ip || "unknown");
         return getPublicProof(input.handle);
       }),
   }),

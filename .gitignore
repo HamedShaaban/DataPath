@@ -118,3 +118,6 @@ client/public/__manus__/version.json
 /client/public/sql-runtime/
 /playwright-report/
 /test-results/
+
+# Vercel project linkage and generated function output
+.vercel/

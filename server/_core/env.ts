@@ -1,4 +1,5 @@
 import "dotenv/config";
+import { environmentWithOrigin } from "../deployment";
 import { z } from "zod";
 import { aiConfigSchema } from "../ai-config";
 const optionalText = z.preprocess(
@@ -89,6 +90,7 @@ const schema = z
       );
   });
 export function parseEnv(source: NodeJS.ProcessEnv) {
+  source = environmentWithOrigin(source);
   const parsed = schema.safeParse(source);
   const ai = source.BUILT_IN_FORGE_API_KEY
     ? aiConfigSchema.safeParse(source)
@@ -97,6 +99,8 @@ export function parseEnv(source: NodeJS.ProcessEnv) {
     ...(!parsed.success ? parsed.error.issues : []),
     ...(ai && !ai.success ? ai.error.issues : []),
   ];
+  if (source.VERCEL === "1" && !source.DATABASE_URL)
+    issues.push({ code: "custom", path: ["DATABASE_URL"], message: "Vercel requires PostgreSQL for accounts and shared rate limits" });
   if (source.BUILT_IN_FORGE_API_KEY && !source.DATABASE_URL)
     issues.push({
       code: "custom",
