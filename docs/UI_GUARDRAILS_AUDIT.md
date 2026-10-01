@@ -36,3 +36,12 @@ Screenshots and inspection data are stored locally in `output/ui-guardrails/`. T
 ## Delivery status
 
 The updated local preview is available at `http://localhost:3010/`. This branch is not a production deployment and the audit does not claim every possible state is fully compliant. The pending browser regression run is now complete. Production connectivity and live optional integrations still require separate deployment acceptance.
+
+## Compact mobile navigation — 2026-10-01
+
+- Mobile workspace navigation is collapsed behind a labeled Menu disclosure; opening it exposes every destination, including for beginner profiles.
+- Choosing a destination closes the menu and focuses the main content. Escape restores focus to Menu. Breakpoint changes reset the disclosure and move focus away from hidden navigation.
+- Narrow-screen roadmap grid sizing now permits shrinking; the AI navigation badge stays on one line.
+- Verified: TypeScript check, 308 unit tests across 47 files, production build, and all 6 Playwright tests against rebuilt production assets. Browser coverage includes 390px/1440px in light/dark themes, 320px overflow, keyboard navigation, resize behavior, and signup → SQL → Python → saved progress against disposable local PostgreSQL.
+- Rendered 320px expanded-menu screenshot inspected: `output/ui-guardrails/mobile-menu.png`.
+- In-app browser inspection encountered a stale connection-error page followed by a browser URL-policy block; no restriction was bypassed. Visual acceptance used the existing authorized Playwright test workflow. Local development server restarted on port 3010. No production deployment or database changes.

@@ -49,6 +49,7 @@ import {
   GraduationCap,
   LayoutDashboard,
   Map,
+  Menu,
   MessageSquare,
   Settings,
   MessageSquareText,
@@ -213,6 +214,22 @@ export default function Home() {
   const [page, setPage] = useState<Page>("dashboard");
   const [editing, setEditing] = useState(false);
   const [exploreAll, setExploreAll] = useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const mobileNavToggle = useRef<HTMLButtonElement>(null);
+  const navigationRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const mobile = window.matchMedia("(max-width: 850px)");
+    const resetNavigation = () => {
+      setMobileNavOpen(false);
+      if (mobile.matches && navigationRef.current?.contains(document.activeElement)) {
+        mobileNavToggle.current?.focus();
+      } else if (!mobile.matches && document.activeElement === mobileNavToggle.current) {
+        navigationRef.current?.querySelector<HTMLButtonElement>("button")?.focus();
+      }
+    };
+    mobile.addEventListener("change", resetNavigation);
+    return () => mobile.removeEventListener("change", resetNavigation);
+  }, []);
   const [exportSkills, setExportSkills] = useState<string[]>([]);
   const [independentPractice, setIndependentPractice] = useState(false);
   const [startedSetup, setStartedSetup] = useState(false);
@@ -582,13 +599,22 @@ export default function Home() {
       <a className="skip-to-content" href="#main-content">
         {t("Skip to main content", "انتقل إلى المحتوى الرئيسي")}
       </a>
-      <aside className="sidebar">
+      <aside className={`sidebar${mobileNavOpen ? " mobile-nav-open" : ""}`}
+        onKeyDown={event => {
+          if (event.key === "Escape" && mobileNavOpen) {
+            event.preventDefault();
+            setMobileNavOpen(false);
+            mobileNavToggle.current?.focus();
+          }
+        }}
+      >
         <a
           className="brand"
           href="#"
           onClick={e => {
             e.preventDefault();
             setPage("dashboard");
+            setMobileNavOpen(false);
           }}
         >
           <span className="brand-mark">
@@ -598,15 +624,25 @@ export default function Home() {
             DataPath<span className="brand-dot">.</span>
           </span>
         </a>
+        <button
+          ref={mobileNavToggle}
+          className="mobile-nav-toggle secondary"
+          aria-expanded={mobileNavOpen}
+          aria-controls="workspace-navigation"
+          onClick={() => setMobileNavOpen(open => !open)}
+        >
+          {mobileNavOpen ? <X size={20} /> : <Menu size={20} />}
+          {t("Menu", "القائمة")}
+        </button>
         <div className="workspace-label">
           {t("YOUR LEARNING SPACE", "مساحة تعلمك")}
         </div>
-        <nav aria-label={t("Main navigation", "التنقل الرئيسي")}>
+        <nav id="workspace-navigation" ref={navigationRef} aria-label={t("Main navigation", "التنقل الرئيسي")}>
           {navigation
             .filter(
               ([id]) =>
                 state.profile.experience !== "new" ||
-                exploreAll ||
+                exploreAll || mobileNavOpen ||
                 ["dashboard", "lab", "proof"].includes(id)
             )
             .map(([id, en, ar, Icon]) => (
@@ -621,6 +657,10 @@ export default function Home() {
                 onClick={() => {
                   setPage(id);
                   setCoachReply("");
+                  if (mobileNavOpen) {
+                    setMobileNavOpen(false);
+                    requestAnimationFrame(() => document.getElementById("main-content")?.focus());
+                  }
                 }}
               >
                 <Icon size={19} />
@@ -637,7 +677,7 @@ export default function Home() {
             ))}
           {state.profile.experience === "new" && (
             <button
-              className="nav-item"
+              className="nav-item explore-toggle"
               onClick={() => setExploreAll(value => !value)}
               aria-expanded={exploreAll}
             >
@@ -791,7 +831,7 @@ export default function Home() {
             <button
               className="mobile-settings icon-button"
               title={t("Settings & profile", "الإعدادات والملف")}
-              onClick={() => setPage("settings")}
+              onClick={() => { setPage("settings"); setMobileNavOpen(false); }}
             >
               <Settings size={17} />
             </button>

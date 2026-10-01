@@ -14,8 +14,9 @@ for (const theme of ["light", "dark"] as const) {
         localStorage.setItem("datapath.theme", theme);
       }, { state, theme });
       await page.goto("/");
-      await page.getByRole("button", { name: "Explore all", exact: true }).click();
+      if (width > 850) await page.getByRole("button", { name: "Explore all", exact: true }).click();
       for (const name of destinations) {
+        if (width <= 850 && name !== "Settings & profile") await page.getByRole("button", { name: "Menu", exact: true }).click();
         await page.getByRole("button", { name, exact: true }).press("Enter");
         await expect(page.locator("main h1")).toBeVisible();
         const findings = await page.evaluate(() => {
@@ -55,3 +56,43 @@ for (const theme of ["light", "dark"] as const) {
     });
   }
 }
+
+test("mobile menu preserves screen space and keyboard focus", async ({ page }) => {
+  const state = newState();
+  state.onboarded = true;
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.addInitScript(state => {
+    localStorage.setItem("datapath.guest.v1", JSON.stringify(state));
+    localStorage.setItem("datapath.theme", "light");
+  }, state);
+  await page.goto("/");
+  const menu = page.getByRole("button", { name: "Menu", exact: true });
+  const navigation = page.getByRole("navigation", { name: "Main navigation" });
+  await expect(menu).toHaveAttribute("aria-expanded", "false");
+  await expect(navigation).toBeHidden();
+  expect(await page.locator(".sidebar").evaluate(el => el.getBoundingClientRect().height)).toBeLessThanOrEqual(72);
+  await menu.press("Enter");
+  await expect(navigation).toBeVisible();
+  await expect(menu).toHaveAttribute("aria-expanded", "true");
+  await navigation.getByRole("button", { name: "AI coach", exact: true }).focus();
+  await page.keyboard.press("Escape");
+  await expect(menu).toBeFocused();
+  await expect(navigation).toBeHidden();
+  await menu.press("Tab");
+  await expect(page.getByRole("button", { name: "Enable dark mode", exact: true })).toBeFocused();
+  await menu.click();
+  await navigation.getByRole("button", { name: "My roadmap", exact: true }).press("Enter");
+  await expect(page.locator("main h1")).toHaveText("My roadmap");
+  await expect(navigation).toBeHidden();
+  await expect(page.locator("main")).toBeFocused();
+  await menu.click();
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await expect(menu).toBeHidden();
+  await expect(navigation).toBeVisible();
+  await page.setViewportSize({ width: 320, height: 700 });
+  await expect(menu).toHaveAttribute("aria-expanded", "false");
+  await expect(navigation).toBeHidden();
+  await menu.click();
+  await page.screenshot({path:"output/ui-guardrails/mobile-menu.png"});
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
+});
