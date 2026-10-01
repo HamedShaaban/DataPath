@@ -45,3 +45,11 @@ The updated local preview is available at `http://localhost:3010/`. This branch 
 - Verified: TypeScript check, 308 unit tests across 47 files, production build, and all 6 Playwright tests against rebuilt production assets. Browser coverage includes 390px/1440px in light/dark themes, 320px overflow, keyboard navigation, resize behavior, and signup → SQL → Python → saved progress against disposable local PostgreSQL.
 - Rendered 320px expanded-menu screenshot inspected: `output/ui-guardrails/mobile-menu.png`.
 - In-app browser inspection encountered a stale connection-error page followed by a browser URL-policy block; no restriction was bypassed. Visual acceptance used the existing authorized Playwright test workflow. Local development server restarted on port 3010. No production deployment or database changes.
+
+## Comfortable dark palette — 2026-10-01
+
+- Replaced green-tinted dark neutrals with charcoal page, card and inset surfaces. Softened primary and secondary text while retaining tested readable contrast.
+- Separated filled-button color from the link/focus accent: dark-mode actions use subdued teal with light text rather than a bright mint fill. Light-mode token values remain unchanged.
+- Softened semantic error/warning colors and retained distinct feedback surfaces.
+- Verified TypeScript, production build, 308 unit tests and all 6 browser tests. Existing contrast/layout checks cover all 11 workspace destinations at 390px and 1440px in both themes. Inspected dark dashboard, roadmap and practice screenshots saved under `output/ui-guardrails/dark-*.png`.
+- This is a visual comfort adjustment, not a medically validated eye-strain claim. No dependencies, database changes or deployment.

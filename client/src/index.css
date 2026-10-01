@@ -42,6 +42,7 @@
   --radius: 8px;
   --overlay-shadow: 0 1px 2px rgb(0 0 0 / 6%);
   --ui-primary: var(--accent);
+  --ui-primary-hover: var(--accent-hover);
   --ui-primary-foreground: #ffffff;
   --ui-destructive: #a82d2d;
   --ui-font: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
@@ -51,21 +52,24 @@
 }
 
 [data-theme="dark"] {
-  --accent: #9bd5c4;
-  --accent-hover: #bde7db;
-  --muted: #b3bfbb;
-  --page: #151b19;
-  --surface: #1e2623;
-  --surface-soft: #29332f;
-  --text: #edf2ef;
-  --line: #4d5c55;
-  --ui-primary-foreground: #152b23;
-  --danger: #ffb4ad;
-  --danger-surface: #3e2525;
-  --success: #9bd5c4;
-  --success-surface: #253a30;
-  --warning: #e6c38d;
-  --warning-surface: #3b3224;
+  /* Neutral charcoal surfaces keep the accent out of long reading areas. */
+  --accent: #82b9ad;
+  --accent-hover: #9acabc;
+  --muted: #a4afb5;
+  --page: #191d20;
+  --surface: #202528;
+  --surface-soft: #292f33;
+  --text: #d9dfe2;
+  --line: #424c52;
+  --ui-primary: #326c60;
+  --ui-primary-hover: #3b796b;
+  --ui-primary-foreground: #eef3f1;
+  --danger: #e5aaa5;
+  --danger-surface: #38292a;
+  --success: #82b9ad;
+  --success-surface: #243630;
+  --warning: #d6ba89;
+  --warning-surface: #353025;
 }
 
 :root {
@@ -5812,13 +5816,13 @@ body { font-size: 16px; }
 [data-theme="dark"] .primary,
 .learning-home .learning-continue,
 [data-theme="dark"] .learning-home .learning-continue {
-  background: var(--accent);
+  background: var(--ui-primary);
   color: var(--ui-primary-foreground);
   min-height: 40px;
   padding: 8px 16px;
 }
 .primary:hover, [data-theme="dark"] .primary:hover,
-.learning-home .learning-continue:hover { background: var(--accent-hover); }
+.learning-home .learning-continue:hover { background: var(--ui-primary-hover); }
 :is(.secondary, .text-button, .resource-link, .link-button),
 [data-theme="dark"] :is(.secondary, .text-button, .resource-link, .link-button) { color: var(--accent); }
 :where(button) { min-height: 36px; }

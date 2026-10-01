@@ -46,6 +46,9 @@ for (const theme of ["light", "dark"] as const) {
           return failures;
         });
         expect(findings, name).toEqual([]);
+        if (theme === "dark" && ["Overview", "My roadmap", "Practice lab"].includes(name)) {
+          await page.screenshot({ path: `output/ui-guardrails/dark-${name.toLowerCase().replaceAll(" ", "-")}-${width}.png` });
+        }
       }
       // A keyboard user must see which control will respond to Enter.
       const themeButton = page.getByRole("button", { name: `Enable ${theme === "light" ? "dark" : "light"} mode`, exact: true });
