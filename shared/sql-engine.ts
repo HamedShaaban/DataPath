@@ -9,6 +9,7 @@ const blockedSql =
   /\b(insert|update|delete|drop|alter|create|truncate|replace|merge|attach|detach|use|source|require|eval|script|into|set|transaction|commit|rollback)\b|\b(csv|txt|json|xlsx?|sqlite)\s*\(/i;
 
 export type SqlExecutionResult = {
+  unavailable?: boolean;
   passed: boolean;
   executed: boolean;
   columns: string[];
@@ -214,9 +215,11 @@ async function executeChallenge(
       error: safetyError,
     };
 
+  let ready = false;
   try {
     const db = await getDatabase(options);
     await seedDatabase(db, sqlLabTables, sector);
+    ready = true;
     const result = await readQuery(db, query);
     const raw = result.rows;
     if (!Array.isArray(raw)) throw new Error("The query did not return rows.");
@@ -303,6 +306,8 @@ async function executeChallenge(
         : "The query ran, but the result does not yet match the required output.",
     };
   } catch (error) {
+    if (!ready) return { unavailable: true, passed: false, executed: false,
+      columns: [], rows: [], checks: [], message: "The SQL engine could not start. Retry when the connection is available." };
     const detail =
       error instanceof Error ? error.message : "SQL execution failed.";
     return {

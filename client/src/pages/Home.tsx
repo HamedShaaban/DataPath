@@ -3385,7 +3385,7 @@ function SqlPracticeLab({
         ? recordLabAttempt(current, challenge.id, query, nextResult)
         : current,
     );
-    if (serverVerificationEnabled)
+    if (serverVerificationEnabled && !nextResult.unavailable)
       verifySql.mutate(
         {
           challengeId: challenge.id,
@@ -3568,15 +3568,16 @@ function SqlPracticeLab({
               <>
                 <div
                   className={
-                    result.passed
+                    result.unavailable ? "result-status" : result.passed
                       ? "result-status passed"
                       : "result-status failed"
                   }
                 >
                   <strong>
-                    {result.passed ? "Query passed" : "Query needs work"}
+                    {result.unavailable ? "Practice engine unavailable" : result.passed ? "Query passed" : "Query needs work"}
                   </strong>
                   <span>{result.message}</span>
+                  {result.unavailable && <p>Your query is still in the editor. This was not counted as an attempt. Use Run query to retry.</p>}
                 </div>
                 <div className="query-checks">
                   {result.checks.map((check) => (
@@ -3598,7 +3599,7 @@ function SqlPracticeLab({
                     </span>
                   ))}
                 </div>
-                {!result.passed && (
+                {!result.passed && !result.unavailable && (
                   <p>
                     Try this: {challenge.hints[0]}{" "}
                     <button

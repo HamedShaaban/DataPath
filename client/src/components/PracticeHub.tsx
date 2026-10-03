@@ -666,17 +666,18 @@ export function PracticeHub({
                 </div>
                 {result && (
                   <div
-                    className={`practice-feedback studio-feedback ${result.reviewOnly ? "review" : result.passed ? "passed" : "needs-work"}`}
+                    className={`practice-feedback studio-feedback ${result.unavailable ? "review" : result.reviewOnly ? "review" : result.passed ? "passed" : "needs-work"}`}
                     role="status"
                   >
                     <h3>
-                      {result.reviewOnly
+                      {result.unavailable ? "Practice engine unavailable" : result.reviewOnly
                         ? "Submission saved"
                         : result.passed
                           ? "Passed"
                           : "Needs work"}
                     </h3>
                     <p>{result.message}</p>
+                    {result.unavailable && <p>Your answer is still in the editor. This was not counted as an attempt. Use Check my work to retry.</p>}
                     {result.checks.length > 0 && (
                       <strong className="studio-check-count">
                         {result.checks.filter(check => check.passed).length} /{" "}
@@ -693,7 +694,7 @@ export function PracticeHub({
                         </li>
                       ))}
                     </ul>
-                    {!result.passed && !result.reviewOnly && hintCount < challenge.hints.length && (
+                    {!result.passed && !result.unavailable && !result.reviewOnly && hintCount < challenge.hints.length && (
                       <div className="progressive-hints">
                         <strong>A small nudge</strong>
                         {hintCount > 0 && <p>{challenge.hints[hintCount - 1]}</p>}
@@ -702,10 +703,10 @@ export function PracticeHub({
                         </button>
                       </div>
                     )}
-                    {!result.passed && !result.reviewOnly && hintCount === challenge.hints.length && hintCount > 0 && (
+                    {!result.passed && !result.unavailable && !result.reviewOnly && hintCount === challenge.hints.length && hintCount > 0 && (
                       <p>{challenge.hints[hintCount - 1]}</p>
                     )}
-                    {!result.passed && !result.reviewOnly && (
+                    {!result.passed && !result.unavailable && !result.reviewOnly && (
                       <button
                         className="text-button"
                         onClick={() => openLesson(challenge.topicId)}

@@ -17,6 +17,7 @@ export function runSqlInWorker(
     };
     const failure = (message: string) =>
       finish({
+        unavailable: true,
         passed: false,
         executed: false,
         columns: [],
@@ -32,7 +33,7 @@ export function runSqlInWorker(
       timer = setTimeout(
         () =>
           failure(
-            "The query exceeded the 8-second limit. Check joins and simplify the query before trying again."
+            "The SQL engine did not respond within the 8-second limit. Your query was not graded. Retry; if this repeats, check the connection or simplify the query."
           ),
         8000
       );

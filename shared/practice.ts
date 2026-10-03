@@ -415,6 +415,7 @@ export function practiceChallenges(profile: Profile): PracticeChallenge[] {
   return result;
 }
 export type PracticeResult = {
+  unavailable?: boolean;
   passed: boolean;
   message: string;
   checks: { label: string; passed: boolean }[];
@@ -495,6 +496,7 @@ export function recordPractice(
   rubric: string[] = [],
   checkpoints: Record<string, string> = {}
 ): LearningState {
+  if (result.unavailable) return state;
   const key = practiceKey(state.profile, challenge.id);
   return {
     ...state,

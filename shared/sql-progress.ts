@@ -27,6 +27,7 @@ export function recordLabAttempt(
   result: SqlExecutionResult,
   at = new Date().toISOString()
 ): LearningState {
+  if (result.unavailable) return state;
   const challenge = sqlLabChallenges.find(item => item.id === challengeId);
   if (!challenge) return state;
   const passed = new Set([

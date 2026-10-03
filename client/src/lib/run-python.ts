@@ -16,26 +16,28 @@ export function runPythonPractice(
 ): Promise<PracticeResult> {
   return new Promise(resolve => {
     let worker: Worker;
+    let ready = false;
     let timer: ReturnType<typeof setTimeout>;
     const finish = (result: PracticeResult) => {
       clearTimeout(timer);
       worker?.terminate();
       resolve(result);
     };
-    const fail = (message: string) =>
-      finish({ passed: false, message, checks: [] });
+    const fail = (message: string, unavailable = false) =>
+      finish({ passed: false, message, checks: [], unavailable });
     try {
       worker = new Worker("/python-worker.js", { type: "module" });
       timer = setTimeout(
         () =>
           fail(
-            "Python did not finish loading within 45 seconds. Check the connection and retry."
+            "Python did not finish loading within 45 seconds. Check the connection and retry.", true
           ),
         45000
       );
       const fixtures = pythonFixtures(sector, id);
       worker.onmessage = ({ data }) => {
         if (data.stage === "ready") {
+          ready = true;
           clearTimeout(timer);
           timer = setTimeout(
             () =>
@@ -48,7 +50,7 @@ export function runPythonPractice(
         }
         if (data.error) {
           fail(
-            `${pythonErrorFeedback(String(data.error))}\n${String(data.error).slice(-250)}`
+            ready ? `${pythonErrorFeedback(String(data.error))}\n${String(data.error).slice(-250)}` : "The Python runtime could not start. Check the connection and retry.", !ready
           );
           return;
         }
@@ -91,14 +93,14 @@ export function runPythonPractice(
         }
       };
       worker.onerror = () =>
-        fail("The Python runtime could not load. Reload and retry.");
+        fail("The Python runtime could not load. Check the connection and retry.", true);
       worker.postMessage({
         source,
         fixtures: JSON.stringify(fixtures),
         harness: pythonHarnessFor(id),
       });
     } catch {
-      fail("This browser could not start Python practice.");
+      fail("This browser could not start Python practice.", true);
     }
   });
 }

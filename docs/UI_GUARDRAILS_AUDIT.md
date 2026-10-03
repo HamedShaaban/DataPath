@@ -53,3 +53,11 @@ The updated local preview is available at `http://localhost:3010/`. This branch 
 - Softened semantic error/warning colors and retained distinct feedback surfaces.
 - Verified TypeScript, production build, 308 unit tests and all 6 browser tests. Existing contrast/layout checks cover all 11 workspace destinations at 390px and 1440px in both themes. Inspected dark dashboard, roadmap and practice screenshots saved under `output/ui-guardrails/dark-*.png`.
 - This is a visual comfort adjustment, not a medically validated eye-strain claim. No dependencies, database changes or deployment.
+
+## Practice engine failure handling — 2026-10-03
+
+- SQL/Python startup and worker failures now show a neutral engine-unavailable state, preserve the current editor content, and explain retry without learner hints or blame.
+- Unavailable results do not enter attempt history, change learning evidence/review topics, or trigger SQL server verification. SQL's combined startup/execution timeout is ungraded because it cannot reliably attribute the delay to the learner. Python errors after its ready signal remain learning feedback.
+- Existing historical attempts are preserved; drafts are retained in the current editor, not newly guaranteed across reloads.
+- Verified: TypeScript, production build, 312 unit tests (original 308 plus four failure tests), and 8 browser tests. New browser cases block SQL assets/Python worker loading, assert unchanged editor contents and zero recorded attempts, then restore access and verify successful retries. Screenshot inspected under `output/student-review/python-unavailable-fixed.png`.
+- No dependencies or schema changes. Account setup remains the next separate task.

@@ -36,6 +36,7 @@ self.onmessage = async (
     );
   } catch {
     self.postMessage({
+      unavailable: true,
       passed: false,
       executed: false,
       columns: [],
