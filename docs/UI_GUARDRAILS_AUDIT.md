@@ -61,3 +61,7 @@ The updated local preview is available at `http://localhost:3010/`. This branch 
 - Existing historical attempts are preserved; drafts are retained in the current editor, not newly guaranteed across reloads.
 - Verified: TypeScript, production build, 312 unit tests (original 308 plus four failure tests), and 8 browser tests. New browser cases block SQL assets/Python worker loading, assert unchanged editor contents and zero recorded attempts, then restore access and verify successful retries. Screenshot inspected under `output/student-review/python-unavailable-fixed.png`.
 - No dependencies or schema changes. Account setup remains the next separate task.
+
+## Persistent local accounts — 2026-10-04
+
+Added repeatable local database start/setup and stop commands, using installed PostgreSQL, password authentication and loopback-only access. Existing migrations applied to a separate persistent database; no schema changes. Verified live API signup → save → logout → database restart → login → saved data retrieval. Local credential and database files are Git-ignored. See LOCAL_ACCOUNTS.md for startup and persistence details. Browser visual acceptance blocked by URL policy; no bypass attempted.

@@ -121,3 +121,6 @@ client/public/__manus__/version.json
 
 # Vercel project linkage and generated function output
 .vercel/
+
+# Persistent local account database and credentials
+.local-data/
