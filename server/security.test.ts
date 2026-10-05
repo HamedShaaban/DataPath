@@ -47,6 +47,12 @@ describe("HTTP security", () => {
     const { res } = run({ host: "datapath.example" });
     expect(res.status).toHaveBeenCalledWith(403);
   });
+  it("does not let an arbitrary Authorization header bypass the Origin check", () => {
+    vi.stubEnv("NODE_ENV", "production");
+    const { res, next } = run({ host: "datapath.example", authorization: "Bearer unused" });
+    expect(res.status).toHaveBeenCalledWith(403);
+    expect(next).not.toHaveBeenCalled();
+  });
   it("allows WASM only in the SQL worker with runtime-only network access", () => {
     vi.stubEnv("NODE_ENV", "production");
     const main = run({}, "GET", "/").res;

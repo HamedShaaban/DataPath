@@ -26,7 +26,7 @@ function isPortAvailable(port: number): Promise<boolean> {
     };
     process.once("SIGTERM", shutdown);
     process.once("SIGINT", shutdown);
-    server.listen(port, "0.0.0.0", () => {
+    server.listen(port, config.NODE_ENV === "development" ? "127.0.0.1" : "0.0.0.0", () => {
       server.close(() => resolve(true));
     });
     server.on("error", () => resolve(false));
@@ -80,7 +80,7 @@ async function startServer() {
   };
   process.once("SIGTERM", shutdown);
   process.once("SIGINT", shutdown);
-  server.listen(port, "0.0.0.0", () => {
+  server.listen(port, config.NODE_ENV === "development" ? "127.0.0.1" : "0.0.0.0", () => {
     console.log(`Server running on http://localhost:${port}/`);
   });
 }

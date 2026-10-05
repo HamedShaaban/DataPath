@@ -3,7 +3,7 @@ import { and, eq, gt, isNull } from "drizzle-orm";
 import { parse } from "cookie";
 import type { Request } from "express";
 import { sessions, users } from "../drizzle/schema";
-import { COOKIE_NAME, ONE_YEAR_MS } from "../shared/const";
+import { COOKIE_NAME, SESSION_LIFETIME_MS } from "../shared/const";
 import { getDb } from "./db";
 
 const validToken = (token: unknown): token is string =>
@@ -18,8 +18,8 @@ async function requireDb() {
   if (!db) throw new Error("Account database unavailable");
   return db;
 }
-export async function createSession(userId: number, lifetime = ONE_YEAR_MS) {
-  if (!Number.isFinite(lifetime) || lifetime <= 0 || lifetime > ONE_YEAR_MS)
+export async function createSession(userId: number, lifetime = SESSION_LIFETIME_MS) {
+  if (!Number.isFinite(lifetime) || lifetime <= 0 || lifetime > SESSION_LIFETIME_MS)
     throw new Error("Invalid session lifetime");
   const db = await requireDb();
   const token = randomBytes(32).toString("base64url");

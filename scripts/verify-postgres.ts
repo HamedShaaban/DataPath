@@ -145,6 +145,9 @@ try {
   const stored = await conn.query('SELECT id FROM sessions WHERE "userId"=$1', [signedIn.id]);
   assert.ok(stored.rows.every(row => !cookies.includes(row.id)));
   assert.equal(await sessionStore.lookupSession("legacy.jwt.value"), null);
+  await assert.rejects(() => sessionStore.createSession(first.userId, 25 * 60 * 60 * 1000), /Invalid session lifetime/);
+  const expiry = await conn.query('SELECT "expiresAt" FROM sessions WHERE id=$1', [sessionStore.hashSessionToken(cookies[0])]);
+  assert.ok(expiry.rows[0].expiresAt.getTime() - Date.now() <= 24 * 60 * 60 * 1000);
   const otherToken = await sessionStore.createSession(first.userId);
   const ctx = { user: signedIn, req: { protocol: "http", headers: { cookie: `app_session_id=${cookies[0]}` } }, res: { clearCookie() {} } } as unknown as TrpcContext;
   const { COOKIE_NAME } = await import("../shared/const");

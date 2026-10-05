@@ -9,7 +9,7 @@ import {
   timingSafeEqual,
 } from "node:crypto";
 import { promisify } from "node:util";
-import { COOKIE_NAME, ONE_YEAR_MS } from "../shared/const";
+import { COOKIE_NAME, SESSION_LIFETIME_MS } from "../shared/const";
 import { careers, skills, catalogVersion } from "../shared/catalog";
 import {
   learningStateSchema,
@@ -75,9 +75,15 @@ async function limitPublicProof(ip: string) {
   recent.push(now);
   publicProofCalls.set(ip, recent);
 }
-async function limitAuth(ip: string) {
+async function limitAuth(ip: string, email: string) {
+  // Shared account budget prevents rotating IPs from resetting guesses.
+  await sharedRateLimit("auth-account", email, 20, 3600);
   if (process.env.VERCEL === "1") return sharedRateLimit("auth", ip, 20, 3600);
   const now = Date.now();
+  for (const [key, times] of authCalls)
+    if (times.every(time => now - time >= 3600000)) authCalls.delete(key);
+  if (!authCalls.has(ip) && authCalls.size >= 10000)
+    throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "Sign-in is busy. Try again later." });
   const recent = (authCalls.get(ip) || []).filter(t => now - t < 3600000);
   if (recent.length >= 20)
     throw new TRPCError({
@@ -92,6 +98,7 @@ async function hashPassword(password: string) {
   const derived = (await scrypt(password, salt, 64)) as Buffer;
   return `scrypt$${salt.toString("base64")}$${derived.toString("base64")}`;
 }
+const dummyPasswordHash = hashPassword(randomBytes(32).toString("hex"));
 async function verifyPassword(password: string, encoded: string) {
   const [method, saltValue, hashValue] = encoded.split("$");
   if (method !== "scrypt" || !saltValue || !hashValue) return false;
@@ -112,7 +119,7 @@ async function setLocalSession(
   });
   ctx.res.cookie(COOKIE_NAME, token, {
     ...getSessionCookieOptions(ctx.req),
-    maxAge: ONE_YEAR_MS,
+    maxAge: SESSION_LIFETIME_MS,
   });
   return { success: true } as const;
 }
@@ -143,12 +150,12 @@ export const appRouter = router({
         z.object({ email: emailSchema, password: z.string().min(10).max(128) })
       )
       .mutation(async ({ ctx, input }) => {
-        await limitAuth(ctx.req.ip || "unknown");
+        await limitAuth(ctx.req.ip || "unknown", input.email);
         const account = await getLocalAccount(input.email);
-        if (
-          !account ||
-          !(await verifyPassword(input.password, account.passwordHash))
-        )
+        const matches = await verifyPassword(
+          input.password, account?.passwordHash ?? await dummyPasswordHash
+        );
+        if (!account || !matches)
           throw new TRPCError({
             code: "UNAUTHORIZED",
             message: "Invalid email or password.",
@@ -164,7 +171,7 @@ export const appRouter = router({
         })
       )
       .mutation(async ({ ctx, input }) => {
-        await limitAuth(ctx.req.ip || "unknown");
+        await limitAuth(ctx.req.ip || "unknown", input.email);
         const openId = `local-${createHash("sha256").update(input.email).digest("hex").slice(0, 58)}`;
         try {
           const account = await createLocalAccount({

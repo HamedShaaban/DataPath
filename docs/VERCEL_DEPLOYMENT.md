@@ -24,7 +24,7 @@ Keep the connection string private. Use TLS with certificate verification (`sslm
 
 ## 2. Import the repository
 
-Import `HamedShaaban/DataPath` into Vercel. Select the branch containing this preparation (`deploy/vercel-readiness`) for the first preview. The older `main` branch does not automatically receive these changes.
+Import `HamedShaaban/DataPath` into Vercel. Select the branch containing this preparation (`security/launch-hardening`) for the first preview. The older `main` branch does not automatically receive these changes.
 
 Use the repository root, framework **Other**, Node **24.x**. The checked-in configuration sets installation to `pnpm install --frozen-lockfile` and the build to `pnpm build:vercel`. Do not override the output directory or set a Docker/start command. Enable Vercel's system environment variables so `VERCEL_URL` is available. Choose a function region close to the Neon database.
 
@@ -89,3 +89,7 @@ Rollback by restoring the previous deployment. Leave the additive rate-limit tab
 - Browser smoke: passed signup → SQL exercise → Python exercise → saved progress.
 - Isolated Vercel artifact: passed cookie flags, origin rejection, PostgreSQL signup, server SQL worker grading, proof privacy and static route/header configuration.
 - Still unverified: Vercel cloud routing/worker execution, live Neon connectivity, production load/cold starts, and optional live AI/Sentry/OAuth integrations.
+
+## Security hardening update — 2026-10-05
+
+See [SECURITY_READINESS.md](SECURITY_READINESS.md) for current validation, 24-hour new sessions, dependency updates, and remaining public-launch gates. Do not launch from an older branch that lacks these fixes.

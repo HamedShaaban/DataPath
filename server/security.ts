@@ -43,8 +43,7 @@ export function securityMiddleware(
     }
     if (
       process.env.NODE_ENV === "production" &&
-      !origin &&
-      !req.get("authorization")
+      !origin
     ) {
       res.status(403).json({ error: "Origin required" });
       return;
