@@ -80,7 +80,7 @@ export function LearningDashboard({
         >
           <span className="learning-kicker">
             <span />
-            {t("YOUR NEXT STEP", "خطوتك القادمة")}
+            {t("Next lesson", "الدرس التالي")}
           </span>
           <div className="learning-spotlight-body">
             <span className="learning-icon">
@@ -185,6 +185,8 @@ export function LearningDashboard({
           </small>
         </aside>
       </div>
+      <details className="learning-disclosure">
+        <summary>{t("Plan this week", "خطط لهذا الأسبوع")}</summary>
       <CatchUpPace state={state} onApply={adjustPace} />
       <WeeklyStudyPlan state={state} start={activity => {
         if (activity.kind === "basics") startBasics();
@@ -192,6 +194,7 @@ export function LearningDashboard({
         else if (activity.kind === "practice" && activity.practiceInLab) openPractice(activity.skillId!, activity.topicId!);
         else openLesson(activity.skillId!, activity.topicId!);
       }} />
+      </details>
       <div
         className="learning-shortcuts"
         aria-label={t("Learning shortcuts", "اختصارات التعلم")}
@@ -246,6 +249,8 @@ export function LearningDashboard({
           <ArrowUpRight size={19} />
         </button>
       </div>
+      <details className="learning-disclosure">
+        <summary>{t("Review my progress and skills", "راجع تقدمي ومهاراتي")}</summary>
       <section className="evidence-progress" aria-label={t("What your progress means", "ماذا يعني تقدمك")}>
         <h2>{t("Your progress, clearly", "تقدمك بوضوح")}</h2>
         <p>{t("These are different kinds of evidence: not interchangeable completion scores. Practice counts use retained attempts for your current path and industry.", "هذه أنواع مختلفة من الأدلة وليست درجات إكمال متبادلة. يعتمد التدريب على المحاولات المحفوظة لمسارك ومجالك الحاليين.")}</p>
@@ -320,6 +325,7 @@ export function LearningDashboard({
           </button>
         )}
       </section>
+      </details>
     </div>
   );
 }
