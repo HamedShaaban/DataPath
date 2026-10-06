@@ -1,3 +1,4 @@
+import { GuidedSetup } from "@/components/GuidedSetup";
 import { progressEvidence } from "@shared/progress-evidence";
 import { nextIntroStep } from "@shared/intro-progress";
 import { ProjectBlueprint } from "../components/ProjectBlueprint";
@@ -511,6 +512,7 @@ export default function Home() {
           password: authForm.password,
         });
       setAuthOpen(false);
+      if (authMode === "register") setStartedSetup(true);
       setReady(false);
       await utils.proof.settings.reset();
       await utils.proof.preview.reset();
@@ -594,7 +596,7 @@ export default function Home() {
   }
   return (
     <div
-      className={`app-shell studio-shell${!state.onboarded ? " discovery-shell" : ""}`}
+      className={`app-shell studio-shell${!state.onboarded ? " discovery-shell" : ""}${!state.onboarded && !startedSetup ? " welcome-shell" : ""}`}
     >
       <a className="skip-to-content" href="#main-content">
         {t("Skip to main content", "انتقل إلى المحتوى الرئيسي")}
@@ -813,7 +815,7 @@ export default function Home() {
                   <LogOut size={17} />
                 </button>
               </>
-            ) : caps.data?.accounts ? (
+            ) : (
               <button
                 className="small primary"
                 onClick={event => {
@@ -823,10 +825,6 @@ export default function Home() {
               >
                 {t("Sign in", "تسجيل الدخول")}
               </button>
-            ) : (
-              <span className="guest-label">
-                {t("Guest mode", "وضع الزائر")}
-              </span>
             )}
             <button
               className="mobile-settings icon-button"
@@ -877,6 +875,8 @@ export default function Home() {
           )}
           {!state.onboarded && !startedSetup ? (
             <CareerLanding
+              signedIn={Boolean(me.data)}
+              onAccount={mode => { authReturnFocus.current = document.activeElement as HTMLButtonElement; setAuthMode(mode); setAuthError(""); setAuthOpen(true); }}
               onStart={() => {
                 setStartedSetup(true);
                 window.scrollTo({ top: 0 });
@@ -3161,6 +3161,12 @@ export default function Home() {
                 : t("Create your free account", "أنشئ حسابك المجاني")}
             </DialogTitle>
             <DialogDescription>{t("Save your learning progress securely across devices.", "احفظ تقدمك في التعلم بأمان عبر أجهزتك.")}</DialogDescription>
+            {!caps.data?.accounts && (
+              <div role="status" className="notice">
+                <p>{caps.isPending ? "Checking account availability…" : "Account access is temporarily unavailable. You can still explore as a guest; your progress stays in this browser."}</p>
+                {!caps.isPending && <Button type="button" variant="secondary" onClick={() => void caps.refetch()}>Retry account connection</Button>}
+              </div>
+            )}
             {authMode === "register" && (
               <label>
                 {t("Name", "الاسم")}
@@ -3208,7 +3214,7 @@ export default function Home() {
             {authError && <p role="alert" className="auth-error">{authError}</p>}
             <Button
               type="submit"
-              disabled={login.isPending || register.isPending}
+              disabled={!caps.data?.accounts || login.isPending || register.isPending}
             >
               {authMode === "login"
                 ? t("Sign in", "تسجيل الدخول")
@@ -4246,6 +4252,7 @@ function ProfileSetup({
   cancel?: () => void;
 }) {
   const [draft, setDraft] = useState(() => structuredClone(state));
+  if (!state.onboarded) return <GuidedSetup state={state} done={done} cancel={cancel} />;
   return (
     <Onboarding
       state={draft}

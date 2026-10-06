@@ -5916,3 +5916,33 @@ button[role="checkbox"], button[role="radio"], button[role="switch"] { min-heigh
   .studio-shell .sidebar-bottom { display: none; }
   .studio-shell .topbar { min-height: 48px; padding-block: 4px; }
 }
+
+/* A quiet entry page, separate from workspace navigation. */
+.welcome-shell .topbar, .welcome-shell main > footer { display: none; }
+.welcome-page { max-width: 1120px; margin: 0 auto; }
+.welcome-page .landing-nav { padding: 24px 0; }
+.welcome-intro { padding: 64px 0; max-width: 720px; }
+.welcome-intro h1 { font-size: clamp(32px, 4vw, 48px); line-height: 1.16; margin: 0 0 24px; letter-spacing: -0.02em; }
+.welcome-intro > p { max-width: 64ch; line-height: 1.6; }
+.welcome-actions { display: flex; flex-wrap: wrap; gap: 16px; margin: 32px 0 16px; }
+.welcome-intro .welcome-saving { font-size: 14px; color: var(--muted); }
+.welcome-next { border-top: 1px solid var(--line); padding: 32px 0 48px; }
+.welcome-next h2 { font-size: 24px; margin-bottom: 24px; }
+.welcome-next ol { padding-left: 24px; max-width: 720px; }
+.welcome-next li { padding-left: 8px; margin-bottom: 24px; }
+.welcome-next p { margin: 4px 0 0; color: var(--muted); line-height: 1.6; }
+@media (max-width: 600px) {
+  .welcome-intro { padding: 40px 0; }
+  .welcome-page .landing-nav { padding: 16px 0; }
+  .welcome-actions { gap: 12px; }
+}
+.guided-setup { max-width: 680px; margin: 0 auto; padding: 40px 0; }
+.guided-setup h1 { font-size: 32px; line-height: 1.2; margin: 16px 0; }
+.guided-setup p { line-height: 1.6; color: var(--muted); }
+.guided-setup .setup-step { font-size: 14px; }
+.guided-setup form { margin-top: 32px; }
+.guided-setup label { display: grid; gap: 8px; margin: 24px 0; }
+.guided-setup select, .guided-setup input { width: 100%; min-height: 44px; }
+.guided-setup summary { cursor: pointer; padding: 16px 0; }
+.guided-setup li { margin-bottom: 8px; }
+.guided-setup ul { padding-left: 24px; }
