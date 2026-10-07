@@ -1,0 +1,1450 @@
+{
+  "items": [
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "32px",
+      "tag": "H1",
+      "text": "Resource library"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Data Analyst · Built around your goals, at your pace."
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "search-field",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "LABEL",
+      "text": "Find a resource"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "LABEL",
+      "text": "Budget preferenceFree onlyFree + paid"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "muted",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Official guides selected for your skill gaps. External resources may be in "
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "9 guides match your filters"
+    },
+    {
+      "bg": [
+        "rgb(41, 51, 47)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "soft-tag",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "FREE"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SMALL",
+      "text": "SQL"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "16px",
+      "tag": "H3",
+      "text": "PostgreSQL tutorial"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Read, practice, and apply it to your portfolio."
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "resource-bottom",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "English"
+    },
+    {
+      "bg": [
+        "rgb(41, 51, 47)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "soft-tag",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "FREE"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SMALL",
+      "text": "Excel"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "16px",
+      "tag": "H3",
+      "text": "Microsoft Excel help"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Read, practice, and apply it to your portfolio."
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "resource-bottom",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "English"
+    },
+    {
+      "bg": [
+        "rgb(41, 51, 47)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "soft-tag",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "FREE"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SMALL",
+      "text": "Statistics"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "16px",
+      "tag": "H3",
+      "text": "OpenIntro Statistics"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Read, practice, and apply it to your portfolio."
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "resource-bottom",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "English"
+    },
+    {
+      "bg": [
+        "rgb(41, 51, 47)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "soft-tag",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "FREE"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SMALL",
+      "text": "Data cleaning"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "16px",
+      "tag": "H3",
+      "text": "Pandas tutorials"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Read, practice, and apply it to your portfolio."
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "resource-bottom",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "English"
+    },
+    {
+      "bg": [
+        "rgb(41, 51, 47)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "soft-tag",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "FREE"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SMALL",
+      "text": "Power BI"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "16px",
+      "tag": "H3",
+      "text": "Microsoft Learn Power BI"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Read, practice, and apply it to your portfolio."
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "resource-bottom",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "Multiple languages"
+    },
+    {
+      "bg": [
+        "rgb(41, 51, 47)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "soft-tag",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "FREE"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SMALL",
+      "text": "Data storytelling"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "16px",
+      "tag": "H3",
+      "text": "UK Analysis Function chart guidance"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Read, practice, and apply it to your portfolio."
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "resource-bottom",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "English"
+    },
+    {
+      "bg": [
+        "rgb(41, 51, 47)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "soft-tag",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "FREE"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SMALL",
+      "text": "Business analysis"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "16px",
+      "tag": "H3",
+      "text": "IIBA business analysis articles"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Read, practice, and apply it to your portfolio."
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "resource-bottom",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "English"
+    },
+    {
+      "bg": [
+        "rgb(41, 51, 47)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "soft-tag",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "FREE"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SMALL",
+      "text": "Python"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "16px",
+      "tag": "H3",
+      "text": "Python tutorial"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Read, practice, and apply it to your portfolio."
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "resource-bottom",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "English"
+    },
+    {
+      "bg": [
+        "rgb(41, 51, 47)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "soft-tag",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "FREE"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SMALL",
+      "text": "Data modeling"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "16px",
+      "tag": "H3",
+      "text": "Microsoft star schema guidance"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Read, practice, and apply it to your portfolio."
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "resource-bottom",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "Multiple languages"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "16px",
+      "tag": "H2",
+      "text": "Recommended YouTube learning"
+    },
+    {
+      "bg": [
+        "rgb(41, 51, 47)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "soft-tag",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "ENGLISH"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "muted",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Focused recommendations for your selected language and skills. Review the p"
+    },
+    {
+      "bg": [
+        "rgb(41, 51, 47)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "video-badge",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "SPAN",
+      "text": "▶"
+    },
+    {
+      "bg": [
+        "rgb(41, 51, 47)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "soft-tag",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "YOUTUBE"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "16px",
+      "tag": "H3",
+      "text": "SQL full-course videos · freeCodeCamp.org"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Watch one section, reproduce it, then save evidence in the matching topic."
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "resource-bottom",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "Open recommendations"
+    },
+    {
+      "bg": [
+        "rgb(41, 51, 47)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "video-badge",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "SPAN",
+      "text": "▶"
+    },
+    {
+      "bg": [
+        "rgb(41, 51, 47)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "soft-tag",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "YOUTUBE"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "16px",
+      "tag": "H3",
+      "text": "Data analyst portfolio tutorials · Alex The Analyst"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Watch one section, reproduce it, then save evidence in the matching topic."
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "resource-bottom",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "Open recommendations"
+    },
+    {
+      "bg": [
+        "rgb(41, 51, 47)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "video-badge",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "SPAN",
+      "text": "▶"
+    },
+    {
+      "bg": [
+        "rgb(41, 51, 47)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "soft-tag",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "YOUTUBE"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "16px",
+      "tag": "H3",
+      "text": "Python and machine-learning courses · freeCodeCamp.org"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Watch one section, reproduce it, then save evidence in the matching topic."
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "resource-bottom",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "Open recommendations"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "SPAN",
+      "text": "DataPath ↗"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "brand-dot",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "SPAN",
+      "text": "↗"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "Small steps. Real skills. Your future."
+    }
+  ],
+  "scroll": 390,
+  "width": 390
+}

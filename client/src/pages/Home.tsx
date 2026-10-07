@@ -643,9 +643,8 @@ export default function Home() {
           {navigation
             .filter(
               ([id]) =>
-                state.profile.experience !== "new" ||
                 exploreAll || mobileNavOpen ||
-                ["dashboard", "lab", "proof"].includes(id)
+                ["dashboard", "roadmap", "lab", "proof", "projects"].includes(id)
             )
             .map(([id, en, ar, Icon]) => (
               <Fragment key={id}>
@@ -677,14 +676,14 @@ export default function Home() {
               </button>
               </Fragment>
             ))}
-          {state.profile.experience === "new" && (
+          {(
             <button
               className="nav-item explore-toggle"
               onClick={() => setExploreAll(value => !value)}
               aria-expanded={exploreAll}
             >
               <Compass size={19} />
-              <span>{exploreAll ? "Show less" : "Explore all"}</span>
+              <span>{exploreAll ? "Fewer sections" : "More sections"}</span>
             </button>
           )}
         </nav>
