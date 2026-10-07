@@ -5916,3 +5916,102 @@ button[role="checkbox"], button[role="radio"], button[role="switch"] { min-heigh
   .studio-shell .sidebar-bottom { display: none; }
   .studio-shell .topbar { min-height: 48px; padding-block: 4px; }
 }
+
+/* A quiet entry page, separate from workspace navigation. */
+.welcome-shell .topbar, .welcome-shell main > footer { display: none; }
+.welcome-page { max-width: 1120px; margin: 0 auto; }
+.welcome-page .landing-nav { padding: 24px 0; }
+.welcome-intro { padding: 64px 0; max-width: 720px; }
+.welcome-intro h1 { font-size: clamp(32px, 4vw, 48px); line-height: 1.16; margin: 0 0 24px; letter-spacing: -0.02em; }
+.welcome-intro > p { max-width: 64ch; line-height: 1.6; }
+.welcome-actions { display: flex; flex-wrap: wrap; gap: 16px; margin: 32px 0 16px; }
+.welcome-intro .welcome-saving { font-size: 14px; color: var(--muted); }
+.welcome-next { border-top: 1px solid var(--line); padding: 32px 0 48px; }
+.welcome-next h2 { font-size: 24px; margin-bottom: 24px; }
+.welcome-next ol { padding-left: 24px; max-width: 720px; }
+.welcome-next li { padding-left: 8px; margin-bottom: 24px; }
+.welcome-next p { margin: 4px 0 0; color: var(--muted); line-height: 1.6; }
+@media (max-width: 600px) {
+  .welcome-intro { padding: 40px 0; }
+  .welcome-page .landing-nav { padding: 16px 0; }
+  .welcome-actions { gap: 12px; }
+}
+.guided-setup { max-width: 680px; margin: 0 auto; padding: 40px 0; }
+.guided-setup h1 { font-size: 32px; line-height: 1.2; margin: 16px 0; }
+.guided-setup p { line-height: 1.6; color: var(--muted); }
+.guided-setup .setup-step { font-size: 14px; }
+.guided-setup form { margin-top: 32px; }
+.guided-setup label { display: grid; gap: 8px; margin: 24px 0; }
+.guided-setup select, .guided-setup input { width: 100%; min-height: 44px; }
+.guided-setup summary { cursor: pointer; padding: 16px 0; }
+.guided-setup li { margin-bottom: 8px; }
+.guided-setup ul { padding-left: 24px; }
+
+/* Minimal guided workspace: primary task first, supporting detail on demand. */
+.learning-home { display: grid; gap: 24px; }
+.learning-home .learning-start-grid { grid-template-columns: minmax(0, 1fr); gap: 0; }
+.learning-home .learning-spotlight { padding: 32px; background: var(--surface); border: 1px solid var(--line); }
+.learning-home .learning-spotlight-body { gap: 16px; }
+.learning-home .learning-spotlight h2 { font-size: clamp(24px, 3vw, 32px); line-height: 1.25; }
+.learning-home .learning-icon { display: none; }
+.learning-home .learning-week { padding: 24px 0; border: 0; background: transparent; }
+.learning-home .learning-week-total { font-size: 24px; }
+.learning-home .learning-path-strip { padding: 0 0 16px; border: 0; border-bottom: 1px solid var(--line); background: transparent; }
+.learning-disclosure { border-block-start: 1px solid var(--line); padding: 0; }
+.learning-disclosure > summary { cursor: pointer; padding: 20px 0; font-size: 16px; font-weight: 600; color: var(--text); }
+.learning-disclosure > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.learning-disclosure[open] > summary { margin-bottom: 8px; }
+.learning-home .learning-shortcuts { display: flex; flex-wrap: wrap; gap: 12px; }
+.learning-home .learning-shortcuts > button { flex: 1 1 200px; padding: 16px; background: transparent; border: 1px solid var(--line); border-radius: var(--radius); }
+.learning-home .learning-shortcut-icon { background: transparent; border: 0; padding: 0; width: auto; height: auto; }
+.studio-shell .page-heading h1 { font-size: 28px; line-height: 1.25; }
+.studio-shell .page-heading { margin-bottom: 24px; }
+.studio-shell .roadmap-explorer .roadmap-layout { gap: 24px; }
+.studio-shell .roadmap-explorer .roadmap-lesson-panel { background: var(--surface); }
+.studio-shell .roadmap-explorer .roadmap-topic { background: transparent; }
+.practice-studio .practice-header { background: transparent; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; padding: 0 0 24px; }
+.practice-studio .practice-header .eyebrow { text-transform: none; letter-spacing: normal; }
+.practice-studio .practice-reference, .practice-studio .practice-editor { min-width: 0; }
+@media (min-width: 901px) {
+  .studio-shell:not(.discovery-shell) .sidebar { width: 200px; padding: 24px 16px; }
+  .studio-shell:not(.discovery-shell) .main-shell { margin-inline-start: 200px; width: calc(100% - 200px); }
+  .studio-shell:not(.discovery-shell) .sidebar nav button { display: flex; flex-direction: row; justify-content: flex-start; text-align: start; gap: 12px; padding: 12px; min-height: 44px; }
+  .studio-shell:not(.discovery-shell) .sidebar nav button svg { width: 20px; height: 20px; flex-shrink: 0; }
+  .studio-shell:not(.discovery-shell) main { padding: 32px 40px 48px; }
+}
+@media (max-width: 600px) {
+  .learning-home .learning-spotlight { padding: 20px; }
+  .learning-home .learning-shortcuts { flex-direction: column; }
+  .learning-home .learning-shortcuts > button { flex-basis: auto; }
+  .studio-shell .page-heading h1 { font-size: 24px; }
+}
+
+/* Horizontal workspace replaces the fixed left rail. */
+@media (min-width: 851px) {
+  .studio-shell:not(.discovery-shell) .sidebar {
+    position: relative; inset: auto; width: 100%; height: auto; min-height: 0;
+    display: grid; grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center; gap: 24px; padding: 16px 32px;
+    border: 0; border-bottom: 1px solid var(--line); overflow: visible;
+    background: var(--surface);
+  }
+  .studio-shell:not(.discovery-shell) .sidebar .brand { margin: 0; padding: 0; }
+  .studio-shell:not(.discovery-shell) .sidebar .brand-name { display: inline; font-size: 18px; }
+  .studio-shell:not(.discovery-shell) .sidebar .workspace-label,
+  .studio-shell:not(.discovery-shell) .sidebar .navigation-section-label,
+  .studio-shell:not(.discovery-shell) .sidebar .free-note,
+  .studio-shell:not(.discovery-shell) .sidebar .user-row { display: none; }
+  .studio-shell:not(.discovery-shell) .sidebar nav { display: flex; flex-wrap: wrap; gap: 4px; margin: 0; }
+  .studio-shell:not(.discovery-shell) .sidebar nav .nav-item { flex-direction: row; width: auto; min-height: 40px; padding: 8px 12px; gap: 8px; font-size: 14px; }
+  .studio-shell:not(.discovery-shell) .sidebar nav .nav-item > svg { display: none; }
+  .studio-shell:not(.discovery-shell) .sidebar-bottom { margin: 0; padding: 0; border: 0; }
+  .studio-shell:not(.discovery-shell) .sidebar-bottom .settings-nav { width: auto; min-height: 40px; flex-direction: row; gap: 8px; padding: 8px; }
+  .studio-shell:not(.discovery-shell) .main-shell { width: 100%; margin: 0; padding: 0; }
+  .studio-shell:not(.discovery-shell) .topbar { position: static; min-height: 56px; padding: 8px 32px; background: var(--page); }
+  .studio-shell:not(.discovery-shell) main { max-width: 1120px; margin: 0 auto; padding: 32px 24px 64px; }
+  .learning-home .learning-start-grid { grid-template-columns: minmax(0, 2fr) minmax(240px, 1fr); gap: 32px; align-items: start; }
+  .learning-home .learning-week { padding: 24px; border-inline-start: 1px solid var(--line); }
+}
+@media (min-width: 851px) {
+  .app-shell.studio-shell:not(.discovery-shell) { flex-direction: column; }
+}

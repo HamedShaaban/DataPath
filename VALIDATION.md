@@ -317,3 +317,11 @@ Branch: `docs-audience-deliverables`. Application baseline remains `88c1d89`; ex
 - All 282 tests across 40 files passed during this documentation task. Rendered and visually reviewed PDF pages and all 12 slides; PPTX package and geometry validation pass. Native Microsoft PowerPoint rendering was not checked.
 - No app code, DB schema, dependencies, user data, environment secrets or earlier PDF guides changed. Local preview was restarted for capture. Production deployment, Neon connectivity and live AI remain unverified. Team/funding slide intentionally contains owner placeholders.
 - Files: `output/deliverables/` and `output/DataPath_Documentation_Package.zip`. macOS has no `/mnt/user-data/outputs` mount; the downloadable package preserves a descriptive screenshots folder.
+
+## GitHub synchronization — 7 October 2026
+
+- Includes personalized first-time setup, simplified workspace hierarchy, horizontal desktop navigation, and the feature-and-flow Word/Markdown reference.
+- Preserves prior documentation, screenshots and UI inspection artifacts as historical snapshots; output/README.md distinguishes these from current behavior.
+- Fresh checks: all 318 tests across 50 files passed; TypeScript passed; production build passed; Vercel packaging passed with APP_ORIGIN supplied (five trace warnings).
+- Vercel runtime smoke verification could not run because DATAPATH_SMOKE_DATABASE_URL for a disposable database is not configured. Browser acceptance and production connectivity remain unverified.
+- No database schema or dependencies changed in this synchronization. Environment files and generated runtime/build files remain excluded. Credential-pattern scan of newly added documentation and snapshots found no matches.

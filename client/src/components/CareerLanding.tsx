@@ -1,222 +1,39 @@
-import { careers, businessSectors } from "@shared/catalog";
-import { useState } from "react";
-import {
-  ArrowRight,
-  ArrowUpRight,
-  Check,
-  Code2,
-  Compass,
-  Layers3,
-} from "lucide-react";
+import { ArrowRight, Layers3 } from "lucide-react";
 
-export function CareerLanding({ onStart }: { onStart: () => void }) {
-  const [answer, setAnswer] = useState<number | null>(null);
+export function CareerLanding({ onStart, onAccount, signedIn }: {
+  onStart: () => void;
+  onAccount: (mode: "login" | "register") => void;
+  signedIn: boolean;
+}) {
   return (
-    <div className="career-landing">
+    <div className="career-landing welcome-page">
       <nav className="landing-nav" aria-label="Getting started">
-        <a className="brand" href="#">
-          <Layers3 /> DataPath<span>.</span>
-        </a>
-        <span>Learn through practice</span>
-        <button className="secondary" onClick={onStart}>
-          Build my path <ArrowUpRight size={16} />
-        </button>
+        <a className="brand" href="#"><Layers3 /> DataPath</a>
+        {!signedIn && <button className="secondary" onClick={() => onAccount("login")}>Sign in</button>}
       </nav>
-      <section className="landing-hero">
-        <div className="landing-copy">
-          <h1>
-            Your next data role starts with <em>what you can do.</em>
-          </h1>
-          <p>
-            Choose your direction. Practise with industry scenarios. Turn what
-            you learn into work you can show.
-          </p>
-          <div className="landing-actions">
-            <button className="primary" onClick={onStart}>
-              Find my path <ArrowRight size={18} />
-            </button>
-            <a href="#first-challenge">Try a quick challenge ↗</a>
-          </div>
-          <small>
-            No coding experience needed · Start as a guest · Learn at your pace
-          </small>
+      <section className="welcome-intro" aria-labelledby="welcome-title">
+        <h1 id="welcome-title">Learn the data skills you need.</h1>
+        <p>Choose a career or a single skill. Follow a guided plan, practise with real-world examples, and build projects at your pace.</p>
+        <div className="welcome-actions">
+          {signedIn ? (
+            <button className="primary" onClick={onStart}>Find my path <ArrowRight size={16} /></button>
+          ) : (
+            <>
+              <button className="primary" onClick={() => onAccount("register")}>Create account</button>
+              <button className="secondary" onClick={onStart}>Find my path <ArrowRight size={16} /></button>
+            </>
+          )}
         </div>
-        <div
-          className="career-map"
-          aria-label="Example journey from learning to a portfolio"
-        >
-          <div className="map-top">
-            <span>Your learning journey</span>
-            <Compass size={22} />
-          </div>
-          <div className="map-destination">
-            <small>Choose a direction</small>
-            <h2>
-              From curious
-              <br />
-              to capable.
-            </h2>
-          </div>
-          <ol>
-            {[
-              [
-                "01",
-                "Learn the foundations",
-                "A path shaped around your goals",
-              ],
-              ["02", "Make it work", "SQL, Python, spreadsheets & more"],
-              ["03", "Build your evidence", "Projects that tell your story"],
-            ].map(([n, title, sub]) => (
-              <li key={n}>
-                <span>{n}</span>
-                <div>
-                  <strong>{title}</strong>
-                  <small>{sub}</small>
-                </div>
-                <ArrowUpRight size={18} />
-              </li>
-            ))}
-          </ol>
-          <div className="map-footer">
-            <span className="live-dot" /> One focused step at a time
-          </div>
-        </div>
+        <p className="welcome-saving">{signedIn ? "Your account is ready. Choose what you want to learn next." : "Just exploring? Find a path as a guest. Guest progress stays in this browser; an account lets you save across devices."}</p>
       </section>
-      <div className="landing-facts">
-        <div>
-          <strong>{careers.length}</strong>
-          <span>career directions</span>
-        </div>
-        <div>
-          <strong>{businessSectors.length}</strong>
-          <span>industry contexts</span>
-        </div>
-        <div>
-          <strong>Your pace</strong>
-          <span>a plan that fits your week</span>
-        </div>
-      </div>
-      <section className="landing-challenge" id="first-challenge">
-        <div>
-          <div className="eyebrow">Try a short exercise</div>
-          <h2>
-            Small challenge.
-            <br />
-            Real analytical thinking.
-          </h2>
-          <p>
-            A shop needs its completed sales total. Pending orders don’t count.
-            What should the report show?
-          </p>
-          <span className="sample-label">
-            Sample exercise · no progress recorded
-          </span>
-        </div>
-        <div className="challenge-demo">
-          <div className="demo-title">
-            <Code2 size={18} />
-            <strong>Your first investigation</strong>
-            <span>RETAIL</span>
-          </div>
-          <table>
-            <caption className="sr-only">Sample retail orders</caption>
-            <thead>
-              <tr>
-                <th>Order</th>
-                <th>Status</th>
-                <th>Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>#101</td>
-                <td>Completed</td>
-                <td>$120</td>
-              </tr>
-              <tr>
-                <td>#102</td>
-                <td>Pending</td>
-                <td>$80</td>
-              </tr>
-              <tr>
-                <td>#103</td>
-                <td>Completed</td>
-                <td>$60</td>
-              </tr>
-            </tbody>
-          </table>
-          <div
-            className="demo-answers"
-            role="group"
-            aria-label="Choose the completed sales total"
-          >
-            {[260, 180, 120].map(value => (
-              <button
-                key={value}
-                aria-pressed={answer === value}
-                className={answer === value ? "chosen" : ""}
-                onClick={() => setAnswer(value)}
-              >
-                ${value}
-              </button>
-            ))}
-          </div>
-          <div className="demo-feedback" aria-live="polite">
-            {answer === null ? (
-              "Choose a total to check your reasoning."
-            ) : answer === 180 ? (
-              <>
-                <Check size={16} /> Exactly. $120 + $60 = $180. Filter by status
-                before adding.
-              </>
-            ) : (
-              "Try again: exclude the $80 pending order, then add both completed orders."
-            )}
-          </div>
-        </div>
+      <section className="welcome-next" aria-labelledby="welcome-next-title">
+        <h2 id="welcome-next-title">What happens next</h2>
+        <ol>
+          <li><strong>Choose your direction</strong><p>A data career, tool, or language. You can review the topics before starting.</p></li>
+          <li><strong>Make a plan that fits</strong><p>Pick your industry, starting level, and weekly study time.</p></li>
+          <li><strong>Learn by doing</strong><p>Work through lessons, practice exercises, and portfolio projects.</p></li>
+        </ol>
       </section>
-      {answer === 180 && (
-        <button className="primary" onClick={onStart}>
-          Learn how to do this, step by step →
-        </button>
-      )}
-      <section className="landing-evidence">
-        <div>
-          <div className="eyebrow">Apply your learning</div>
-          <h2>Make your learning visible.</h2>
-          <p>
-            Your chosen career and industry shape the work ahead. Practise a
-            skill, build a project, then prepare to explain your decisions.
-          </p>
-          <button className="primary" onClick={onStart}>
-            Choose a path <ArrowRight size={18} />
-          </button>
-        </div>
-        <article className="portfolio-preview">
-          <span>Example project</span>
-          <h3>
-            Retail performance
-            <br />
-            investigation
-          </h3>
-          <p>
-            Clean the data. Find the pattern. Explain what the business should
-            do next.
-          </p>
-          <div className="preview-tags">
-            <span>Analysis</span>
-            <span>Visualisation</span>
-            <span>Business story</span>
-          </div>
-        </article>
-      </section>
-      <footer className="landing-footer">
-        <strong>DataPath.</strong>
-        <span>Learn, practise and build evidence.</span>
-        <button onClick={onStart}>
-          Start your journey <ArrowUpRight size={16} />
-        </button>
-      </footer>
     </div>
   );
 }

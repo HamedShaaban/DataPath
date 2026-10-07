@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg
+  PUBLIC '-//W3C//DTD SVG 1.0//EN'
+  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg width="800" height="650" preserveAspectRatio="xMinYMin meet" viewBox="0 0 800 650" xmlns="http://www.w3.org/2000/svg" version="1.0" fill-rule="evenodd" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>...</title>
+	<desc>...</desc>
+	<clipPath id="clip">
+		<rect x="0" y="0" width="800" height="650"/>
+	</clipPath>
+	<g id="group" transform="scale(1,-1) translate(0,-650)" style="clip-path: url(#clip)">
+		<g transform="">
+			<rect x="280" y="540" width="240" height="95" rx="5" ry="0" style="stroke: rgb(38%,44%,52%); stroke-linecap: butt; stroke-width: 0.8; fill: rgb(94%,96%,98%); fill-rule: evenodd;"/>
+			<text x="292" y="612" style="font-family: Helvetica-Bold; font-size: 13px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,1224) scale(1,-1)">users</text>
+			<text x="292" y="593" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,1186) scale(1,-1)">PK id; UQ openId</text>
+			<text x="292" y="577" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,1154) scale(1,-1)">name, email, role, loginMethod</text>
+			<text x="292" y="561" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,1122) scale(1,-1)">createdAt, updatedAt, lastSignedIn</text>
+			<rect x="0" y="430" width="240" height="95" rx="5" ry="0" style="stroke: rgb(38%,44%,52%); stroke-linecap: butt; stroke-width: 0.8; fill: rgb(94%,96%,98%); fill-rule: evenodd;"/>
+			<text x="12" y="502" style="font-family: Helvetica-Bold; font-size: 13px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,1004) scale(1,-1)">localAccounts</text>
+			<text x="12" y="483" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,966) scale(1,-1)">PK userId (logical owner)</text>
+			<text x="12" y="467" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,934) scale(1,-1)">UQ email; passwordHash</text>
+			<text x="12" y="451" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,902) scale(1,-1)">createdAt</text>
+			<path d="M 280,570 L 260,570 Z" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1.1; stroke-dasharray: 4, 3;"/>
+			<path d="M 260,570 L 260,478 Z" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1.1; stroke-dasharray: 4, 3;"/>
+			<path d="M 260,478 L 240,478 Z" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1.1; stroke-dasharray: 4, 3;"/>
+			<polygon points="240 478, 246.4474 475.2741, 246.4474 480.7259" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1; fill: rgb(15%,33%,78%); fill-rule: evenodd;"/>
+			<rect x="0" y="310" width="240" height="95" rx="5" ry="0" style="stroke: rgb(38%,44%,52%); stroke-linecap: butt; stroke-width: 0.8; fill: rgb(94%,96%,98%); fill-rule: evenodd;"/>
+			<text x="12" y="382" style="font-family: Helvetica-Bold; font-size: 13px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,764) scale(1,-1)">learningStates</text>
+			<text x="12" y="363" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,726) scale(1,-1)">PK userId (logical owner)</text>
+			<text x="12" y="347" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,694) scale(1,-1)">stateJson TEXT; revision</text>
+			<text x="12" y="331" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,662) scale(1,-1)">updatedAt</text>
+			<path d="M 280,582 L 256,582 Z" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1.1; stroke-dasharray: 4, 3;"/>
+			<path d="M 256,582 L 256,358 Z" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1.1; stroke-dasharray: 4, 3;"/>
+			<path d="M 256,358 L 240,358 Z" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1.1; stroke-dasharray: 4, 3;"/>
+			<polygon points="240 358, 246.4474 355.2741, 246.4474 360.7259" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1; fill: rgb(15%,33%,78%); fill-rule: evenodd;"/>
+			<rect x="0" y="190" width="240" height="95" rx="5" ry="0" style="stroke: rgb(38%,44%,52%); stroke-linecap: butt; stroke-width: 0.8; fill: rgb(94%,96%,98%); fill-rule: evenodd;"/>
+			<text x="12" y="262" style="font-family: Helvetica-Bold; font-size: 13px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,524) scale(1,-1)">sessions</text>
+			<text x="12" y="243" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,486) scale(1,-1)">PK id (token hash)</text>
+			<text x="12" y="227" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,454) scale(1,-1)">FK userId; expiresAt</text>
+			<text x="12" y="211" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,422) scale(1,-1)">revokedAt</text>
+			<path d="M 280,594 L 252,594 Z" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1.1;"/>
+			<path d="M 252,594 L 252,238 Z" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1.1;"/>
+			<path d="M 252,238 L 240,238 Z" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1.1;"/>
+			<polygon points="240 238, 246.4474 235.2741, 246.4474 240.7259" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1; fill: rgb(15%,33%,78%); fill-rule: evenodd;"/>
+			<rect x="0" y="70" width="240" height="95" rx="5" ry="0" style="stroke: rgb(38%,44%,52%); stroke-linecap: butt; stroke-width: 0.8; fill: rgb(94%,96%,98%); fill-rule: evenodd;"/>
+			<text x="12" y="142" style="font-family: Helvetica-Bold; font-size: 13px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,284) scale(1,-1)">aiRequests</text>
+			<text x="12" y="123" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,246) scale(1,-1)">PK id; FK userId; month</text>
+			<text x="12" y="107" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,214) scale(1,-1)">model; reservations; usage</text>
+			<text x="12" y="91" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,182) scale(1,-1)">status and createdAt</text>
+			<path d="M 280,606 L 248,606 Z" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1.1;"/>
+			<path d="M 248,606 L 248,118 Z" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1.1;"/>
+			<path d="M 248,118 L 240,118 Z" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1.1;"/>
+			<polygon points="240 118, 246.4474 115.2741, 246.4474 120.7259" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1; fill: rgb(15%,33%,78%); fill-rule: evenodd;"/>
+			<rect x="560" y="430" width="240" height="95" rx="5" ry="0" style="stroke: rgb(38%,44%,52%); stroke-linecap: butt; stroke-width: 0.8; fill: rgb(96%,95%,93%); fill-rule: evenodd;"/>
+			<text x="572" y="502" style="font-family: Helvetica-Bold; font-size: 13px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,1004) scale(1,-1)">workspaces</text>
+			<text x="572" y="483" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,966) scale(1,-1)">PK id; UQ userId</text>
+			<text x="572" y="467" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,934) scale(1,-1)">Legacy JSON fragments</text>
+			<text x="572" y="451" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,902) scale(1,-1)">Theme, timer and timestamps</text>
+			<path d="M 520,570 L 540,570 Z" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1.1; stroke-dasharray: 4, 3;"/>
+			<path d="M 540,570 L 540,478 Z" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1.1; stroke-dasharray: 4, 3;"/>
+			<path d="M 540,478 L 560,478 Z" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1.1; stroke-dasharray: 4, 3;"/>
+			<polygon points="560 478, 553.5526 480.7259, 553.5526 475.2741" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1; fill: rgb(15%,33%,78%); fill-rule: evenodd;"/>
+			<rect x="560" y="310" width="240" height="95" rx="5" ry="0" style="stroke: rgb(38%,44%,52%); stroke-linecap: butt; stroke-width: 0.8; fill: rgb(96%,95%,93%); fill-rule: evenodd;"/>
+			<text x="572" y="382" style="font-family: Helvetica-Bold; font-size: 13px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,764) scale(1,-1)">interviewQuestions</text>
+			<text x="572" y="363" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,726) scale(1,-1)">PK id; userId</text>
+			<text x="572" y="347" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,694) scale(1,-1)">UQ (userId, questionKey)</text>
+			<text x="572" y="331" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,662) scale(1,-1)">Prompt, notes and feedback</text>
+			<path d="M 520,582 L 544,582 Z" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1.1; stroke-dasharray: 4, 3;"/>
+			<path d="M 544,582 L 544,358 Z" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1.1; stroke-dasharray: 4, 3;"/>
+			<path d="M 544,358 L 560,358 Z" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1.1; stroke-dasharray: 4, 3;"/>
+			<polygon points="560 358, 553.5526 360.7259, 553.5526 355.2741" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1; fill: rgb(15%,33%,78%); fill-rule: evenodd;"/>
+			<rect x="560" y="190" width="240" height="95" rx="5" ry="0" style="stroke: rgb(38%,44%,52%); stroke-linecap: butt; stroke-width: 0.8; fill: rgb(96%,95%,93%); fill-rule: evenodd;"/>
+			<text x="572" y="262" style="font-family: Helvetica-Bold; font-size: 13px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,524) scale(1,-1)">studySessions</text>
+			<text x="572" y="243" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,486) scale(1,-1)">PK id; userId</text>
+			<text x="572" y="227" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,454) scale(1,-1)">sessionDate; minutes</text>
+			<text x="572" y="211" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,422) scale(1,-1)">createdAt</text>
+			<path d="M 520,594 L 548,594 Z" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1.1; stroke-dasharray: 4, 3;"/>
+			<path d="M 548,594 L 548,238 Z" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1.1; stroke-dasharray: 4, 3;"/>
+			<path d="M 548,238 L 560,238 Z" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1.1; stroke-dasharray: 4, 3;"/>
+			<polygon points="560 238, 553.5526 240.7259, 553.5526 235.2741" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1; fill: rgb(15%,33%,78%); fill-rule: evenodd;"/>
+			<rect x="560" y="70" width="240" height="95" rx="5" ry="0" style="stroke: rgb(38%,44%,52%); stroke-linecap: butt; stroke-width: 0.8; fill: rgb(96%,95%,93%); fill-rule: evenodd;"/>
+			<text x="572" y="142" style="font-family: Helvetica-Bold; font-size: 13px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,284) scale(1,-1)">skillProgressHistory</text>
+			<text x="572" y="123" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,246) scale(1,-1)">PK id; userId</text>
+			<text x="572" y="107" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,214) scale(1,-1)">Legacy integer skillId</text>
+			<text x="572" y="91" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,182) scale(1,-1)">skillName; status; recordedAt</text>
+			<path d="M 520,606 L 552,606 Z" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1.1; stroke-dasharray: 4, 3;"/>
+			<path d="M 552,606 L 552,118 Z" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1.1; stroke-dasharray: 4, 3;"/>
+			<path d="M 552,118 L 560,118 Z" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1.1; stroke-dasharray: 4, 3;"/>
+			<polygon points="560 118, 553.5526 120.7259, 553.5526 115.2741" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1; fill: rgb(15%,33%,78%); fill-rule: evenodd;"/>
+			<rect x="280" y="70" width="240" height="95" rx="5" ry="0" style="stroke: rgb(38%,44%,52%); stroke-linecap: butt; stroke-width: 0.8; fill: rgb(94%,96%,98%); fill-rule: evenodd;"/>
+			<text x="292" y="142" style="font-family: Helvetica-Bold; font-size: 13px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,284) scale(1,-1)">aiBudgets</text>
+			<text x="292" y="123" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,246) scale(1,-1)">PK month (UTC YYYY-MM)</text>
+			<text x="292" y="107" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,214) scale(1,-1)">spentMicros</text>
+			<text x="292" y="91" style="font-family: Helvetica; font-size: 10.5px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,182) scale(1,-1)">Includes unsettled reservations</text>
+			<path d="M 280,112 L 240,112 Z" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1.1; stroke-dasharray: 4, 3;"/>
+			<polygon points="240 112, 246.4474 109.2741, 246.4474 114.7259" style="stroke: rgb(15%,33%,78%); stroke-linecap: butt; stroke-width: 1; fill: rgb(15%,33%,78%); fill-rule: evenodd;"/>
+			<text x="302.745" y="490" style="font-family: Helvetica-Bold; font-size: 10px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,980) scale(1,-1)">Every child has one intended user owner</text>
+			<text x="304.70799999999997" y="470" style="font-family: Helvetica; font-size: 9px;fill: rgb(38%,44%,52%); stroke:none;" transform="translate(0,940) scale(1,-1)">0..1: localAccounts, learningStates, workspaces</text>
+			<text x="323.7205" y="453" style="font-family: Helvetica; font-size: 9px;fill: rgb(38%,44%,52%); stroke:none;" transform="translate(0,906) scale(1,-1)">0..many: remaining user-owned tables</text>
+			<text x="315.51" y="245" style="font-family: Helvetica; font-size: 10px;fill: rgb(38%,44%,52%); stroke:none;" transform="translate(0,490) scale(1,-1)">One budget month : many AI requests</text>
+			<text x="181.02999999999997" y="30" style="font-family: Helvetica; font-size: 10px;fill: rgb(7%,13%,21%); stroke:none;" transform="translate(0,60) scale(1,-1)">Solid: declared FK (ON DELETE CASCADE)   Dashed: logical link only   Tan: retained legacy table</text>
+		</g>
+	</g>
+</svg>

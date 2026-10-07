@@ -1,0 +1,679 @@
+{
+  "items": [
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "32px",
+      "tag": "H1",
+      "text": "Make this journey yours."
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Data Analyst · Built around your goals, at your pace."
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "20px",
+      "tag": "H2",
+      "text": "Your learning profile"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "16px",
+      "tag": "STRONG",
+      "text": "Appearance"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "SMALL",
+      "text": "Choose the mode that is easier on your eyes."
+    },
+    {
+      "bg": [
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "secondary",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "BUTTON",
+      "text": "Light Mode"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "LABEL",
+      "text": "Display name"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "import-label",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "LABEL",
+      "text": "Profile photo"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Data Analyst · 24 weeks"
+    },
+    {
+      "bg": [
+        "rgb(155, 213, 196)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "primary",
+      "color": "rgb(21, 43, 35)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "BUTTON",
+      "text": "Edit goals & assessment"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "20px",
+      "tag": "H2",
+      "text": "Public proof page"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Sign in to publish a server-verified proof page."
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "20px",
+      "tag": "H2",
+      "text": "Log a study session"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Record focused learning time after you finish. This only tracks time you en"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "LABEL",
+      "text": "Minutes"
+    },
+    {
+      "bg": [
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "secondary",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "BUTTON",
+      "text": "Log session"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(41, 51, 47)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SMALL",
+      "text": "TOTAL RECORDED"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(41, 51, 47)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "22px",
+      "tag": "STRONG",
+      "text": "0 min"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "20px",
+      "tag": "H2",
+      "text": "Your data belongs to you"
+    },
+    {
+      "bg": [
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "secondary",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "BUTTON",
+      "text": "Export progress"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "import-label",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "LABEL",
+      "text": "Import backup"
+    },
+    {
+      "bg": [
+        "rgb(62, 37, 37)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "danger",
+      "color": "rgb(255, 180, 173)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "BUTTON",
+      "text": "Delete learning progress"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "20px",
+      "tag": "H2",
+      "text": "Transparent by design"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "DataPath is free. External paid courses are optional and appear only when y"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Guest progress is stored in this browser. Signed-in progress is stored in y"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Skill checks are short learning signals, not professional certifications. T"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "16px",
+      "tag": "H3",
+      "text": "Curriculum sources"
+    },
+    {
+      "bg": [
+        "rgb(30, 38, 35)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "resource-link",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "A",
+      "text": "WEF Future of Jobs 2025"
+    },
+    {
+      "bg": [
+        "rgb(30, 38, 35)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "resource-link",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "A",
+      "text": "Microsoft career paths"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "muted",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "22 representative career paths, not a market ranking. Curated September 202"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "SPAN",
+      "text": "DataPath ↗"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "brand-dot",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "SPAN",
+      "text": "↗"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "Small steps. Real skills. Your future."
+    }
+  ],
+  "scroll": 390,
+  "width": 390
+}

@@ -26,15 +26,14 @@ test("signup → SQL exercise → Python exercise → saved progress", async ({
     .click();
   await expect(dialog).toBeHidden();
   expect((await context.cookies()).some(cookie => cookie.httpOnly)).toBe(true);
-  await page.getByRole("button", { name: "Find my path", exact: true }).click();
-  await page.getByRole("button", { name: /^Data Scientist/ }).click();
-  await page.getByRole("button", { name: "Use this path", exact: true }).click();
-  await page.getByLabel("Target business sector").selectOption("banking");
+  await expect(page.getByRole("heading", { name: "Your goal", exact: true })).toBeVisible();
+  await page.getByLabel("What kind of work interests you?").selectOption("ai");
+  await page.getByLabel("Which industry should the practice examples use?").selectOption("banking");
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page.getByRole("button", { name: "Continue", exact: true }).click();
-  await page
-    .getByRole("button", { name: "Build my learning path", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+  await page.getByLabel("Keep this career or choose another").selectOption("data-scientist");
+  await page.getByRole("button", { name: "Use this learning path", exact: true }).click();
   await page.getByRole("button", { name: "Practice lab", exact: true }).click();
   const independentPractice = page.getByRole("button", { name: "I’m ready to explore independent exercises" });
   if (await independentPractice.isVisible()) await independentPractice.click();

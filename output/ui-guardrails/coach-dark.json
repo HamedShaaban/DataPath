@@ -1,0 +1,317 @@
+{
+  "items": [
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "BUTTON",
+      "text": "My workspace"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "43.2px",
+      "tag": "H1",
+      "text": "AI coach"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Data Analyst · Built around your goals, at your pace."
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "24px",
+      "tag": "H2",
+      "text": "A thinking partner for your next step."
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Ask about your skill gaps, study approach or portfolio. The coach uses your"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(41, 51, 47)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "STRONG",
+      "text": "Your next step"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(41, 51, 47)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "SELECT and WHERE"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(41, 51, 47)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Plan for approximately 183 hours of remaining work."
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(41, 51, 47)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "SMALL",
+      "text": "Curated guidance · available without AI"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "LABEL",
+      "text": "What would you like help with?"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "checkline",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "LABEL",
+      "text": "Share my learning profile and this request with the AI provider. Do not inc"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "muted",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "AI feedback requires sign-in and a configured provider. Curated practice is"
+    },
+    {
+      "bg": [
+        "rgb(155, 213, 196)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "primary",
+      "color": "rgb(21, 43, 35)",
+      "disabled": true,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "BUTTON",
+      "text": "Ask my coach"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "SPAN",
+      "text": "DataPath ↗"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "brand-dot",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "SPAN",
+      "text": "↗"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "Small steps. Real skills. Your future."
+    }
+  ],
+  "scroll": 1440,
+  "width": 1440
+}

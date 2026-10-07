@@ -1,0 +1,848 @@
+{
+  "items": [
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "BUTTON",
+      "text": "My workspace"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "43.2px",
+      "tag": "H1",
+      "text": "Tools setup"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Data Analyst · Built around your goals, at your pace."
+    },
+    {
+      "bg": [
+        "rgb(41, 51, 47)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "notice",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "DIV",
+      "text": "Install only the tools used by your path. Browser-based alternatives are fi"
+    },
+    {
+      "bg": [
+        "rgb(41, 51, 47)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "soft-tag",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "TOOL"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "16px",
+      "tag": "H3",
+      "text": "Visual Studio Code"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "tool-why",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Write, run and debug SQL, Python and configuration files in one reproducibl"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Used for: Python · SQL"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "resource-bottom",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "Official setup page"
+    },
+    {
+      "bg": [
+        "rgb(41, 51, 47)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "soft-tag",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "TOOL"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "16px",
+      "tag": "H3",
+      "text": "Git"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "tool-why",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Track every change, recover earlier work and show employers how a project e"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Used for: Python"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "resource-bottom",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "Official setup page"
+    },
+    {
+      "bg": [
+        "rgb(41, 51, 47)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "soft-tag",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "TOOL"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "16px",
+      "tag": "H3",
+      "text": "Python"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "tool-why",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Automate data work and build reusable analysis, pipelines and machine-learn"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Used for: Python · Data cleaning"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "resource-bottom",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "Official setup page"
+    },
+    {
+      "bg": [
+        "rgb(41, 51, 47)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "soft-tag",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "TOOL"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "16px",
+      "tag": "H3",
+      "text": "PostgreSQL"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "tool-why",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Learn production-grade relational data, query design, transactions and perf"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Used for: SQL · Data modeling"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "resource-bottom",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "Official setup page"
+    },
+    {
+      "bg": [
+        "rgb(41, 51, 47)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "soft-tag",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "TOOL"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "16px",
+      "tag": "H3",
+      "text": "Power BI Desktop"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "tool-why",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Model business data and deliver governed interactive reports to decision ma"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Used for: Power BI"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "resource-bottom",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "Official setup page"
+    },
+    {
+      "bg": [
+        "rgb(41, 51, 47)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "soft-tag",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "TOOL"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "16px",
+      "tag": "H3",
+      "text": "Tableau Public"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "tool-why",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Create and publicly share visual analysis and portfolio-ready data stories."
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Used for: Data storytelling"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "resource-bottom",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "Official setup page"
+    },
+    {
+      "bg": [
+        "rgb(41, 51, 47)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "soft-tag",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "TOOL"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "16px",
+      "tag": "H3",
+      "text": "JupyterLab"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "tool-why",
+      "color": "rgb(237, 242, 239)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Explore data step by step while keeping code, output, charts and explanatio"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "P",
+      "text": "Used for: Python · Statistics"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgb(30, 38, 35)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "resource-bottom",
+      "color": "rgb(155, 213, 196)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "Official setup page"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "SPAN",
+      "text": "DataPath ↗"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "brand-dot",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "14px",
+      "tag": "SPAN",
+      "text": "↗"
+    },
+    {
+      "bg": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(21, 27, 25)",
+        "rgb(21, 27, 25)"
+      ],
+      "cls": "",
+      "color": "rgb(179, 191, 187)",
+      "disabled": false,
+      "shadow": "none",
+      "size": "12px",
+      "tag": "SPAN",
+      "text": "Small steps. Real skills. Your future."
+    }
+  ],
+  "scroll": 1440,
+  "width": 1440
+}
