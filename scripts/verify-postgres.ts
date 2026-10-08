@@ -21,32 +21,39 @@ const { loadLearning, saveLearning, deleteLearning } = await import(
   "../server/learning-store"
 );
 const prefix = "task2-" + Date.now();
+let ownerA: number;
+let ownerB: number;
 try {
-  await deleteLearning(900001);
-  await deleteLearning(900002);
+  const owners = await conn.query<{ id: number }>(
+    'INSERT INTO users ("openId") VALUES ($1), ($2) RETURNING id',
+    [prefix + "-state-a", prefix + "-state-b"]
+  );
+  [ownerA, ownerB] = owners.rows.map(row => row.id);
+  await deleteLearning(ownerA);
+  await deleteLearning(ownerB);
   const state = newState();
   state.onboarded = true;
   state.profile.language = "ar";
   state.cv.summary = "ملخص مهني تجريبي";
-  assert.deepEqual(await saveLearning(900001, state, 0), { revision: 1 });
-  const loaded = await loadLearning(900001);
+  assert.deepEqual(await saveLearning(ownerA, state, 0), { revision: 1 });
+  const loaded = await loadLearning(ownerA);
   assert.equal(loaded?.state.cv.summary, "ملخص مهني تجريبي");
-  assert.equal(await loadLearning(900002), null);
+  assert.equal(await loadLearning(ownerB), null);
   await assert.rejects(
-    () => saveLearning(900001, state, 0),
+    () => saveLearning(ownerA, state, 0),
     (e: any) => e.code === "CONFLICT"
   );
   state.completed = ["sql-1"];
   state.evidence["sql-1"] = "Validated a SELECT query";
-  assert.deepEqual(await saveLearning(900001, state, 1), { revision: 2 });
+  assert.deepEqual(await saveLearning(ownerA, state, 1), { revision: 2 });
   await assert.rejects(
-    () => saveLearning(900001, state, 1),
+    () => saveLearning(ownerA, state, 1),
     (e: any) => e.code === "CONFLICT"
   );
-  await saveLearning(900002, newState(), 0);
-  await deleteLearning(900001);
-  assert.equal(await loadLearning(900001), null);
-  assert.ok(await loadLearning(900002));
+  await saveLearning(ownerB, newState(), 0);
+  await deleteLearning(ownerA);
+  assert.equal(await loadLearning(ownerA), null);
+  assert.ok(await loadLearning(ownerB));
   const first = await db.createLocalAccount({
     openId: prefix,
     name: "مستخدم",
@@ -116,8 +123,8 @@ try {
   ]);
   assert.equal((await db.listSkillHistory(first.userId))[0].skillName, "SQL");
   const race = await Promise.allSettled([
-    saveLearning(900002, state, 1),
-    saveLearning(900002, state, 1),
+    saveLearning(ownerB, state, 1),
+    saveLearning(ownerB, state, 1),
   ]);
   assert.equal(race.filter(r => r.status === "fulfilled").length, 1);
   assert.equal(race.filter(r => r.status === "rejected").length, 1);
@@ -221,8 +228,6 @@ try {
     "PASS: migrations twice, Unicode, ownership, revision races, accounts/rollback, legacy upserts, timestamps, history, preserved IDs and identity sequence"
   );
 } finally {
-  await deleteLearning(900001);
-  await deleteLearning(900002);
   const ids = (
     await conn.query(
       'SELECT id FROM users WHERE "openId" LIKE $1 OR email LIKE $1',

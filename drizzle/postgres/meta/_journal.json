@@ -50,6 +50,13 @@
       "when": 1790709056125,
       "tag": "0006_aspiring_liz_osborn",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1791486389060,
+      "tag": "0007_account_ownership",
+      "breakpoints": true
     }
   ]
 }

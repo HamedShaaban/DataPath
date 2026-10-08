@@ -43,7 +43,7 @@ export const users = pgTable(
 
 export const workspaces = pgTable("workspaces", {
   id: integer("id").generatedByDefaultAsIdentity().primaryKey(),
-  userId: integer("userId").notNull().unique(),
+  userId: integer("userId").notNull().unique().references(() => users.id, { onDelete: "cascade" }),
   profileJson: text("profileJson").notNull(),
   skillsJson: text("skillsJson").notNull(),
   projectsJson: text("projectsJson").notNull(),
@@ -65,7 +65,7 @@ export const interviewQuestions = pgTable(
   "interviewQuestions",
   {
     id: integer("id").generatedByDefaultAsIdentity().primaryKey(),
-    userId: integer("userId").notNull(),
+    userId: integer("userId").notNull().references(() => users.id, { onDelete: "cascade" }),
     questionKey: varchar("questionKey", { length: 64 }).notNull(),
     category: varchar("category", { length: 120 }).notNull(),
     question: text("question").notNull(),
@@ -90,7 +90,7 @@ export const interviewQuestions = pgTable(
 
 export const studySessions = pgTable("studySessions", {
   id: integer("id").generatedByDefaultAsIdentity().primaryKey(),
-  userId: integer("userId").notNull(),
+  userId: integer("userId").notNull().references(() => users.id, { onDelete: "cascade" }),
   sessionDate: varchar("sessionDate", { length: 10 }).notNull(),
   minutes: integer("minutes").notNull().default(25),
   createdAt: timestamp("createdAt", { withTimezone: true })
@@ -100,7 +100,7 @@ export const studySessions = pgTable("studySessions", {
 
 export const skillProgressHistory = pgTable("skillProgressHistory", {
   id: integer("id").generatedByDefaultAsIdentity().primaryKey(),
-  userId: integer("userId").notNull(),
+  userId: integer("userId").notNull().references(() => users.id, { onDelete: "cascade" }),
   skillId: integer("skillId").notNull(),
   skillName: varchar("skillName", { length: 180 }).notNull(),
   status: varchar("status", { length: 40 }).notNull(),
@@ -118,7 +118,7 @@ export type SkillProgressHistory = typeof skillProgressHistory.$inferSelect;
 
 // Versioned DataPath state is separate from legacy workspaces; upgrades are non-destructive.
 export const learningStates = pgTable("learningStates", {
-  userId: integer("userId").primaryKey(),
+  userId: integer("userId").primaryKey().references(() => users.id, { onDelete: "cascade" }),
   stateJson: text("stateJson").notNull(),
   revision: integer("revision").notNull().default(1),
   updatedAt: timestamp("updatedAt", { withTimezone: true })
@@ -159,7 +159,7 @@ export const verifiedCredentials = pgTable(
 export type VerifiedCredential = typeof verifiedCredentials.$inferSelect;
 
 export const localAccounts = pgTable("localAccounts", {
-  userId: integer("userId").primaryKey(),
+  userId: integer("userId").primaryKey().references(() => users.id, { onDelete: "cascade" }),
   email: varchar("email", { length: 320 }).notNull().unique(),
   passwordHash: varchar("passwordHash", { length: 255 }).notNull(),
   createdAt: timestamp("createdAt", { withTimezone: true })
