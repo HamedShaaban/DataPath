@@ -6,12 +6,16 @@ import { learningPathTitle } from "@shared/learning";
 import {
   ArrowRight,
   ArrowUpRight,
+  BrainCircuit,
   BookOpen,
   Check,
   Clock3,
+  Code2,
+  Database,
   FolderKanban,
-  Map,
+  Network,
   RotateCcw,
+  Sparkles,
   SquareTerminal,
   Target,
 } from "lucide-react";
@@ -63,16 +67,26 @@ export function LearningDashboard({
     `${Math.round((minutes / 60) * 10) / 10} ${t("h", "س")}`;
   return (
     <div className="learning-home">
-      <div className="learning-path-strip">
-        <span>
-          <Map size={18} />
-          <strong>{title(learningPathTitle(state.profile))}</strong>
-          <span>{sectorById[state.profile.sector].title}</span>
-        </span>
-        <button className="text-button" onClick={editPath}>
-          {t("Edit my path", "تعديل مساري")} <ArrowUpRight size={15} />
-        </button>
-      </div>
+      <section className="intelligence-header" aria-label={t("Your adaptive learning system", "نظام تعلمك المتكيف")}>
+        <div className="intelligence-heading">
+          <span className="system-label"><i /> DATAPATH LEARNING OS · ONLINE</span>
+          <div>
+            <span className="intelligence-mark"><Network size={24} /></span>
+            <div>
+              <small>{t("ACTIVE LEARNING GRAPH", "شبكة التعلم النشطة")}</small>
+              <h2>{title(learningPathTitle(state.profile))}</h2>
+              <p>{sectorById[state.profile.sector].title} · {t("Personalized from foundations to intelligent systems", "مسار شخصي من الأساسيات إلى الأنظمة الذكية")}</p>
+            </div>
+          </div>
+        </div>
+        <div className="intelligence-meta">
+          <div><small>{t("MODE", "النمط")}</small><strong>{t("ADAPTIVE", "متكيف")}</strong></div>
+          <div><small>{t("STACK", "المجال")}</small><strong>DATA + AI</strong></div>
+          <button className="secondary" onClick={editPath}>
+            {t("Configure path", "إعداد المسار")} <ArrowUpRight size={15} />
+          </button>
+        </div>
+      </section>
       <div className="learning-start-grid">
         <section
           className="learning-spotlight"
@@ -185,6 +199,27 @@ export function LearningDashboard({
           </small>
         </aside>
       </div>
+      <section className="learning-pipeline" aria-label={t("Intelligent data learning pipeline", "مسار تعلم البيانات الذكي")}>
+        <div className="pipeline-heading">
+          <span className="system-label">{t("LEARNING PIPELINE", "مسار التعلم")}</span>
+          <p>{t("Open a skill to explore its lessons and practice.", "افتح مهارة لاستكشاف دروسها وتدريباتها.")}</p>
+        </div>
+        <div className="pipeline-track">
+          {skills.slice(0, 4).map((id, index) => {
+            const topics = plan.topics.filter(topic => topic.skillId === id);
+            const completed = topics.filter(topic => topic.done).length;
+            const Icon = [Database, Code2, BrainCircuit, Sparkles][index];
+            return (
+              <button key={id} className={next?.skillId === id ? "pipeline-node is-ready" : "pipeline-node"} onClick={() => openLesson(id)}>
+                <span><Icon size={18} /></span>
+                <small>{String(index + 1).padStart(2, "0")} · {completed}/{topics.length} {t("topics", "موضوعات")}</small>
+                <strong>{title(skillById[id].title)}</strong>
+                <b><ArrowUpRight size={13} /></b>
+              </button>
+            );
+          })}
+        </div>
+      </section>
       <details className="learning-disclosure">
         <summary>{t("Plan this week", "خطط لهذا الأسبوع")}</summary>
       <CatchUpPace state={state} onApply={adjustPace} />
@@ -200,6 +235,7 @@ export function LearningDashboard({
         aria-label={t("Learning shortcuts", "اختصارات التعلم")}
       >
         <button onClick={() => navigate("lab")}>
+          <small className="shortcut-index">01 / EXECUTE</small>
           <span className="learning-shortcut-icon">
             <SquareTerminal size={22} />
           </span>
@@ -216,6 +252,7 @@ export function LearningDashboard({
             review ? openLesson(review.skillId, review.id) : navigate("roadmap")
           }
         >
+          <small className="shortcut-index">02 / NAVIGATE</small>
           <span className="learning-shortcut-icon">
             <RotateCcw size={22} />
           </span>
@@ -234,6 +271,7 @@ export function LearningDashboard({
           <ArrowUpRight size={19} />
         </button>
         <button onClick={() => navigate("projects")}>
+          <small className="shortcut-index">03 / SHIP</small>
           <span className="learning-shortcut-icon">
             <FolderKanban size={22} />
           </span>

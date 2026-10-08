@@ -875,6 +875,8 @@ export default function Home() {
           {!state.onboarded && !startedSetup ? (
             <CareerLanding
               signedIn={Boolean(me.data)}
+              theme={theme}
+              onToggleTheme={() => setTheme(value => value === "light" ? "dark" : "light")}
               onAccount={mode => { authReturnFocus.current = document.activeElement as HTMLButtonElement; setAuthMode(mode); setAuthError(""); setAuthOpen(true); }}
               onStart={() => {
                 setStartedSetup(true);
@@ -907,7 +909,7 @@ export default function Home() {
                 <div>
                   <h1>
                     {page === "dashboard"
-                      ? t("Let’s make progress.", "لنتقدم خطوة جديدة.")
+                      ? t("Learning workspace", "مساحة التعلم")
                       : navigation.find(n => n[0] === page)?.[
                           lang === "ar" ? 2 : 1
                         ] ||
@@ -916,7 +918,7 @@ export default function Home() {
                   <p>
                     {page === "dashboard"
                       ? t(
-                          "Continue your lessons, practise skills and review your progress.",
+                          "Your live workspace for data, analytics, machine learning and AI systems.",
                           "اتجاه واضح. مهارات مناسبة. ومستقبل مهني تبنيه بنفسك."
                         )
                       : txt(learningPathTitle(state.profile)) +
